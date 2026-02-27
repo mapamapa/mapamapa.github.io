@@ -1,0 +1,216 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import site from '../../public/data/site.json';
+
+const { about } = site;
+const { capabilities } = about;
+---
+
+<BaseLayout title="Us" description="Conoce a MAPA MAPA — Gestión y producción cultural.">
+  <section class="us-hero">
+    <div class="us-hero__inner container">
+      <span class="us-hero__label reveal">Quiénes somos</span>
+      <h1 class="us-hero__title reveal reveal-delay-1">
+        Nos mueven las historias que conectan y las experiencias que
+        <span class="us-hero__accent">transforman</span>
+      </h1>
+    </div>
+  </section>
+
+  <section class="us-about container">
+    <div class="us-about__grid">
+      <div class="us-about__col reveal">
+        <p class="us-about__text us-about__text--large">{about.intro}</p>
+      </div>
+      <div class="us-about__col reveal reveal-delay-2">
+        <p class="us-about__text">{about.body}</p>
+        <p class="us-about__text">{about.body2}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="us-capabilities">
+    <div class="container">
+      <h2 class="us-capabilities__title reveal">Capacidades</h2>
+      <div class="us-capabilities__grid">
+        {capabilities.map((cap, i) => (
+          <article class={`us-cap-card reveal reveal-delay-${(i % 4) + 1}`}>
+            <span class="us-cap-card__number">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="us-cap-card__title">{cap.title}</h3>
+            <p class="us-cap-card__desc">{cap.desc}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="us-cta container reveal">
+    <div class="us-cta__inner">
+      <h2 class="us-cta__heading">¿Tienes un proyecto en mente?</h2>
+      <a href="/contact/" class="us-cta__btn">
+        Conversemos
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17L17 7M17 7H7M17 7V17" />
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .us-hero {
+    padding-top: calc(var(--space-3xl) + 80px);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .us-hero__label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .us-hero__title {
+    font-size: var(--text-4xl);
+    max-width: 900px;
+  }
+
+  .us-hero__accent {
+    color: var(--color-accent);
+    font-style: italic;
+  }
+
+  /* About */
+  .us-about {
+    padding: var(--space-2xl) 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .us-about__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 768px) {
+    .us-about__grid {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+
+  .us-about__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .us-about__text {
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+    line-height: 1.8;
+  }
+
+  .us-about__text--large {
+    font-size: var(--text-xl);
+    color: var(--color-text);
+    line-height: 1.5;
+  }
+
+  /* Capabilities */
+  .us-capabilities {
+    padding: var(--space-3xl) 0;
+  }
+
+  .us-capabilities__title {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+  }
+
+  .us-capabilities__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background-color: var(--color-border);
+    border: 1px solid var(--color-border);
+  }
+
+  .us-cap-card {
+    background-color: var(--color-bg);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    transition: background-color var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .us-cap-card:hover {
+    background-color: var(--color-bg-elevated);
+  }
+
+  .us-cap-card__number {
+    font-family: var(--font-mono, var(--font-display));
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+  }
+
+  .us-cap-card__title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+  }
+
+  .us-cap-card__desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  /* CTA */
+  .us-cta {
+    padding: var(--space-3xl) 0;
+  }
+
+  .us-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);
+    padding: var(--space-2xl);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-elevated);
+  }
+
+  .us-cta__heading {
+    font-size: var(--text-2xl);
+  }
+
+  .us-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 100px;
+    transition: background-color var(--duration-fast),
+                color var(--duration-fast),
+                transform var(--duration-fast);
+  }
+
+  .us-cta__btn:hover {
+    background-color: var(--color-hover);
+    color: var(--color-bg);
+    transform: scale(1.05);
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404" description="Página no encontrada.">
+  <section class="not-found">
+    <div class="not-found__inner container">
+      <span class="not-found__code">404</span>
+      <h1 class="not-found__title">Página no encontrada</h1>
+      <p class="not-found__desc">La página que buscas no existe o fue movida.</p>
+      <a href="/" class="not-found__link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Volver al inicio
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 80dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3xl) var(--gutter);
+  }
+
+  .not-found__inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .not-found__code {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 700;
+    color: var(--color-accent);
+    line-height: 1;
+    opacity: 0.3;
+  }
+
+  .not-found__title {
+    font-size: var(--text-2xl);
+  }
+
+  .not-found__desc {
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+  }
+
+  .not-found__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    padding: var(--space-sm) var(--space-lg);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 100px;
+    transition: background-color var(--duration-fast),
+                color var(--duration-fast);
+  }
+
+  .not-found__link:hover {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+</style>

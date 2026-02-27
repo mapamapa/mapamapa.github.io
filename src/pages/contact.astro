@@ -1,0 +1,187 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import site from '../../public/data/site.json';
+
+const { contact, social } = site;
+---
+
+<BaseLayout title="Contact" description="Contacta a MAPA MAPA para tu próximo proyecto cultural.">
+  <section class="contact-hero">
+    <div class="contact-hero__inner container">
+      <span class="contact-hero__label reveal">Contacto</span>
+      <h1 class="contact-hero__title reveal reveal-delay-1">
+        Hablemos de tu
+        <span class="contact-hero__accent">proyecto</span>
+      </h1>
+    </div>
+  </section>
+
+  <section class="contact-body container">
+    <div class="contact-grid">
+      <div class="contact-main reveal">
+        <div class="contact-block">
+          <h2 class="contact-block__label">Email</h2>
+          <a href={`mailto:${contact.email}`} class="contact-block__value contact-block__value--large">
+            {contact.email}
+          </a>
+        </div>
+
+        <div class="contact-block">
+          <h2 class="contact-block__label">Teléfono</h2>
+          <a href={`tel:${contact.phoneLink}`} class="contact-block__value contact-block__value--large">
+            {contact.phone}
+          </a>
+        </div>
+      </div>
+
+      <aside class="contact-side reveal reveal-delay-2">
+        <div class="contact-block">
+          <h2 class="contact-block__label">Ubicación</h2>
+          <p class="contact-block__value">{contact.location}</p>
+        </div>
+
+        <div class="contact-block">
+          <h2 class="contact-block__label">Social</h2>
+          <ul class="contact-socials">
+            {social.map((s) => (
+              <li>
+                <a href={s.url} target="_blank" rel="noopener noreferrer">
+                  {s.name}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                  </svg>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="contact-block">
+          <h2 class="contact-block__label">Horario</h2>
+          <p class="contact-block__value" set:html={contact.hours.replace('\n', '<br />')} />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="contact-cta container reveal">
+    <p class="contact-cta__text">{contact.cta}</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-hero {
+    padding-top: calc(var(--space-3xl) + 80px);
+    padding-bottom: var(--space-xl);
+  }
+
+  .contact-hero__label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-hero__title {
+    font-size: var(--text-4xl);
+  }
+
+  .contact-hero__accent {
+    color: var(--color-accent);
+    font-style: italic;
+  }
+
+  /* Body */
+  .contact-body {
+    padding-bottom: var(--space-2xl);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 768px) {
+    .contact-grid {
+      grid-template-columns: 1.5fr 1fr;
+    }
+  }
+
+  .contact-main,
+  .contact-side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .contact-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .contact-block__label {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .contact-block__value {
+    font-size: var(--text-base);
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+
+  .contact-block__value--large {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    transition: color var(--duration-fast);
+    display: block;
+  }
+
+  .contact-block__value--large:hover {
+    color: var(--color-hover);
+  }
+
+  .contact-socials {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .contact-socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-base);
+    transition: color var(--duration-fast);
+  }
+
+  .contact-socials a:hover {
+    color: var(--color-hover);
+  }
+
+  /* CTA */
+  .contact-cta {
+    padding: var(--space-2xl) 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .contact-cta__text {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+</style>

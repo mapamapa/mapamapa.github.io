@@ -1,0 +1,382 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import site from '../../public/data/site.json';
+
+const { projects } = site;
+---
+
+<BaseLayout>
+  <!-- Hero: Services + Logo + Office + image collage -->
+  <section class="hero">
+    <div class="hero__logo-wrap reveal reveal-delay-1">
+      <p class="hero__services" id="hero-services">
+        Dirección Creativa, Producción General, Producción Técnica, Museografía, Diseño Sonoro, Diseño de Espacios, Relatos, Editorial, Comunicaciones, Gestión de Prensa, Diseño, Render, Soporte, Fabricación, Fotografía y Audiovisual, Tramitación de Permisos y +
+      </p>
+      <img src="/img/logo.png" alt="MAPA MAPA" class="hero__logo" width="1080" height="auto" fetchpriority="high" decoding="async" />
+    </div>
+    <p class="hero__office reveal reveal-delay-2">Office</p>
+
+    <div class="hero__collage" id="collage">
+      <div class="hero__img-red reveal reveal-delay-3">
+        <img src="/img/red.jpg" alt="MAPA MAPA — producción" width="400" height="400" decoding="async" />
+      </div>
+
+      <div class="bee" data-bee>
+        <img src="/img/box.jpg" alt="" width="150" height="150" loading="lazy" decoding="async" />
+      </div>
+      <div class="bee" data-bee>
+        <img src="/img/proy.jpg" alt="" width="150" height="150" loading="lazy" decoding="async" />
+      </div>
+      <div class="bee" data-bee>
+        <img src="/img/bw.jpg" alt="" width="150" height="150" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Project list -->
+  <section class="project-list">
+    <div class="project-list__inner container">
+      {projects.map((project, i) => (
+        <a href={project.url} class={`project-row reveal reveal-delay-${(i % 4) + 1}`}>
+          <span class="project-row__num">{String(i + 1).padStart(2, '0')}</span>
+          <span class="project-row__name">{project.name}</span>
+          <span class="project-row__desc">{project.description}</span>
+          <span class="project-row__cta">VER</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 var(--gutter) var(--space-xl);
+    overflow: hidden;
+  }
+
+  .hero__services {
+    position: absolute;
+    top: 150px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    width: 100%;
+    font-size: var(--text-2xl);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--color-hover);
+    text-align: left;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .hero__services--visible {
+    opacity: 1;
+  }
+
+  .hero__services:hover {
+    cursor: none;
+  }
+
+  .hero__logo-wrap {
+    position: relative;
+    z-index: var(--z-above);
+    width: 100%;
+    max-width: 1080px;
+    margin-top: -20px;
+    margin-bottom: -100px;
+    overflow: hidden;
+  }
+
+  .hero__logo {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.04));
+  }
+
+  .hero__office {
+    position: relative;
+    z-index: var(--z-above);
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-align: center;
+    margin-top: -30px;
+  }
+
+  /* Collage area below Office */
+  .hero__collage {
+    position: relative;
+    width: 100%;
+    max-width: var(--max-width);
+    min-height: clamp(350px, 40vw, 550px);
+    margin-top: var(--space-lg);
+    padding-inline: var(--gutter);
+    overflow: hidden;
+  }
+
+  .hero__img-red {
+    width: clamp(220px, 28vw, 380px);
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .hero__img-red img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .hero__img-red:hover img {
+    transform: scale(1.04);
+  }
+
+  /* Bee images — absolute within collage, controlled by JS */
+  .bee {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: var(--z-above);
+  }
+
+  .bee img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ===== PROJECT LIST ===== */
+  .project-list {
+    padding: 0;
+  }
+
+  .project-list__inner {
+    max-width: 1000px;
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 2fr auto;
+    gap: var(--space-sm);
+    align-items: baseline;
+    padding: 0.35em 0;
+    transition: opacity var(--duration-fast);
+    text-decoration: none;
+  }
+
+  .project-row:hover {
+    opacity: 0.65;
+  }
+
+  .project-row span {
+    font-size: var(--text-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .project-row__num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .project-row__desc {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .project-row__cta {
+    transition: color var(--duration-fast);
+  }
+
+  .project-row:hover .project-row__cta {
+    color: var(--color-hover);
+  }
+
+  @media (max-width: 768px) {
+    .project-row {
+      grid-template-columns: 40px 1fr auto;
+    }
+
+    .project-row__desc {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function initServicesToggle() {
+    const el = document.getElementById('hero-services');
+    if (!el) return;
+
+    let cursor: HTMLElement | null = document.getElementById('services-cursor');
+    if (!cursor) {
+      cursor = document.createElement('div');
+      cursor.id = 'services-cursor';
+      cursor.style.cssText = 'position:fixed;top:0;left:0;width:50px;height:50px;background:#df9de5;pointer-events:none;z-index:9999;opacity:0;transition:opacity .15s;will-change:transform;';
+      document.body.appendChild(cursor);
+    }
+
+    el.addEventListener('click', () => {
+      el.classList.toggle('hero__services--visible');
+    });
+
+    el.addEventListener('mouseenter', (e: MouseEvent) => {
+      cursor!.style.transform = `translate(${e.clientX - 25}px, ${e.clientY - 25}px)`;
+      cursor!.style.opacity = '1';
+    });
+
+    el.addEventListener('mouseleave', () => {
+      cursor!.style.opacity = '0';
+    });
+
+    el.addEventListener('mousemove', (e: MouseEvent) => {
+      cursor!.style.transform = `translate(${e.clientX - 25}px, ${e.clientY - 25}px)`;
+    });
+  }
+  initServicesToggle();
+  document.addEventListener('astro:after-swap', initServicesToggle);
+
+  let beeCleanup: (() => void) | null = null;
+
+  function initBees() {
+    if (beeCleanup) { beeCleanup(); beeCleanup = null; }
+
+    const beeEls = document.querySelectorAll<HTMLElement>('[data-bee]');
+    if (!beeEls.length) return;
+
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      beeEls.forEach((el) => { el.style.display = 'none'; });
+      return;
+    }
+
+    const collage = document.getElementById('collage');
+    if (!collage) return;
+
+    const SIZE = 150;
+    const EASE = 0.05;
+
+    const cW = collage.offsetWidth;
+    const cH = collage.offsetHeight;
+
+    function clamp(v: number, min: number, max: number) {
+      return v < min ? min : v > max ? max : v;
+    }
+
+    function randInBox() {
+      return {
+        x: Math.random() * (cW - SIZE),
+        y: Math.random() * (cH - SIZE),
+      };
+    }
+
+    const IDLE_RADIUS = 120;
+    const ACTIVE_RADIUS = 220;
+    const TWO_PI = Math.PI * 2;
+
+    const bees = Array.from(beeEls).map((el, i) => {
+      const home = randInBox();
+      const count = beeEls.length || 3;
+      return {
+        el,
+        x: home.x,
+        y: home.y,
+        angle: (TWO_PI / count) * i + Math.random() * 0.5,
+        speed: 0.008 + Math.random() * 0.012,
+        radiusX: IDLE_RADIUS + Math.random() * 60,
+        radiusY: IDLE_RADIUS + Math.random() * 80,
+        wobble: Math.random() * TWO_PI,
+        wobbleSpeed: 0.02 + Math.random() * 0.015,
+      };
+    });
+
+    bees.forEach((b) => {
+      b.el.style.left = '0';
+      b.el.style.top = '0';
+      b.el.style.transform = `translate(${b.x}px, ${b.y}px)`;
+    });
+
+    let running = true;
+    let active = false;
+    let mouseRelX = cW / 2;
+    let mouseRelY = cH / 2;
+
+    function onEnter() { active = true; }
+    function onLeave() { active = false; }
+
+    function onMove(e: MouseEvent) {
+      const rect = collage.getBoundingClientRect();
+      mouseRelX = e.clientX - rect.left;
+      mouseRelY = e.clientY - rect.top;
+    }
+
+    function animate() {
+      if (!running) return;
+      const w = collage!.offsetWidth;
+      const h = collage!.offsetHeight;
+      const maxX = w - SIZE;
+      const maxY = h - SIZE;
+      const rMult = active ? ACTIVE_RADIUS / IDLE_RADIUS : 1;
+
+      bees.forEach((b) => {
+        b.angle += b.speed;
+        b.wobble += b.wobbleSpeed;
+
+        const rx = b.radiusX * rMult;
+        const ry = b.radiusY * rMult;
+        const wobbleX = Math.sin(b.wobble * 1.3) * 30;
+        const wobbleY = Math.cos(b.wobble * 0.9) * 25;
+
+        const goalX = clamp(
+          mouseRelX - SIZE / 2 + Math.cos(b.angle) * rx + wobbleX,
+          0, maxX
+        );
+        const goalY = clamp(
+          mouseRelY - SIZE / 2 + Math.sin(b.angle) * ry + wobbleY,
+          0, maxY
+        );
+
+        b.x += (goalX - b.x) * EASE;
+        b.y += (goalY - b.y) * EASE;
+
+        b.el.style.transform = `translate(${b.x}px, ${b.y}px)`;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    collage.addEventListener('mouseenter', onEnter);
+    collage.addEventListener('mouseleave', onLeave);
+    collage.addEventListener('mousemove', onMove as EventListener);
+    requestAnimationFrame(animate);
+
+    beeCleanup = () => {
+      running = false;
+      collage.removeEventListener('mouseenter', onEnter);
+      collage.removeEventListener('mouseleave', onLeave);
+      collage.removeEventListener('mousemove', onMove as EventListener);
+      beeEls.forEach((el) => {
+        el.style.transform = '';
+        el.style.display = '';
+      });
+    };
+  }
+
+  initBees();
+  document.addEventListener('astro:after-swap', () => {
+    requestAnimationFrame(initBees);
+  });
+</script>

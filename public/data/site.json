@@ -1,0 +1,56 @@
+{
+  "projects": [
+    { "id": "cnc", "name": "CNC", "description": "Clásica No Convencional", "url": "/work/cnc/" },
+    { "id": "fast", "name": "FAST", "description": "Festival de Arte Contemporáneo", "url": "/work/fast/" },
+    { "id": "saturnalia", "name": "SATURNALIA", "description": "Celebración del Vino", "url": "/work/saturnalia/" },
+    { "id": "parking", "name": "PARKING", "description": "Locación", "url": "/work/parking/" }
+  ],
+
+  "about": {
+    "intro": "MAPA MAPA es un estudio de gestión y producción cultural con base en Chile. Trabajamos en la intersección entre arte, diseño y territorio, creando experiencias que conectan comunidades con sus historias.",
+    "body": "Desde la dirección creativa hasta la tramitación de permisos, acompañamos cada proyecto de forma integral. Creemos en el poder de los relatos bien contados y los espacios bien diseñados para generar transformación cultural.",
+    "body2": "Nuestro equipo combina experiencia en producción, diseño, museografía, comunicaciones y gestión para dar vida a proyectos que importan.",
+    "capabilities": [
+      { "title": "Dirección Creativa", "desc": "Conceptualización y dirección artística de proyectos culturales y experiencias inmersivas." },
+      { "title": "Producción General", "desc": "Gestión integral de proyectos desde la planificación hasta la ejecución final." },
+      { "title": "Museografía", "desc": "Diseño y montaje de exposiciones que generan conexión entre el espectador y el relato." },
+      { "title": "Diseño de Espacios", "desc": "Transformación de espacios en experiencias que cuentan historias." },
+      { "title": "Producción Técnica", "desc": "Soluciones técnicas de iluminación, sonido, estructura y montaje." },
+      { "title": "Comunicaciones", "desc": "Estrategia de comunicación, gestión de prensa y difusión de proyectos culturales." }
+    ]
+  },
+
+  "social": [
+    {
+      "name": "Instagram",
+      "url": "https://www.instagram.com/mapamapa.cl",
+      "handle": "@mapamapa.cl",
+      "description": "Proyectos, procesos y detrás de escena."
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/company/mapamapa",
+      "handle": "MAPA MAPA",
+      "description": "Conexiones profesionales y actualizaciones."
+    },
+    {
+      "name": "Behance",
+      "url": "https://www.behance.net/mapamapa",
+      "handle": "MAPA MAPA",
+      "description": "Portafolio visual de nuestros proyectos."
+    }
+  ],
+
+  "contact": {
+    "email": "pablo@mapamapa.cl",
+    "phone": "+56 9 8136 3807",
+    "phoneLink": "+56981363807",
+    "location": "Santiago, Chile",
+    "hours": "Lunes a Viernes\n10:00 — 19:00",
+    "cta": "Cuéntanos sobre tu proyecto y te contactaremos a la brevedad. Trabajamos con instituciones culturales, municipalidades, fundaciones, marcas y artistas independientes."
+  },
+
+  "footer": {
+    "tagline": "Gestión y producción cultural"
+  }
+}

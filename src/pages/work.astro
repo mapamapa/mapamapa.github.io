@@ -1,0 +1,106 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const images = [
+  'bachelet.webp', 'sneak.webp', 'eclipse.webp', 'mariana.webp', 'cena.webp', 'food.webp', 'irl.webp',
+  'cnc.webp', 'jaar.webp', 'dance.webp', 'expor.webp', 'banksy.webp', 'moneda.webp',
+  'saturnalia.webp', 'murmullo.webp', 'wallmart.webp', 'nacional.webp', 'dj.webp',
+  'dance2.webp', 'exp.webp', 'nicole.webp', 'lagos.webp', 'susurro.webp', 'mortal.webp', 'arte.webp',
+];
+
+const rows = [
+  images.slice(0, 7),
+  images.slice(7, 13),
+  images.slice(13, 19),
+  images.slice(19),
+];
+---
+
+<BaseLayout title="Work" description="Proyectos de MAPA MAPA — Gestión y producción cultural.">
+  <section class="work">
+    {rows.map((row, i) => (
+      <div class={`work__row work__row--${i % 2 === 0 ? 'left' : 'right'} work__row--speed-${i}`}>
+        <div class="work__track">
+          {row.map((img) => (
+            <div class="work__item">
+              <img src={`/img-opt/work/${img}`} alt="" width="400" height="400" loading="lazy" decoding="async" />
+            </div>
+          ))}
+          {row.map((img) => (
+            <div class="work__item" aria-hidden="true">
+              <img src={`/img-opt/work/${img}`} alt="" width="400" height="400" loading="lazy" decoding="async" />
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .work {
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    overflow: hidden;
+  }
+
+  .work__row {
+    overflow: hidden;
+  }
+
+  .work__track {
+    display: flex;
+    gap: var(--space-xs);
+    width: max-content;
+    will-change: transform;
+  }
+
+  .work__row--left .work__track {
+    animation: scroll-left var(--row-duration, 40s) linear infinite;
+  }
+
+  .work__row--right .work__track {
+    animation: scroll-right var(--row-duration, 40s) linear infinite;
+  }
+
+  .work__row--speed-0 { --row-duration: 35s; }
+  .work__row--speed-1 { --row-duration: 45s; }
+  .work__row--speed-2 { --row-duration: 38s; }
+  .work__row--speed-3 { --row-duration: 50s; }
+
+  .work__item {
+    flex-shrink: 0;
+    width: clamp(150px, 22vw, 300px);
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .work__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .work__item:hover img {
+    transform: scale(1.05);
+  }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes scroll-right {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work__track {
+      animation: none !important;
+    }
+  }
+</style>

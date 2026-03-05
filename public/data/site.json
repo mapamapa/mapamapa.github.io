@@ -55,18 +55,18 @@
   "pye": {
     "title": "Producción & experiencias",
     "items": [
-      { "title": "Producción General", "subtitle": "Diseño de Producción", "image": "/img/pye/prodgen.jpg" },
-      { "title": "Rito de Primavera", "subtitle": "José Vidal Mut", "image": "/img/pye/rito.jpg" },
-      { "title": "Iván Navarro", "subtitle": "Carnavalito GAM", "image": "/img/pye/ivan.jpg" },
-      { "title": "Libreria Nacional", "subtitle": "Concurso \"Arte en Vivo\"", "image": "/img/pye/lnacional.jpg" },
-      { "title": "Exposición Banksy", "subtitle": "Museografía | GAM", "image": "/img/pye/banksy.png" },
-      { "title": "Artel - Museografía", "subtitle": "Aniversario 85 Años - MAVI", "image": "/img/pye/artel.jpg" },
-      { "title": "Nicolas Jaar, Lanzamiento Disco", "subtitle": "Ladridos y Radio Piedras", "image": "/img/pye/njaar.jpg" },
-      { "title": "Producción Técnica", "subtitle": "", "image": "/img/pye/prodtec.jpg" },
-      { "title": "Ghost Producer", "subtitle": "", "image": "/img/pye/ghost.jpg" },
-      { "title": "Editoriales", "subtitle": "", "image": "/img/pye/editoriales.jpg" },
-      { "title": "Creatividad & Amigos", "subtitle": "", "image": "/img/pye/creatividad.jpg" },
-      { "title": "BTL", "subtitle": "", "image": "/img/pye/btl.jpg" }
+      { "title": "Producción General", "subtitle": "Diseño de Producción", "image": "/img-opt/pye/prodgen.webp" },
+      { "title": "Rito de Primavera", "subtitle": "José Vidal Mut", "image": "/img-opt/pye/rito.webp" },
+      { "title": "Iván Navarro", "subtitle": "Carnavalito GAM", "image": "/img-opt/pye/ivan.webp" },
+      { "title": "Libreria Nacional", "subtitle": "Concurso \"Arte en Vivo\"", "image": "/img-opt/pye/lnacional.webp" },
+      { "title": "Exposición Banksy", "subtitle": "Museografía | GAM", "image": "/img-opt/pye/banksy.webp" },
+      { "title": "Artel - Museografía", "subtitle": "Aniversario 85 Años - MAVI", "image": "/img-opt/pye/artel.webp" },
+      { "title": "Nicolas Jaar, Lanzamiento Disco", "subtitle": "Ladridos y Radio Piedras", "image": "/img-opt/pye/njaar.webp" },
+      { "title": "Producción Técnica", "subtitle": "", "image": "/img-opt/pye/prodtec.webp" },
+      { "title": "Ghost Producer", "subtitle": "", "image": "/img-opt/pye/ghost.webp" },
+      { "title": "Editoriales", "subtitle": "", "image": "/img-opt/pye/editoriales.webp" },
+      { "title": "Creatividad & Amigos", "subtitle": "", "image": "/img-opt/pye/creatividad.webp" },
+      { "title": "BTL", "subtitle": "", "image": "/img-opt/pye/btl.webp" }
     ]
   },
 

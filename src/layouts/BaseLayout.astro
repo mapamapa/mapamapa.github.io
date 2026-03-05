@@ -59,6 +59,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
     <ViewTransitions />
   </head>
   <body>
+    <div class="preloader" id="preloader">
+      <img src="/img/logo.png" alt="MAPA MAPA" width="80" height="80" style="opacity:0.6" />
+    </div>
+
     <Nav />
     <main>
       <slot />
@@ -67,6 +71,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
 
     <script>
       let revealObserver: IntersectionObserver | null = null;
+
+      function dismissPreloader() {
+        const loader = document.getElementById('preloader');
+        if (loader && !loader.classList.contains('done')) {
+          loader.classList.add('done');
+          setTimeout(() => loader.remove(), 500);
+        }
+      }
 
       function initRevealAnimations(immediate = false) {
         if (revealObserver) {
@@ -77,7 +89,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
         const reveals = document.querySelectorAll('.reveal');
         reveals.forEach((el) => el.classList.remove('visible'));
 
-        if (!reveals.length) return;
+        if (!reveals.length) {
+          dismissPreloader();
+          return;
+        }
 
         if (immediate) {
           const vh = window.innerHeight;
@@ -105,9 +120,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
             revealObserver!.observe(el);
           }
         });
+
+        dismissPreloader();
       }
 
-      initRevealAnimations(false);
+      function onReady() {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => initRevealAnimations(false));
+        });
+      }
+
+      if (document.readyState === 'complete') {
+        onReady();
+      } else {
+        window.addEventListener('load', onReady);
+      }
 
       document.addEventListener('astro:after-swap', () => {
         requestAnimationFrame(() => initRevealAnimations(true));

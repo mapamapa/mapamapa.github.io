@@ -1,130 +1,189 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import site from '../../public/data/site.json';
 
-const socials = site.social;
+const images = [
+  '01.png','02.jpg','03.jpg','04.jpg','05.jpg',
+  '06.jpg','07.jpg','08.jpg','09.jpg','10.jpg',
+  '11.jpg','12.jpg','13.jpg','14.jpg','15.jpg',
+];
+
+const cols = [
+  [images[0], images[4], images[8], images[12]],
+  [images[1], images[5], images[9], images[13]],
+  [images[2], images[6], images[10], images[14]],
+  [images[3], images[7], images[11]],
+];
 ---
 
 <BaseLayout title="Social" description="Sigue a MAPA MAPA en redes sociales.">
-  <section class="social-hero">
-    <div class="social-hero__inner container">
-      <span class="social-hero__label reveal">Redes</span>
-      <h1 class="social-hero__title reveal reveal-delay-1">Social</h1>
-      <p class="social-hero__desc reveal reveal-delay-2">
-        Síguenos para ver proyectos en desarrollo, procesos creativos
-        y todo lo que nos inspira.
+  <!-- Image Board -->
+  <section class="social-board container">
+    <div class="board">
+      {cols.map((col, ci) => (
+        <div class="board__col">
+          {col.map((img, ii) => (
+            <div class={`board__item reveal reveal-delay-${(ci + ii) % 4 + 1}`}>
+              <img
+                src={`/social/${img}`}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <section class="social-quote reveal">
+    <div class="social-quote__inner container">
+      <p class="social-quote__text">
+        La creatividad es el arma más importante, para hacer cambios importantes
       </p>
     </div>
   </section>
 
-  <section class="social-links container">
-    <div class="social-links__list">
-      {socials.map((social, i) => (
-        <a
-          href={social.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class={`social-card reveal reveal-delay-${i + 1}`}
-        >
-          <div class="social-card__header">
-            <h2 class="social-card__name">{social.name}</h2>
-            <svg class="social-card__arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M7 17L17 7M17 7H7M17 7V17" />
-            </svg>
-          </div>
-          <span class="social-card__handle">{social.handle}</span>
-          <p class="social-card__desc">{social.description}</p>
-        </a>
-      ))}
+  <!-- Colaboradores -->
+  <section class="social-collab container">
+    <div class="social-collab__group reveal">
+      <span class="social-collab__label">Partner</span>
+      <div class="social-collab__logos">
+        <img src="/social/logos/mcomun.png" alt="Mapa Común" class="social-collab__logo" />
+        <img src="/social/logos/lupa.png" alt="Lupa" class="social-collab__logo" />
+        <img src="/social/logos/simple.png" alt="Simple" class="social-collab__logo" />
+      </div>
+    </div>
+
+    <div class="social-collab__group reveal reveal-delay-1">
+      <span class="social-collab__label">Amigos</span>
+      <div class="social-collab__logos">
+        <img src="/social/logos/indh.png" alt="IN(H)" class="social-collab__logo" />
+        <img src="/social/logos/grieta.png" alt="Grieta" class="social-collab__logo social-collab__logo--lg" />
+        <img src="/social/logos/funktion.png" alt="Funktion-One" class="social-collab__logo social-collab__logo--lg" />
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .social-hero {
-    padding-top: calc(var(--space-3xl) + 80px);
-    padding-bottom: var(--space-2xl);
+  /* ===== IMAGE BOARD ===== */
+  .social-board {
+    padding-top: calc(var(--space-sm) + 70px);
   }
 
-  .social-hero__label {
+  .board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    align-items: start;
+  }
+
+  .board__col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .board__item {
+    overflow: hidden;
+  }
+
+  .board__item img {
+    width: 100%;
+    height: auto;
     display: block;
+    transition: transform 0.5s var(--ease-out-expo), filter 0.5s ease;
+    filter: grayscale(30%);
+  }
+
+  .board__item:hover img {
+    transform: scale(1.04);
+    filter: grayscale(0%);
+  }
+
+  @media (max-width: 768px) {
+    .board {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ===== QUOTE ===== */
+  .social-quote {
+    padding-top: calc(var(--space-3xl) + 100px);
+    padding-bottom: var(--space-3xl);
+  }
+
+  .social-quote__inner {
+    text-align: center;
+  }
+
+  .social-quote__text {
     font-family: var(--font-display);
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-accent);
-    margin-bottom: var(--space-xs);
-  }
-
-  .social-hero__title {
-    font-size: var(--text-4xl);
-    margin-bottom: var(--space-xs);
-  }
-
-  .social-hero__desc {
-    font-size: var(--text-xl);
-    color: var(--color-text-muted);
-    max-width: 500px;
-    line-height: 1.15;
-  }
-
-  /* Cards */
-  .social-links__list {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    background-color: var(--color-border);
-    border: 1px solid var(--color-border);
-  }
-
-  .social-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-    padding: var(--space-md);
-    background-color: var(--color-bg);
-    transition: background-color var(--duration-normal) var(--ease-out-expo);
-  }
-
-  .social-card:hover {
-    background-color: var(--color-bg-elevated);
-  }
-
-  .social-card__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .social-card__name {
     font-size: var(--text-3xl);
     font-weight: 700;
-    transition: color var(--duration-fast);
+    line-height: 1.1;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #fff;
   }
 
-  .social-card:hover .social-card__name {
-    color: var(--color-hover);
+  /* ===== COLABORADORES ===== */
+  .social-collab {
+    padding-bottom: var(--space-xl);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
   }
 
-  .social-card__arrow {
-    transition: transform var(--duration-fast) var(--ease-out-expo);
-    color: var(--color-text-muted);
+  .social-collab__group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
   }
 
-  .social-card:hover .social-card__arrow {
-    transform: translate(4px, -4px);
-    color: var(--color-hover);
-  }
-
-  .social-card__handle {
+  .social-collab__label {
+    display: block;
     font-family: var(--font-display);
-    font-size: var(--text-sm);
-    color: var(--color-hover);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: #fff;
   }
 
-  .social-card__desc {
-    font-size: var(--text-base);
-    color: var(--color-text-muted);
-    max-width: 400px;
+  .social-collab__logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xl);
+  }
+
+  .social-collab__logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(100%) brightness(0.7);
+    transition: filter 0.4s ease;
+  }
+
+  .social-collab__logo--lg {
+    height: 70px;
+  }
+
+  .social-collab__logo:hover {
+    filter: grayscale(0%) brightness(1);
+  }
+
+  @media (max-width: 480px) {
+    .social-collab__logos {
+      gap: var(--space-lg);
+    }
+
+    .social-collab__logo {
+      height: 36px;
+    }
   }
 </style>

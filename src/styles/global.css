@@ -125,12 +125,35 @@ h1, h2, h3, h4, h5, h6 {
   border: 0;
 }
 
+/* ===== PRELOADER ===== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+}
+
+.preloader.done {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ===== SCROLL REVEAL ===== */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity var(--duration-slow) var(--ease-out-expo),
               transform var(--duration-slow) var(--ease-out-expo);
+}
+
+@media (max-width: 768px) {
+  .reveal {
+    transform: translateY(12px);
+  }
 }
 
 .reveal.visible {

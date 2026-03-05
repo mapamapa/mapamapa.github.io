@@ -37,12 +37,20 @@ const { projects, pye } = site;
   <section class="project-list">
     <div class="project-list__inner container">
       {projects.map((project, i) => (
-        <a href={project.url} class={`project-row reveal reveal-delay-${(i % 4) + 1}`}>
-          <span class="project-row__num">{String(i + 1).padStart(2, '0')}</span>
-          <span class="project-row__name">{project.name}</span>
-          <span class="project-row__desc">{project.description}</span>
-          <span class="project-row__cta">VER</span>
-        </a>
+        <div class={`project-cube reveal reveal-delay-${(i % 4) + 1}`}>
+          <a href={project.url} class="project-row">
+            <span class="project-row__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="project-row__name">{project.name}</span>
+            <span class="project-row__desc">{project.description}</span>
+            <span class="project-row__cta">VER</span>
+          </a>
+          <a href={project.url} class="project-row project-row--back">
+            <span class="project-row__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="project-row__name">{project.name}</span>
+            <span class="project-row__desc">{project.description}</span>
+            <span class="project-row__cta">VER</span>
+          </a>
+        </div>
       ))}
     </div>
   </section>
@@ -187,18 +195,55 @@ const { projects, pye } = site;
     max-width: 1000px;
   }
 
+  .project-cube {
+    perspective: 800px;
+    height: 2.2em;
+    position: relative;
+  }
+
+  .project-cube:hover .project-row {
+    transform: rotateX(90deg);
+  }
+
+  .project-cube:hover .project-row--back {
+    transform: rotateX(0deg);
+    visibility: visible;
+  }
+
   .project-row {
     display: grid;
     grid-template-columns: 50px 1fr 2fr auto;
     gap: var(--space-xs);
     align-items: baseline;
-    padding: 0.2em 0;
-    transition: opacity var(--duration-fast);
+    padding: 0.2em 0.4em;
     text-decoration: none;
+    height: 100%;
+    backface-visibility: hidden;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center bottom;
+    transform: rotateX(0deg);
   }
 
-  .project-row:hover {
-    color: var(--color-hover);
+  .project-row--back {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-accent);
+    color: #000;
+    transform-origin: center top;
+    transform: rotateX(-90deg);
+    visibility: hidden;
+  }
+
+  .project-cube:hover .project-row--back {
+    visibility: visible;
+  }
+
+  .project-row--back span {
+    color: #000;
+  }
+
+  .project-row--back:hover {
+    color: #000;
   }
 
   .project-row span {
@@ -219,10 +264,6 @@ const { projects, pye } = site;
 
   .project-row__cta {
     transition: color var(--duration-fast);
-  }
-
-  .project-row:hover .project-row__cta {
-    color: var(--color-hover);
   }
 
   @media (max-width: 768px) {

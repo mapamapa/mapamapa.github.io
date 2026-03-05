@@ -1,8 +1,8 @@
 /* ===== DESIGN TOKENS ===== */
 :root {
-  --color-bg: #0a0a0a;
-  --color-bg-elevated: #141414;
-  --color-bg-surface: #1e1e1e;
+  --color-bg: #000000;
+  --color-bg-elevated: #000000;
+  --color-bg-surface: #000000;
   --color-text: #b1b1b1;
   --color-text-muted: #707070;
   --color-hover: #df9de5;
@@ -64,10 +64,11 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-10xl);
   font-weight: 500;
-  line-height: 1.6;
+  line-height: 1.2;
   color: var(--color-text);
   background-color: var(--color-bg);
   overflow-x: hidden;
+  text-transform: uppercase;
 }
 
 img, video {
@@ -100,7 +101,7 @@ button {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 900;
-  line-height: 1.15;
+  line-height: 1.0;
   letter-spacing: -0.02em;
 }
 
@@ -196,34 +197,13 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
   padding: 1rem;
   cursor: pointer;
-  transition: opacity 0.4s ease !important;
+  outline: 1px solid transparent;
+  transition: outline-color 0.4s ease !important;
 }
 
-.pye__card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-color: var(--color-accent);
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.4s ease !important;
-  will-change: opacity;
-}
-
-.pye__card:hover::after {
-  opacity: 1;
-}
-
-
-.pye__card-title,
-.pye__card-subtitle {
-  transition: color 0.4s ease !important;
-}
-
-.pye__card:hover .pye__card-title,
-.pye__card:hover .pye__card-subtitle {
-  color: #000;
+.pye__card:hover {
+  outline-color: #fff;
 }

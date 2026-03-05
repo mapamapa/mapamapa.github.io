@@ -24,32 +24,6 @@ const links = [
         </li>
       ))}
     </ul>
-
-    <button
-      class="nav__toggle"
-      id="nav-toggle"
-      aria-label="Abrir menú"
-      aria-expanded="false"
-      aria-controls="nav-mobile"
-    >
-      <span class="nav__toggle-bar"></span>
-      <span class="nav__toggle-bar"></span>
-    </button>
-
-    <div class="nav__mobile" id="nav-mobile">
-      <ul class="nav__mobile-list">
-        {links.map(({ href, label }) => (
-          <li class="nav__mobile-item">
-            <a
-              href={href}
-              class:list={['nav__mobile-link', { 'nav__mobile-link--active': currentPath === href }]}
-            >
-              {label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
   </nav>
 </header>
 
@@ -57,32 +31,11 @@ const links = [
   let scrollHandler: (() => void) | null = null;
 
   function initNav() {
-    const toggle = document.getElementById('nav-toggle');
-    const mobile = document.getElementById('nav-mobile');
     const nav = document.getElementById('nav');
-    if (!toggle || !mobile || !nav) return;
+    if (!nav) return;
 
-    // Reset nav state on every init
-    nav.classList.remove('nav--scrolled', 'nav--hidden', 'nav--open');
-    toggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+    nav.classList.remove('nav--scrolled', 'nav--hidden');
 
-    toggle.addEventListener('click', () => {
-      const isOpen = nav.classList.toggle('nav--open');
-      toggle.setAttribute('aria-expanded', String(isOpen));
-      toggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-    });
-
-    mobile.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        nav.classList.remove('nav--open');
-        toggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
-    });
-
-    // Remove previous scroll handler before adding a new one
     if (scrollHandler) {
       window.removeEventListener('scroll', scrollHandler);
     }
@@ -108,7 +61,7 @@ const links = [
     left: 0;
     width: 100%;
     z-index: var(--z-nav);
-    padding: var(--space-md) var(--gutter);
+    padding: var(--space-sm) var(--gutter);
     transition: background-color var(--duration-normal) var(--ease-out-expo),
                 transform var(--duration-normal) var(--ease-out-expo);
   }
@@ -119,7 +72,7 @@ const links = [
     -webkit-backdrop-filter: blur(12px);
   }
 
-  .nav--hidden:not(.nav--open) {
+  .nav--hidden {
     transform: translateY(-100%);
   }
 
@@ -129,30 +82,24 @@ const links = [
     justify-content: center;
     max-width: 900px;
     margin-inline: auto;
-    position: relative;
   }
 
   .nav__list {
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-  }
-
-  @media (min-width: 768px) {
-    .nav__list {
-      display: flex;
-    }
+    gap: var(--space-sm);
   }
 
   .nav__link {
     font-family: var(--font-display);
-    font-size: var(--text-lg);
+    font-size: var(--text-sm);
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     padding: 0.4em 0;
-    position: relative;
+    white-space: nowrap;
     transition: opacity var(--duration-fast);
   }
 
@@ -164,105 +111,9 @@ const links = [
     opacity: 0.6;
   }
 
-  .nav__toggle {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-    width: 32px;
-    height: 32px;
-    position: relative;
-    z-index: calc(var(--z-nav) + 1);
-  }
-
   @media (min-width: 768px) {
-    .nav__toggle {
-      display: none;
+    .nav__link {
+      font-size: var(--text-lg);
     }
-  }
-
-  .nav__toggle-bar {
-    display: block;
-    width: 100%;
-    height: 1.5px;
-    background-color: var(--color-text);
-    transition: transform var(--duration-normal) var(--ease-out-expo),
-                opacity var(--duration-fast);
-    transform-origin: center;
-  }
-
-  .nav--open .nav__toggle-bar:first-child {
-    transform: translateY(3.75px) rotate(45deg);
-  }
-
-  .nav--open .nav__toggle-bar:last-child {
-    transform: translateY(-3.75px) rotate(-45deg);
-  }
-
-  .nav__mobile {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background-color: var(--color-bg);
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--duration-slow) var(--ease-out-expo),
-                visibility 0s var(--duration-slow);
-  }
-
-  @media (max-width: 767px) {
-    .nav__mobile {
-      display: flex;
-    }
-  }
-
-  .nav--open .nav__mobile {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity var(--duration-slow) var(--ease-out-expo),
-                visibility 0s;
-  }
-
-  .nav__mobile-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-lg);
-  }
-
-  .nav__mobile-item {
-    overflow: hidden;
-  }
-
-  .nav__mobile-link {
-    font-family: var(--font-display);
-    font-size: var(--text-2xl);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: block;
-    transform: translateY(100%);
-    transition: transform var(--duration-slow) var(--ease-out-expo),
-                opacity var(--duration-fast);
-  }
-
-  .nav--open .nav__mobile-link {
-    transform: translateY(0);
-  }
-
-  .nav--open .nav__mobile-item:nth-child(1) .nav__mobile-link { transition-delay: 100ms; }
-  .nav--open .nav__mobile-item:nth-child(2) .nav__mobile-link { transition-delay: 150ms; }
-  .nav--open .nav__mobile-item:nth-child(3) .nav__mobile-link { transition-delay: 200ms; }
-  .nav--open .nav__mobile-item:nth-child(4) .nav__mobile-link { transition-delay: 250ms; }
-  .nav--open .nav__mobile-item:nth-child(5) .nav__mobile-link { transition-delay: 300ms; }
-
-  .nav__mobile-link:hover {
-    opacity: 0.6;
-  }
-
-  .nav__mobile-link--active {
-    opacity: 0.5;
   }
 </style>

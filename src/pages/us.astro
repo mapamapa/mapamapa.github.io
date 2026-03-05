@@ -3,16 +3,19 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import site from '../../public/data/site.json';
 
 const { about } = site;
-const { capabilities } = about;
 ---
 
 <BaseLayout title="Us" description="Conoce a MAPA MAPA — Gestión y producción cultural.">
   <section class="us-hero">
-    <div class="us-hero__inner container">
-      <span class="us-hero__label reveal">Quiénes somos</span>
+    <div class="us-hero__video">
+      <video autoplay loop muted playsinline>
+        <source src="/img/vid-us.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="us-hero__text container">
+      <span class="us-hero__label reveal">{about.title}</span>
       <h1 class="us-hero__title reveal reveal-delay-1">
-        Nos mueven las historias que conectan y las experiencias que
-        <span class="us-hero__accent">transforman</span>
+        {about.subtitle}
       </h1>
     </div>
   </section>
@@ -20,63 +23,84 @@ const { capabilities } = about;
   <section class="us-about container">
     <div class="us-about__grid">
       <div class="us-about__col reveal">
-        <p class="us-about__text us-about__text--large">{about.intro}</p>
+        <p class="us-about__text us-about__text--large">{about.body}</p>
       </div>
       <div class="us-about__col reveal reveal-delay-2">
-        <p class="us-about__text">{about.body}</p>
         <p class="us-about__text">{about.body2}</p>
       </div>
     </div>
   </section>
 
-  <section class="us-capabilities">
-    <div class="container">
-      <h2 class="us-capabilities__title reveal">Capacidades</h2>
-      <div class="us-capabilities__grid">
-        {capabilities.map((cap, i) => (
-          <article class={`us-cap-card reveal reveal-delay-${(i % 4) + 1}`}>
-            <span class="us-cap-card__number">{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="us-cap-card__title">{cap.title}</h3>
-            <p class="us-cap-card__desc">{cap.desc}</p>
-          </article>
-        ))}
-      </div>
+  <section class="us-origin container">
+    <p class="us-origin__text reveal">{about.origin}</p>
+  </section>
+
+  <section class="us-team container">
+    <div class="us-team__grid">
+      <article class="us-team__card us-team__card--right reveal">
+        <h2 class="us-team__name">Pablo<br />Gutiérrez</h2>
+        <div class="us-team__photo">
+          <img src="/img/us/pablo.jpg" alt="Pablo Gutiérrez" width="400" height="400" loading="lazy" decoding="async" />
+        </div>
+      </article>
+      <article class="us-team__card us-team__card--left reveal reveal-delay-1">
+        <div class="us-team__photo">
+          <img src="/img/us/matias.jpg" alt="Matías Gutiérrez" width="400" height="400" loading="lazy" decoding="async" />
+        </div>
+        <h2 class="us-team__name">Matías<br />Gutiérrez</h2>
+      </article>
+      <article class="us-team__card us-team__card--right reveal reveal-delay-2">
+        <h2 class="us-team__name">Carolina<br />Caimanque</h2>
+        <div class="us-team__photo">
+          <img src="/img/us/carolina.jpg" alt="Carolina Caimanque" width="400" height="400" loading="lazy" decoding="async" />
+        </div>
+      </article>
     </div>
   </section>
 
-  <section class="us-cta container reveal">
-    <div class="us-cta__inner">
-      <h2 class="us-cta__heading">¿Tienes un proyecto en mente?</h2>
-      <a href="/contact/" class="us-cta__btn">
-        Conversemos
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M7 17L17 7M17 7H7M17 7V17" />
-        </svg>
-      </a>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
   /* Hero */
   .us-hero {
-    padding-top: calc(var(--space-3xl) + 80px);
-    padding-bottom: var(--space-2xl);
+    padding-top: 60px;
+  }
+
+  .us-hero__video {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .us-hero__video video {
+    width: 100%;
+    max-height: 70vh;
+    object-fit: cover;
+  }
+
+  .us-hero__text {
+    padding-top: var(--space-sm);
+    padding-bottom: var(--space-md);
   }
 
   .us-hero__label {
     display: block;
     font-family: var(--font-display);
-    font-size: var(--text-xs);
+    font-size: var(--text-4xl);
+    font-weight: 900;
+    line-height: 0.85;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-accent);
+    letter-spacing: 0.05em;
+    color: #ffffff;
     margin-bottom: var(--space-sm);
   }
 
   .us-hero__title {
-    font-size: var(--text-4xl);
-    max-width: 900px;
+    font-size: var(--text-lg);
+    color: #ffffff;
+    max-width: 700px;
+    font-weight: 400;
   }
 
   .us-hero__accent {
@@ -86,14 +110,15 @@ const { capabilities } = about;
 
   /* About */
   .us-about {
-    padding: var(--space-2xl) 0;
+    padding-top: var(--space-sm);
+    padding-bottom: var(--space-md);
     border-top: 1px solid var(--color-border);
   }
 
   .us-about__grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    gap: var(--space-md);
   }
 
   @media (min-width: 768px) {
@@ -105,112 +130,114 @@ const { capabilities } = about;
   .us-about__col {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--space-sm);
   }
 
   .us-about__text {
     font-size: var(--text-base);
     color: var(--color-text-muted);
-    line-height: 1.8;
+    line-height: 1.25;
   }
 
   .us-about__text--large {
     font-size: var(--text-xl);
     color: var(--color-text);
-    line-height: 1.5;
+    line-height: 1.15;
   }
 
-  /* Capabilities */
-  .us-capabilities {
-    padding: var(--space-3xl) 0;
+  /* Origin */
+  .us-origin {
+    padding-top: var(--space-sm);
+    padding-bottom: var(--space-md);
+    border-top: 1px solid var(--color-border);
   }
 
-  .us-capabilities__title {
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-xl);
-  }
-
-  .us-capabilities__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1px;
-    background-color: var(--color-border);
-    border: 1px solid var(--color-border);
-  }
-
-  .us-cap-card {
-    background-color: var(--color-bg);
-    padding: var(--space-lg);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    transition: background-color var(--duration-normal) var(--ease-out-expo);
-  }
-
-  .us-cap-card:hover {
-    background-color: var(--color-bg-elevated);
-  }
-
-  .us-cap-card__number {
-    font-family: var(--font-mono, var(--font-display));
-    font-size: var(--text-xs);
-    color: var(--color-accent);
-  }
-
-  .us-cap-card__title {
+  .us-origin__text {
     font-size: var(--text-lg);
-    font-weight: 700;
-  }
-
-  .us-cap-card__desc {
-    font-size: var(--text-sm);
     color: var(--color-text-muted);
-    line-height: 1.6;
+    line-height: 1.35;
+    max-width: 720px;
   }
 
-  /* CTA */
-  .us-cta {
-    padding: var(--space-3xl) 0;
+  /* Team */
+  .us-team {
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-md);
   }
 
-  .us-cta__inner {
+  .us-team__grid {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-lg);
-    padding: var(--space-2xl);
-    border: 1px solid var(--color-border);
-    background-color: var(--color-bg-elevated);
-  }
-
-  .us-cta__heading {
-    font-size: var(--text-2xl);
-  }
-
-  .us-cta__btn {
-    display: inline-flex;
-    align-items: center;
     gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-lg);
-    border: 1px solid var(--color-accent);
-    color: var(--color-accent);
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 100px;
-    transition: background-color var(--duration-fast),
-                color var(--duration-fast),
-                transform var(--duration-fast);
   }
 
-  .us-cta__btn:hover {
-    background-color: var(--color-hover);
-    color: var(--color-bg);
-    transform: scale(1.05);
+  .us-team__card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    outline: 1px solid transparent;
+    padding: var(--space-sm);
+    transition: outline-color 0.4s ease;
+  }
+
+  .us-team__card:hover {
+    outline-color: #fff;
+  }
+
+  .us-team__card--right {
+    justify-content: flex-end;
+  }
+
+  .us-team__card--left {
+    justify-content: flex-start;
+  }
+
+  .us-team__name {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    line-height: 0.95;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .us-team__photo {
+    width: clamp(150px, 25vw, 300px);
+    aspect-ratio: 1;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .us-team__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    transition: filter 0.4s ease;
+  }
+
+  .us-team__card:hover .us-team__photo img {
+    filter: grayscale(0);
+  }
+
+  @media (max-width: 480px) {
+    .us-team__card {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .us-team__card--right,
+    .us-team__card--left {
+      justify-content: center;
+    }
+
+    .us-team__name {
+      font-size: var(--text-2xl);
+      order: 2;
+    }
+
+    .us-team__photo {
+      order: 1;
+    }
   }
 </style>

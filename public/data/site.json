@@ -7,9 +7,11 @@
   ],
 
   "about": {
-    "intro": "MAPA MAPA es un estudio de gestión y producción cultural con base en Chile. Trabajamos en la intersección entre arte, diseño y territorio, creando experiencias que conectan comunidades con sus historias.",
-    "body": "Desde la dirección creativa hasta la tramitación de permisos, acompañamos cada proyecto de forma integral. Creemos en el poder de los relatos bien contados y los espacios bien diseñados para generar transformación cultural.",
-    "body2": "Nuestro equipo combina experiencia en producción, diseño, museografía, comunicaciones y gestión para dar vida a proyectos que importan.",
+    "title": "Gestión y producción cultural",
+    "subtitle": "Nos mueven las historias que conectan y las experiencias que transforman",
+    "body": "Reunimos a periodistas, escritores, artistas gráficos, fotógrafos y creadores audiovisuales para crear proyectos originales, donde la creatividad es el lenguaje común.",
+    "body2": "Somos un punto de encuentro para una comunidad global de mentes inquietas: un mapa que se dibuja y redibuja con cada colaboración, cada idea y cada experiencia compartida.",
+    "origin": "MAPAMAPA nació en 2015 en Chile, fundado por Pablo Gutiérrez, Matías Gutiérrez y Carolina Caimanque como una productora independiente. Desde entonces, hemos crecido con la misma energía creativa que nos vio nacer: libre, colaborativa y siempre en movimiento.",
     "capabilities": [
       { "title": "Dirección Creativa", "desc": "Conceptualización y dirección artística de proyectos culturales y experiencias inmersivas." },
       { "title": "Producción General", "desc": "Gestión integral de proyectos desde la planificación hasta la ejecución final." },

@@ -3,130 +3,75 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import site from '../../public/data/site.json';
 
 const { contact, social } = site;
+
+const MAPA = [
+  // M          A          P          A
+  [1,0,0,0,1, 0,1,1,1,0, 1,1,1,1,0, 0,1,1,1,0],
+  [1,1,0,1,1, 1,0,0,0,1, 1,0,0,0,1, 1,0,0,0,1],
+  [1,0,1,0,1, 1,1,1,1,1, 1,1,1,1,0, 1,1,1,1,1],
+  [1,0,0,0,1, 1,0,0,0,1, 1,0,0,0,0, 1,0,0,0,1],
+  [1,0,0,0,1, 1,0,0,0,1, 1,0,0,0,0, 1,0,0,0,1],
+];
 ---
 
 <BaseLayout title="Contact" description="Contacta a MAPA MAPA para tu próximo proyecto cultural.">
-  <section class="contact-hero">
-    <div class="contact-hero__inner container">
-      <span class="contact-hero__label reveal">Contacto</span>
-      <h1 class="contact-hero__title reveal reveal-delay-1">
-        Hablemos de tu
-        <span class="contact-hero__accent">proyecto</span>
-      </h1>
-    </div>
-  </section>
-
   <section class="contact-body container">
-    <div class="contact-grid">
-      <div class="contact-main reveal">
-        <div class="contact-block">
-          <h2 class="contact-block__label">Email</h2>
-          <a href={`mailto:${contact.email}`} class="contact-block__value contact-block__value--large">
-            {contact.email}
-          </a>
-        </div>
-
-        <div class="contact-block">
-          <h2 class="contact-block__label">Teléfono</h2>
-          <a href={`tel:${contact.phoneLink}`} class="contact-block__value contact-block__value--large">
-            {contact.phone}
-          </a>
-        </div>
+    <div class="mapa-art reveal">
+      <div class="mapa-grid" id="mapa-grid">
+        {MAPA.flat().map((cell, i) => (
+          <div
+            class={`mapa-cell ${cell ? 'mapa-cell--filled' : 'mapa-cell--empty'}`}
+            data-filled={cell ? 'true' : 'false'}
+            style={`--delay: ${Math.random() * 0.3}s`}
+          />
+        ))}
       </div>
-
-      <aside class="contact-side reveal reveal-delay-2">
-        <div class="contact-block">
-          <h2 class="contact-block__label">Ubicación</h2>
-          <p class="contact-block__value">{contact.location}</p>
-        </div>
-
-        <div class="contact-block">
-          <h2 class="contact-block__label">Social</h2>
-          <ul class="contact-socials">
-            {social.map((s) => (
-              <li>
-                <a href={s.url} target="_blank" rel="noopener noreferrer">
-                  {s.name}
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" />
-                  </svg>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div class="contact-block">
-          <h2 class="contact-block__label">Horario</h2>
-          <p class="contact-block__value" set:html={contact.hours.replace('\n', '<br />')} />
-        </div>
-      </aside>
     </div>
-  </section>
 
-  <section class="contact-cta container reveal">
-    <p class="contact-cta__text">{contact.cta}</p>
+    <form class="contact-form reveal reveal-delay-1" id="contact-form">
+      <div class="contact-form__field">
+        <label class="contact-form__label" for="nombre">Nombre</label>
+        <input class="contact-form__input" type="text" id="nombre" name="nombre" required autocomplete="name" />
+      </div>
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="email">Correo</label>
+          <input class="contact-form__input" type="email" id="email" name="email" required autocomplete="email" />
+        </div>
+      <div class="contact-form__field">
+        <label class="contact-form__label" for="mensaje">Mensaje</label>
+        <textarea class="contact-form__input contact-form__textarea" id="mensaje" name="mensaje" rows="5" required></textarea>
+      </div>
+      <button class="contact-form__btn" type="submit">
+        Enviar
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17L17 7M17 7H7M17 7V17" />
+        </svg>
+      </button>
+      <p class="contact-form__success" id="form-success">Mensaje enviado. Te contactaremos pronto.</p>
+    </form>
   </section>
 </BaseLayout>
 
 <style>
-  .contact-hero {
-    padding-top: calc(var(--space-3xl) + 80px);
-    padding-bottom: var(--space-xl);
-  }
-
-  .contact-hero__label {
-    display: block;
-    font-family: var(--font-display);
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-accent);
-    margin-bottom: var(--space-xs);
-  }
-
-  .contact-hero__title {
-    font-size: var(--text-4xl);
-  }
-
-  .contact-hero__accent {
-    color: var(--color-accent);
-    font-style: italic;
-  }
-
-  /* Body */
   .contact-body {
-    padding-bottom: var(--space-2xl);
+    padding-top: calc(var(--space-2xl) + 60px);
+    padding-bottom: var(--space-sm);
+    max-width: 600px;
   }
 
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--color-border);
-  }
-
-  @media (min-width: 768px) {
-    .contact-grid {
-      grid-template-columns: 1.5fr 1fr;
-    }
-  }
-
-  .contact-main,
-  .contact-side {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .contact-block {
+  .contact-form {
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
   }
 
-  .contact-block__label {
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .contact-form__label {
     font-family: var(--font-display);
     font-size: var(--text-xs);
     text-transform: uppercase;
@@ -135,53 +80,145 @@ const { contact, social } = site;
     font-weight: 500;
   }
 
-  .contact-block__value {
-    font-size: var(--text-base);
+  .contact-form__input {
+    background: transparent;
+    border: 1px solid var(--color-border);
     color: var(--color-text);
-    line-height: 1.2;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    padding: var(--space-xs) var(--space-sm);
+    text-transform: uppercase;
+    transition: border-color var(--duration-fast);
+    outline: none;
   }
 
-  .contact-block__value--large {
+  .contact-form__input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.5;
+  }
+
+  .contact-form__input:focus {
+    border-color: #fff;
+  }
+
+  .contact-form__textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .contact-form__btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-md);
+    border: 1px solid #fff;
+    color: #fff;
     font-family: var(--font-display);
-    font-size: var(--text-2xl);
+    font-size: var(--text-sm);
     font-weight: 700;
-    letter-spacing: -0.02em;
-    transition: color var(--duration-fast);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    background: transparent;
+    transition: background-color var(--duration-fast), color var(--duration-fast);
+  }
+
+  .contact-form__btn:hover {
+    background-color: #fff;
+    color: var(--color-bg);
+  }
+
+  .contact-form__success {
+    display: none;
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+  }
+
+  .contact-form__success--visible {
     display: block;
   }
 
-  .contact-block__value--large:hover {
-    color: var(--color-hover);
+  /* MAPA pixel art */
+  .mapa-art {
+    padding-bottom: var(--space-md);
   }
 
-  .contact-socials {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-  }
-
-  .contact-socials a {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    font-size: var(--text-base);
-    transition: color var(--duration-fast);
-  }
-
-  .contact-socials a:hover {
-    color: var(--color-hover);
-  }
-
-  /* CTA */
-  .contact-cta {
-    padding: var(--space-2xl) 0;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .contact-cta__text {
-    font-size: var(--text-lg);
-    color: var(--color-text-muted);
+  .mapa-grid {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: clamp(2px, 0.4vw, 5px);
     max-width: 600px;
-    line-height: 1.2;
+    margin-inline: auto;
+  }
+
+  .mapa-cell {
+    aspect-ratio: 1;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mapa-cell--filled {
+    background-color: #fff;
+  }
+
+  .mapa-cell--empty {
+    background-color: transparent;
+  }
+
+  .mapa-cell--filled:hover {
+    background-color: var(--color-accent);
+    transform: rotate(180deg) scale(1.1);
+  }
+
+  .mapa-cell--filled.mapa-cell--activated {
+    background-color: var(--color-accent);
+    transform: rotate(180deg);
+    transition-delay: var(--delay);
   }
 </style>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const success = document.getElementById('form-success');
+    if (!form || !success) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const nombre = data.get('nombre');
+      const email = data.get('email');
+      const mensaje = data.get('mensaje');
+
+      const subject = encodeURIComponent(`Contacto de ${nombre}`);
+      const body = encodeURIComponent(`Nombre: ${nombre}\nCorreo: ${email}\n\n${mensaje}`);
+      window.location.href = `mailto:pablo@mapamapa.cl?subject=${subject}&body=${body}`;
+
+      success.classList.add('contact-form__success--visible');
+      form.reset();
+    });
+  }
+
+  function initMapaGrid() {
+    const grid = document.getElementById('mapa-grid');
+    if (!grid) return;
+
+    const cells = grid.querySelectorAll<HTMLElement>('.mapa-cell--filled');
+
+    grid.addEventListener('mouseenter', () => {
+      cells.forEach((cell) => cell.classList.add('mapa-cell--activated'));
+    });
+
+    grid.addEventListener('mouseleave', () => {
+      cells.forEach((cell) => cell.classList.remove('mapa-cell--activated'));
+    });
+  }
+
+  initContactForm();
+  initMapaGrid();
+  document.addEventListener('astro:after-swap', () => {
+    initContactForm();
+    initMapaGrid();
+  });
+</script>

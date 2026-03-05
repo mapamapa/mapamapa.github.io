@@ -9,7 +9,7 @@
   --color-accent: #df9de5;
   --color-border: #2a2a2a;
 
-  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-main: 'Instrument Sans', system-ui, -apple-system, sans-serif;
   --font-display: var(--font-main);
   --font-body: var(--font-main);
 
@@ -188,3 +188,42 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-track { background: var(--color-bg); }
 ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+
+/* ===== PYE HOVER EFFECT ===== */
+.pye__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: opacity 0.4s ease !important;
+}
+
+.pye__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-accent);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease !important;
+  will-change: opacity;
+}
+
+.pye__card:hover::after {
+  opacity: 1;
+}
+
+
+.pye__card-title,
+.pye__card-subtitle {
+  transition: color 0.4s ease !important;
+}
+
+.pye__card:hover .pye__card-title,
+.pye__card:hover .pye__card-subtitle {
+  color: #000;
+}

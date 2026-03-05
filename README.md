@@ -35,63 +35,76 @@ El sitio queda disponible en **http://localhost:4321**
 
 ```
 src/
-├── components/         # Componentes reutilizables (.astro)
-│   ├── Nav.astro       # Navegación con menú hamburguesa full-screen
-│   ├── Hero.astro      # Hero animado del home
-│   ├── ServiceMarquee  # Marquee infinito de servicios
-│   ├── ProjectCard     # Tarjeta de proyecto con hover effects
-│   ├── ProjectGrid     # Grid del portafolio
-│   └── Footer.astro    # Footer global
-├── content/
-│   └── work/           # Proyectos del portafolio (Markdown)
+├── components/
+│   ├── Nav.astro            # Navegación desktop + hamburguesa mobile
+│   └── Footer.astro         # Footer global (lee de site.json)
 ├── layouts/
-│   └── BaseLayout.astro # Layout base (nav, footer, meta, View Transitions)
-├── pages/              # Rutas del sitio
-│   ├── index.astro     # Home
-│   ├── us.astro        # Quiénes somos
-│   ├── work/           # Portafolio (listado + detalle)
-│   ├── social.astro    # Redes sociales
-│   ├── contact.astro   # Contacto
-│   └── 404.astro       # Página de error
+│   └── BaseLayout.astro     # Layout base (nav, footer, meta, View Transitions)
+├── pages/
+│   ├── index.astro          # Home: servicios, logo, collage, proyectos, PYE
+│   ├── us.astro             # Quiénes somos + capacidades
+│   ├── social.astro         # Redes sociales
+│   ├── contact.astro        # Contacto
+│   └── 404.astro            # Página de error
 ├── styles/
-│   └── global.css      # Variables CSS, reset, animaciones
-└── content.config.ts   # Schema de content collections
+│   └── global.css           # Variables CSS, reset, animaciones, tipografía
+public/
+├── data/
+│   └── site.json            # ← Todos los contenidos editables del sitio
+├── img/
+│   ├── logo.png             # Logo principal
+│   ├── red.jpg, box.jpg,    # Imágenes del home
+│   │   proy.jpg, bw.jpg
+│   └── pye/                 # Imágenes de Producción & Experiencias
+├── CNAME                    # Dominio mapamapa.cl
+└── robots.txt               # SEO
 ```
 
-## Agregar un proyecto al portafolio
+## Editar contenido
 
-Crea un archivo `.md` en `src/content/work/` con este formato:
+Todo el contenido del sitio se gestiona desde un solo archivo: **`public/data/site.json`**
 
-```markdown
----
-title: "Nombre del Proyecto"
-description: "Descripción breve del proyecto."
-date: 2025-06-15
-tags: ["museografía", "producción"]
-cover: "/images/work/mi-proyecto-cover.jpg"
-gallery:
-  - "/images/work/mi-proyecto-1.jpg"
-  - "/images/work/mi-proyecto-2.jpg"
-featured: true
-client: "Nombre del cliente"
-location: "Santiago, Chile"
----
+No es necesario tocar código para cambiar textos, datos de contacto, redes sociales o proyectos.
 
-Texto extendido del proyecto en Markdown...
+### Secciones del JSON
+
+| Sección      | Qué contiene                                  | Usado en           |
+| ------------ | --------------------------------------------- | ------------------- |
+| `projects`   | Lista de proyectos (nombre, descripción, url) | Home                |
+| `pye`        | Producción & experiencias (título, imágenes)  | Home                |
+| `about`      | Textos de "quiénes somos" + capacidades       | Us                  |
+| `social`     | Redes sociales (nombre, url, handle)          | Social, Contact, Footer |
+| `contact`    | Email, teléfono, ubicación, horario           | Contact, Footer     |
+| `footer`     | Tagline                                       | Footer              |
+
+### Ejemplo: agregar un proyecto
+
+Abrir `public/data/site.json` y agregar un item al array `projects`:
+
+```json
+{ "id": "mi-proyecto", "name": "MI PROYECTO", "description": "Descripción corta", "url": "/work/mi-proyecto/" }
 ```
 
-Las imágenes van en `public/images/work/`. El proyecto aparece automáticamente en `/work/` y genera su página de detalle en `/work/nombre-del-archivo/`.
+### Ejemplo: agregar un item a Producción & Experiencias
+
+Agregar un item al array `pye.items` y su imagen en `public/img/pye/`:
+
+```json
+{ "title": "Nombre del Proyecto", "subtitle": "Detalle", "image": "/img/pye/nombre.jpg" }
+```
 
 ## Deploy
 
 El sitio se despliega automáticamente a GitHub Pages con cada push a `main` mediante GitHub Actions (`.github/workflows/deploy.yml`).
 
-El dominio `mapamapa.cl` está configurado via el archivo `public/CNAME`.
+El dominio `mapamapa.cl` está configurado via `public/CNAME`.
 
 ## Stack
 
 - **Astro 5** — framework estático
 - **View Transitions** — transiciones animadas entre páginas
-- **Content Collections** — portafolio gestionado con Markdown
+- **Google Fonts (Inter 400/900)** — tipografía
 - **CSS custom properties** — design system con fluid typography
+- **Contenido centralizado** — `site.json` como CMS simple
 - **GitHub Actions** — CI/CD automático
+- **@astrojs/sitemap** — generación automática de sitemap

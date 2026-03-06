@@ -55,7 +55,7 @@
   "pye": {
     "title": "Producción & experiencias",
     "items": [
-      { "title": "Producción General", "subtitle": "Diseño de Producción", "image": "/img-opt/pye/prodgen.webp" },
+      { "title": "Producción General", "subtitle": "Diseño de Producción", "image": "/img-opt/pye/prodgen.webp", "url": "/produccion-general/" },
       { "title": "Rito de Primavera", "subtitle": "José Vidal Mut", "image": "/img-opt/pye/rito.webp" },
       { "title": "Iván Navarro", "subtitle": "Carnavalito GAM", "image": "/img-opt/pye/ivan.webp" },
       { "title": "Libreria Nacional", "subtitle": "Concurso \"Arte en Vivo\"", "image": "/img-opt/pye/lnacional.webp" },

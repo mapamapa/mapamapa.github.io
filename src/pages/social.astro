@@ -13,6 +13,20 @@ const cols = [
   [images[2], images[6], images[10], images[14]],
   [images[3], images[7], images[11]],
 ];
+
+const quoteWords = [
+  'La',
+  'creatividad',
+  'es',
+  'el',
+  'arma',
+  'más',
+  'importante,',
+  'para',
+  'hacer',
+  'cambios',
+  'importantes.',
+];
 ---
 
 <BaseLayout title="Social" description="Sigue a MAPA MAPA en redes sociales.">
@@ -37,31 +51,42 @@ const cols = [
   </section>
 
   <!-- Quote -->
-  <section class="social-quote reveal">
+  <section class="social-quote" data-scroll-quote>
     <div class="social-quote__inner container">
-      <p class="social-quote__text">
-        La creatividad es el arma más importante, para hacer cambios importantes
+      <p
+        class="social-quote__text"
+        aria-label="La creatividad es el arma más importante, para hacer cambios importantes."
+      >
+        {quoteWords.map((word, index) => (
+          <span
+            class="social-quote__word"
+            style={`--word-index:${index}`}
+            data-quote-word
+          >
+            {word}
+          </span>
+        ))}
       </p>
     </div>
   </section>
 
   <!-- Colaboradores -->
   <section class="social-collab container">
-    <div class="social-collab__group reveal">
+    <div class="social-collab__group" data-scroll-group>
       <span class="social-collab__label">Partner</span>
       <div class="social-collab__logos">
-        <img src="/social/logos/mcomun.png" alt="Mapa Común" class="social-collab__logo" />
-        <img src="/social/logos/lupa.png" alt="Lupa" class="social-collab__logo" />
-        <img src="/social/logos/simple.png" alt="Simple" class="social-collab__logo" />
+        <img src="/social/logos/mcomun.png" alt="Mapa Común" class="social-collab__logo" style="--logo-delay:0s" />
+        <img src="/social/logos/lupa.png" alt="Lupa" class="social-collab__logo" style="--logo-delay:0.15s" />
+        <img src="/social/logos/simple.png" alt="Simple" class="social-collab__logo" style="--logo-delay:0.3s" />
       </div>
     </div>
 
-    <div class="social-collab__group reveal reveal-delay-1">
+    <div class="social-collab__group" data-scroll-group>
       <span class="social-collab__label">Amigos</span>
       <div class="social-collab__logos">
-        <img src="/social/logos/indh.png" alt="IN(H)" class="social-collab__logo" />
-        <img src="/social/logos/grieta.png" alt="Grieta" class="social-collab__logo social-collab__logo--lg" />
-        <img src="/social/logos/funktion.png" alt="Funktion-One" class="social-collab__logo social-collab__logo--lg" />
+        <img src="/social/logos/indh.png" alt="IN(H)" class="social-collab__logo" style="--logo-delay:0s" />
+        <img src="/social/logos/funktion.png" alt="Funktion-One" class="social-collab__logo social-collab__logo--lg" style="--logo-delay:0.15s" />
+        <img src="/social/logos/grieta.png" alt="Grieta" class="social-collab__logo social-collab__logo--lg" style="--logo-delay:0.3s" />
       </div>
     </div>
   </section>
@@ -94,12 +119,11 @@ const cols = [
     width: 100%;
     height: auto;
     display: block;
-    transition: transform 0.5s var(--ease-out-expo), filter 0.5s ease;
+    transition: filter 0.5s ease;
     filter: grayscale(30%);
   }
 
   .board__item:hover img {
-    transform: scale(1.04);
     filter: grayscale(0%);
   }
 
@@ -111,11 +135,17 @@ const cols = [
 
   /* ===== QUOTE ===== */
   .social-quote {
-    padding-top: calc(var(--space-3xl) + 100px);
-    padding-bottom: var(--space-3xl);
+    min-height: 160vh;
+    position: relative;
   }
 
   .social-quote__inner {
+    position: sticky;
+    top: 14vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
   }
 
@@ -127,6 +157,23 @@ const cols = [
     max-width: 700px;
     margin: 0 auto;
     color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.18em 0.32em;
+    perspective: 900px;
+  }
+
+  .social-quote__word {
+    opacity: 0.14;
+    transform: translate3d(0, 72px, 0);
+    transition: opacity 0.35s ease, transform 0.6s var(--ease-out-expo);
+    will-change: opacity, transform;
+  }
+
+  .social-quote__word--visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 
   /* ===== COLABORADORES ===== */
@@ -143,12 +190,20 @@ const cols = [
     flex-direction: column;
     align-items: center;
     gap: var(--space-lg);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.9s var(--ease-out-expo);
+  }
+
+  .social-collab__group--visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .social-collab__label {
     display: block;
     font-family: var(--font-display);
-    font-size: var(--text-lg);
+    font-size: var(--text-xl);
     font-weight: 600;
     color: #fff;
   }
@@ -158,19 +213,25 @@ const cols = [
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: var(--space-xl);
+    gap: var(--space-2xl);
   }
 
   .social-collab__logo {
-    height: 50px;
+    height: 65px;
     width: auto;
     object-fit: contain;
     filter: grayscale(100%) brightness(0.7);
-    transition: filter 0.4s ease;
+    opacity: 0;
+    transition: filter 0.4s ease, opacity 0.6s ease;
+    transition-delay: var(--logo-delay, 0s);
+  }
+
+  .social-collab__group--visible .social-collab__logo {
+    opacity: 1;
   }
 
   .social-collab__logo--lg {
-    height: 70px;
+    height: 118px;
   }
 
   .social-collab__logo:hover {
@@ -178,12 +239,120 @@ const cols = [
   }
 
   @media (max-width: 480px) {
+    .social-quote {
+      min-height: 140vh;
+    }
+
+    .social-quote__inner {
+      top: 10vh;
+    }
+
     .social-collab__logos {
       gap: var(--space-lg);
     }
 
     .social-collab__logo {
-      height: 36px;
+      height: 47px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .social-quote {
+      min-height: auto;
+    }
+
+    .social-quote__inner {
+      position: static;
+      min-height: auto;
+      padding-top: calc(var(--space-3xl) + 100px);
+      padding-bottom: var(--space-3xl);
+    }
+
+    .social-quote__word,
+    .social-collab__group {
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
   }
 </style>
+
+<script>
+  let socialScrollCleanup: (() => void) | null = null;
+
+  function initSocialScrollReveal() {
+    if (socialScrollCleanup) {
+      socialScrollCleanup();
+      socialScrollCleanup = null;
+    }
+
+    const quoteSection = document.querySelector<HTMLElement>('[data-scroll-quote]');
+    const quoteWords = Array.from(document.querySelectorAll<HTMLElement>('[data-quote-word]'));
+    const collabGroups = Array.from(document.querySelectorAll<HTMLElement>('[data-scroll-group]'));
+
+    if (!quoteSection || !quoteWords.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      quoteWords.forEach((w) => w.classList.add('social-quote__word--visible'));
+      collabGroups.forEach((g) => g.classList.add('social-collab__group--visible'));
+      return;
+    }
+
+    function update() {
+      const vh = window.innerHeight;
+      const sectionRect = quoteSection!.getBoundingClientRect();
+
+      const scrollableDistance = sectionRect.height - vh;
+      const scrolled = -sectionRect.top;
+      const progress = Math.min(Math.max(scrolled / scrollableDistance, 0), 1);
+
+      const count = quoteWords.length;
+
+      quoteWords.forEach((word, i) => {
+        const wordStart = i / count;
+        const wordEnd = (i + 1) / count;
+        const local = Math.min(Math.max((progress - wordStart) / (wordEnd - wordStart), 0), 1);
+
+        word.style.opacity = `${0.1 + local * 0.9}`;
+        word.style.transform = `translate3d(0, ${(1 - local) * 60}px, 0)`;
+      });
+    }
+
+    let ticking = false;
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        update();
+        ticking = false;
+      });
+    }
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    const groupObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add('social-collab__group--visible');
+            groupObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+    collabGroups.forEach((g) => groupObserver.observe(g));
+
+    socialScrollCleanup = () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      groupObserver.disconnect();
+    };
+  }
+
+  initSocialScrollReveal();
+  document.addEventListener('astro:after-swap', initSocialScrollReveal);
+</script>

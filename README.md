@@ -112,3 +112,13 @@ El dominio `mapamapa.cl` está configurado via `public/CNAME`.
 
 - **PYE (Producción & experiencias)**: hover con fondo lila y texto negro, transición 0.4s
 - **Footer**: logo pequeño a la izquierda, menú de navegación a la derecha (alineado con el nav superior)
+
+## Regla UI Persistente
+
+- Todos los textos del sitio deben mostrarse en mayúsculas, sin excepciones.
+- No deben agregarse reglas que rompan esa norma, como `text-transform: none`, `lowercase` o `capitalize`.
+- Inputs, botones, labels, párrafos, títulos, enlaces y mensajes del sistema también deben respetar esta convención.
+- En este sitio, las imágenes nunca deben agrandarse en `hover`.
+- Cualquier interacción sobre imágenes debe mantener su tamaño original y puede resolverse con recursos como color, opacidad, borde, máscara o movimiento del contenedor, pero sin aplicar `transform: scale(...)` sobre la imagen.
+- Este sitio no usa ni usará textos tipo `eyebrow`, `overline` o `kicker` sobre los títulos.
+- Los encabezados deben resolverse de forma directa, sin una línea introductoria pequeña encima del `h1` o `h2`.

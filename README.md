@@ -37,11 +37,11 @@ El sitio queda disponible en **http://localhost:4321**
 src/
 ├── components/
 │   ├── Nav.astro            # Navegación desktop + hamburguesa mobile
-│   └── Footer.astro         # Footer global (lee de site.json)
+│   └── Footer.astro         # Footer: logo + menú (misma navegación que Nav)
 ├── layouts/
 │   └── BaseLayout.astro     # Layout base (nav, footer, meta, View Transitions)
 ├── pages/
-│   ├── index.astro          # Home: servicios, logo, collage, proyectos, PYE
+│   ├── index.astro          # Home: servicios, logo, collage, proyectos, PYE (hover lila)
 │   ├── us.astro             # Quiénes somos + capacidades
 │   ├── social.astro         # Redes sociales
 │   ├── contact.astro        # Contacto
@@ -73,9 +73,8 @@ No es necesario tocar código para cambiar textos, datos de contacto, redes soci
 | `projects`   | Lista de proyectos (nombre, descripción, url) | Home                |
 | `pye`        | Producción & experiencias (título, imágenes)  | Home                |
 | `about`      | Textos de "quiénes somos" + capacidades       | Us                  |
-| `social`     | Redes sociales (nombre, url, handle)          | Social, Contact, Footer |
-| `contact`    | Email, teléfono, ubicación, horario           | Contact, Footer     |
-| `footer`     | Tagline                                       | Footer              |
+| `social`     | Redes sociales (nombre, url, handle)         | Social, Contact     |
+| `contact`    | Email, teléfono, ubicación, horario            | Contact             |
 
 ### Ejemplo: agregar un proyecto
 
@@ -103,8 +102,13 @@ El dominio `mapamapa.cl` está configurado via `public/CNAME`.
 
 - **Astro 5** — framework estático
 - **View Transitions** — transiciones animadas entre páginas
-- **Google Fonts (Inter 400/900)** — tipografía
+- **Instrument Sans** — tipografía (Google Fonts, variable 400–700)
 - **CSS custom properties** — design system con fluid typography
 - **Contenido centralizado** — `site.json` como CMS simple
 - **GitHub Actions** — CI/CD automático
 - **@astrojs/sitemap** — generación automática de sitemap
+
+## Detalles de UX
+
+- **PYE (Producción & experiencias)**: hover con fondo lila y texto negro, transición 0.4s
+- **Footer**: logo pequeño a la izquierda, menú de navegación a la derecha (alineado con el nav superior)

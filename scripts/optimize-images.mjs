@@ -1,8 +1,9 @@
 import sharp from 'sharp';
 import { readdir, mkdir, stat } from 'node:fs/promises';
 import { join, parse } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = new URL('../public/', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('../public/', import.meta.url));
 
 const FOLDERS = [
   { src: 'img/work',  size: 600, quality: 80 },

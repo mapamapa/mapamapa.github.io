@@ -2,7 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import site from '../../public/data/site.json';
 
-const { projects, pye } = site;
+const { projects, pye, services } = site;
 ---
 
 <BaseLayout>
@@ -80,6 +80,25 @@ const { projects, pye } = site;
           )
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- Servicios Carousel -->
+  <section class="carousel reveal" id="services-carousel" aria-label="Servicios">
+    <div class="carousel__track">
+      {services.map((item) => (
+        <a href={item.url ?? '#'} class="carousel__slide" data-slide>
+          <img
+            src={item.hero ?? item.image}
+            alt={item.title}
+            width="1600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="carousel__label">{item.title}</span>
+        </a>
+      ))}
     </div>
   </section>
 </BaseLayout>
@@ -193,7 +212,7 @@ const { projects, pye } = site;
 
   /* ===== PROJECT LIST ===== */
   .project-list {
-    padding: 0;
+    padding: 20px 0;
   }
 
   .project-list__inner {
@@ -287,29 +306,31 @@ const { projects, pye } = site;
 
   /* ===== PRODUCCIÓN & EXPERIENCIAS ===== */
   .pye {
-    padding: var(--space-sm) 0 var(--space-sm);
+    padding: 20px 0 var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .pye__inner {
-    max-width: 1000px;
+    max-width: none;
   }
 
   .pye__title {
     font-size: var(--text-2xl);
     font-weight: 900;
     text-align: center;
-    margin-bottom: var(--space-xs);
+    margin-bottom: 20px;
   }
 
   .pye__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-xs);
   }
 
   .pye__card-img {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 5 / 4;
     overflow: hidden;
   }
 
@@ -330,9 +351,85 @@ const { projects, pye } = site;
     font-size: var(--text-base);
   }
 
+  @media (max-width: 768px) {
+    .pye__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   @media (max-width: 480px) {
     .pye__grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  /* ===== SERVICIOS CAROUSEL ===== */
+  .carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: var(--space-md) 0 var(--space-lg);
+  }
+
+  .carousel__track {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.75rem;
+  }
+
+  .carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel__slide {
+    position: relative;
+    flex: 0 0 calc((100% - 1.5rem) / 3);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+  }
+
+  .carousel__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .carousel__label {
+    position: absolute;
+    bottom: clamp(0.8rem, 2vw, 1.5rem);
+    left: clamp(0.6rem, 2vw, 1.2rem);
+    font-size: clamp(0.9rem, 0.6rem + 1.2vw, 1.6rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--color-bg, #0a0a0a);
+    background: var(--color-accent, #df9de5);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    pointer-events: none;
+    padding: 0.1em 0.3em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  @media (max-width: 768px) {
+    .carousel__track {
+      gap: 0;
+    }
+
+    .carousel__slide {
+      flex: 0 0 100%;
+      aspect-ratio: 4 / 3;
+    }
+
+    .carousel__label {
+      font-size: clamp(1.4rem, 1rem + 2vw, 2.5rem);
+      bottom: clamp(1rem, 3vw, 2rem);
+      left: clamp(0.8rem, 3vw, 2rem);
     }
   }
 </style>
@@ -499,5 +596,145 @@ const { projects, pye } = site;
   document.addEventListener('astro:after-swap', () => {
     requestAnimationFrame(initBees);
   });
+
+  let carouselCleanup: (() => void) | null = null;
+
+  function initCarousel() {
+    if (carouselCleanup) { carouselCleanup(); carouselCleanup = null; }
+
+    const track = document.querySelector<HTMLElement>('.carousel__track');
+    if (!track) return;
+
+    track.querySelectorAll('[data-clone]').forEach((el) => el.remove());
+
+    const originals = Array.from(track.querySelectorAll<HTMLElement>('[data-slide]'));
+    const count = originals.length;
+    if (!count) return;
+
+    originals.forEach((slide) => {
+      const clone = slide.cloneNode(true) as HTMLElement;
+      clone.removeAttribute('data-slide');
+      clone.setAttribute('data-clone', '');
+      track.appendChild(clone);
+    });
+
+    const allSlides = Array.from(track.querySelectorAll<HTMLElement>('.carousel__slide'));
+    let current = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let isResetting = false;
+    let animatingScroll = false;
+
+    function getSlideStep(): number {
+      if (allSlides.length < 2) return allSlides[0]?.offsetWidth ?? 0;
+      return allSlides[1].offsetLeft - allSlides[0].offsetLeft;
+    }
+
+    function smoothScrollTo(target: number, duration = 1200): Promise<void> {
+      return new Promise((resolve) => {
+        const start = track!.scrollLeft;
+        const delta = target - start;
+        if (Math.abs(delta) < 1) { resolve(); return; }
+        const t0 = performance.now();
+        animatingScroll = true;
+
+        function ease(t: number): number {
+          return t < 0.5
+            ? 4 * t * t * t
+            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function tick(now: number) {
+          const elapsed = now - t0;
+          const progress = Math.min(elapsed / duration, 1);
+          track!.scrollLeft = start + delta * ease(progress);
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            animatingScroll = false;
+            resolve();
+          }
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+
+    function silentReset(to: number) {
+      isResetting = true;
+      track!.scrollLeft = getSlideStep() * to;
+      current = to;
+      requestAnimationFrame(() => {
+        isResetting = false;
+      });
+    }
+
+    function advance() {
+      if (animatingScroll) return;
+      if (current >= count) {
+        silentReset(current - count);
+        return;
+      }
+      const next = current + 1;
+      current = next;
+      const target = getSlideStep() * current;
+      if (next >= count) {
+        smoothScrollTo(target).then(() => silentReset(next - count));
+      } else {
+        smoothScrollTo(target);
+      }
+    }
+
+    function startAuto() {
+      stopAuto();
+      timer = setInterval(advance, 4500);
+    }
+
+    function stopAuto() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+    track.addEventListener('scroll', () => {
+      if (isResetting || animatingScroll) return;
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const step = getSlideStep();
+        if (step > 0) {
+          const idx = Math.round(track!.scrollLeft / step);
+          if (idx !== current) {
+            current = idx;
+            if (current >= count) {
+              silentReset(current - count);
+            }
+          }
+        }
+      }, 100);
+    }, { passive: true });
+
+    track.addEventListener('mouseenter', stopAuto);
+    track.addEventListener('mouseleave', startAuto);
+    track.addEventListener('touchstart', stopAuto, { passive: true });
+    track.addEventListener('touchend', () => startAuto());
+
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    function onResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (current >= count) silentReset(current - count);
+        track!.scrollTo({ left: getSlideStep() * current, behavior: 'instant' as ScrollBehavior });
+      }, 150);
+    }
+    window.addEventListener('resize', onResize);
+
+    startAuto();
+
+    carouselCleanup = () => {
+      stopAuto();
+      window.removeEventListener('resize', onResize);
+      track.querySelectorAll('[data-clone]').forEach((el) => el.remove());
+    };
+  }
+
+  initCarousel();
+  document.addEventListener('astro:after-swap', initCarousel);
 
 </script>

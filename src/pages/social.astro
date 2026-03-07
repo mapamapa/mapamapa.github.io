@@ -95,7 +95,21 @@ const quoteWords = [
 <style>
   /* ===== IMAGE BOARD ===== */
   .social-board {
+    position: relative;
     padding-top: calc(var(--space-sm) + 70px);
+  }
+
+  .social-board::before {
+    content: '';
+    display: block;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 220px;
+    margin-bottom: -220px;
+    background: linear-gradient(to bottom, var(--color-bg, #0a0a0a) 25%, transparent);
+    pointer-events: none;
+    z-index: 10;
   }
 
   .board {
@@ -141,8 +155,8 @@ const quoteWords = [
 
   .social-quote__inner {
     position: sticky;
-    top: 14vh;
-    min-height: 100vh;
+    top: 25vh;
+    min-height: 50vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -244,7 +258,7 @@ const quoteWords = [
     }
 
     .social-quote__inner {
-      top: 10vh;
+      top: 20vh;
     }
 
     .social-collab__logos {

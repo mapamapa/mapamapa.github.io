@@ -1,9 +1,9 @@
 {
   "projects": [
-    { "id": "cnc", "name": "CNC", "description": "Clásica No Convencional", "url": "/work/cnc/" },
-    { "id": "fast", "name": "FAST", "description": "Festival de Arte Contemporáneo", "url": "/work/fast/" },
-    { "id": "saturnalia", "name": "SATURNALIA", "description": "Celebración del Vino", "url": "/work/saturnalia/" },
-    { "id": "parking", "name": "PARKING", "description": "Locación", "url": "/work/parking/" }
+    { "id": "cnc", "name": "CNC", "description": "Clásica No Convencional", "url": "/cnc/" },
+    { "id": "fast", "name": "FAST", "description": "Festival de Arte Contemporáneo", "url": "/fast/" },
+    { "id": "saturnalia", "name": "SATURNALIA", "description": "Celebración del Vino", "url": "/saturnalia/" },
+    { "id": "parking", "name": "PARKING", "description": "Locación", "url": "/parking/" }
   ],
 
   "about": {
@@ -56,19 +56,22 @@
     "title": "Producción & experiencias",
     "items": [
       { "title": "Producción General", "subtitle": "Diseño de Producción", "image": "/img-opt/pye/prodgen.webp", "url": "/produccion-general/" },
-      { "title": "Rito de Primavera", "subtitle": "José Vidal Mut", "image": "/img-opt/pye/rito.webp" },
-      { "title": "Iván Navarro", "subtitle": "Carnavalito GAM", "image": "/img-opt/pye/ivan.webp" },
-      { "title": "Libreria Nacional", "subtitle": "Concurso \"Arte en Vivo\"", "image": "/img-opt/pye/lnacional.webp" },
-      { "title": "Exposición Banksy", "subtitle": "Museografía | GAM", "image": "/img-opt/pye/banksy.webp" },
-      { "title": "Artel - Museografía", "subtitle": "Aniversario 85 Años - MAVI", "image": "/img-opt/pye/artel.webp" },
-      { "title": "Nicolas Jaar, Lanzamiento Disco", "subtitle": "Ladridos y Radio Piedras", "image": "/img-opt/pye/njaar.webp" },
-      { "title": "Producción Técnica", "subtitle": "", "image": "/img-opt/pye/prodtec.webp" },
-      { "title": "Ghost Producer", "subtitle": "", "image": "/img-opt/pye/ghost.webp" },
-      { "title": "Editoriales", "subtitle": "", "image": "/img-opt/pye/editoriales.webp" },
-      { "title": "Creatividad & Amigos", "subtitle": "", "image": "/img-opt/pye/creatividad.webp" },
-      { "title": "BTL", "subtitle": "", "image": "/img-opt/pye/btl.webp" }
+      { "title": "Rito de Primavera", "subtitle": "José Vidal Mut", "image": "/img-opt/pye/rito.webp", "url": "/rito-primavera/" },
+      { "title": "Iván Navarro", "subtitle": "Carnavalito GAM", "image": "/img-opt/pye/ivan.webp", "url": "/carnavalito-gam/" },
+      { "title": "Libreria Nacional", "subtitle": "Concurso \"Arte en Vivo\"", "image": "/img-opt/pye/lnacional.webp", "url": "/libreria-nacional/" },
+      { "title": "Exposición Banksy", "subtitle": "Museografía | GAM", "image": "/img-opt/pye/banksy.webp", "url": "/banksy/" },
+      { "title": "Artel - Museografía", "subtitle": "Aniversario 85 Años - MAVI", "image": "/img-opt/pye/artel.webp", "url": "/artel-museografia/" },
+      { "title": "Nicolas Jaar, Lanzamiento Disco", "subtitle": "Ladridos y Radio Piedras", "image": "/img-opt/pye/njaar.webp", "url": "/nicolas-jaar/" }
     ]
   },
+
+  "services": [
+    { "title": "Producción Técnica", "image": "/img-opt/pye/prodtec.webp", "hero": "/img/produccion-tecnica/hero.jpg", "url": "/produccion-tecnica/" },
+    { "title": "Host Producer", "image": "/img-opt/pye/ghost.webp", "hero": "/img/ghost-producers/hero.jpg", "url": "/host-producer/" },
+    { "title": "Editoriales", "image": "/img-opt/pye/editoriales.webp", "hero": "/img/editoriales/hero.jpg", "url": "/editoriales/" },
+    { "title": "Creatividad & Amigos", "image": "/img-opt/pye/creatividad.webp", "hero": "/img/creatividad/crowd1.jpg", "url": "/creatividad-amigos/" },
+    { "title": "BTL", "image": "/img-opt/pye/btl.webp", "hero": "/img/btl/hero.jpg", "url": "/btl/" }
+  ],
 
   "footer": {
     "tagline": "Gestión y producción cultural"

@@ -17,18 +17,17 @@ const { projects, pye, services } = site;
     <p class="hero__office reveal reveal-delay-2">Office</p>
 
     <div class="hero__collage" id="collage">
-      <div class="hero__img-red reveal reveal-delay-3">
+      <div class="collage__item collage__item--main" data-collage-item data-speed="0.15">
         <img src="/img/red.jpg" alt="MAPA MAPA — producción" width="400" height="400" decoding="async" />
       </div>
-
-      <div class="bee" data-bee>
-        <img src="/img/box.jpg" alt="" width="150" height="150" loading="lazy" decoding="async" />
+      <div class="collage__item collage__item--a" data-collage-item data-speed="0.3">
+        <img src="/img/box.jpg" alt="" width="300" height="300" loading="lazy" decoding="async" />
       </div>
-      <div class="bee" data-bee>
-        <img src="/img/proy.jpg" alt="" width="150" height="150" loading="lazy" decoding="async" />
+      <div class="collage__item collage__item--b" data-collage-item data-speed="0.45">
+        <img src="/img/proy.jpg" alt="" width="300" height="300" loading="lazy" decoding="async" />
       </div>
-      <div class="bee" data-bee>
-        <img src="/img/bw.jpg" alt="" width="150" height="150" loading="lazy" decoding="async" />
+      <div class="collage__item collage__item--c" data-collage-item data-speed="0.25">
+        <img src="/img/bw.jpg" alt="" width="300" height="300" loading="lazy" decoding="async" />
       </div>
     </div>
   </section>
@@ -107,7 +106,7 @@ const { projects, pye, services } = site;
   /* ===== HERO ===== */
   .hero {
     position: relative;
-    min-height: 100dvh;
+    min-height: 70dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -176,38 +175,59 @@ const { projects, pye, services } = site;
     position: relative;
     width: 100%;
     max-width: var(--max-width);
-    min-height: clamp(350px, 40vw, 550px);
+    min-height: clamp(280px, 35vw, 500px);
     margin-top: var(--space-lg);
     padding-inline: var(--gutter);
-    overflow: hidden;
   }
 
-  .hero__img-red {
-    width: clamp(220px, 28vw, 380px);
-    aspect-ratio: 1;
-    overflow: hidden;
-  }
-
-  .hero__img-red img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Bee images — absolute within collage, controlled by JS */
-  .bee {
+  .collage__item {
     position: absolute;
-    width: 150px;
-    height: 150px;
     overflow: hidden;
-    pointer-events: none;
-    z-index: var(--z-above);
+    will-change: transform;
+    cursor: grab;
+    touch-action: none;
   }
 
-  .bee img {
+  .collage__item:active {
+    cursor: grabbing;
+  }
+
+  .collage__item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .collage__item--main {
+    width: clamp(200px, 26vw, 360px);
+    aspect-ratio: 1;
+    left: 0;
+    top: 0;
+    z-index: 2;
+  }
+
+  .collage__item--a {
+    width: clamp(120px, 16vw, 220px);
+    aspect-ratio: 1;
+    right: 8%;
+    top: 5%;
+    z-index: 3;
+  }
+
+  .collage__item--b {
+    width: clamp(100px, 13vw, 180px);
+    aspect-ratio: 1;
+    left: 32%;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  .collage__item--c {
+    width: clamp(110px, 14vw, 200px);
+    aspect-ratio: 1;
+    right: 28%;
+    top: 0;
+    z-index: 2;
   }
 
   /* ===== PROJECT LIST ===== */
@@ -291,8 +311,48 @@ const { projects, pye, services } = site;
   }
 
   @media (max-width: 768px) {
+    .hero {
+      min-height: auto;
+      padding-top: 70px;
+      padding-bottom: var(--space-md);
+    }
+
+    .hero__logo-wrap {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .hero__office {
+      margin-top: 0;
+    }
+
     .hero__collage {
-      display: none;
+      min-height: 180px;
+      margin-top: var(--space-sm);
+    }
+
+    .collage__item--main {
+      width: 55%;
+      left: 0;
+    }
+
+    .collage__item--a {
+      width: 35%;
+      right: 0;
+      top: 10%;
+    }
+
+    .collage__item--b {
+      width: 28%;
+      left: 40%;
+      bottom: 0;
+    }
+
+    .collage__item--c {
+      width: 30%;
+      right: 5%;
+      top: auto;
+      bottom: 5%;
     }
 
     .project-row {
@@ -435,6 +495,8 @@ const { projects, pye, services } = site;
 </style>
 
 <script>
+  import { gsap, ScrollTrigger } from '@/scripts/gsap';
+
   function initServicesToggle() {
     const el = document.getElementById('hero-services');
     if (!el) return;
@@ -443,7 +505,7 @@ const { projects, pye, services } = site;
     if (!cursor) {
       cursor = document.createElement('div');
       cursor.id = 'services-cursor';
-      cursor.style.cssText = 'position:fixed;top:0;left:0;width:50px;height:50px;background:#df9de5;pointer-events:none;z-index:9999;opacity:0;transition:opacity .15s;will-change:transform;';
+      cursor.style.cssText = 'position:fixed;top:0;left:0;width:50px;height:50px;background:#df9de5;pointer-events:none;z-index:9999;opacity:0;will-change:transform;';
       document.body.appendChild(cursor);
     }
 
@@ -452,149 +514,260 @@ const { projects, pye, services } = site;
     });
 
     el.addEventListener('mouseenter', (e: MouseEvent) => {
-      cursor!.style.transform = `translate(${e.clientX - 25}px, ${e.clientY - 25}px)`;
-      cursor!.style.opacity = '1';
+      gsap.set(cursor!, { x: e.clientX - 25, y: e.clientY - 25 });
+      gsap.to(cursor!, { opacity: 1, duration: 0.15 });
     });
 
     el.addEventListener('mouseleave', () => {
-      cursor!.style.opacity = '0';
+      gsap.to(cursor!, { opacity: 0, duration: 0.15 });
     });
 
     el.addEventListener('mousemove', (e: MouseEvent) => {
-      cursor!.style.transform = `translate(${e.clientX - 25}px, ${e.clientY - 25}px)`;
+      gsap.set(cursor!, { x: e.clientX - 25, y: e.clientY - 25 });
     });
   }
   initServicesToggle();
   document.addEventListener('astro:after-swap', initServicesToggle);
 
-  let beeCleanup: (() => void) | null = null;
+  const COLLAGE_ST_ID = 'collage';
 
-  function initBees() {
-    if (beeCleanup) { beeCleanup(); beeCleanup = null; }
-
-    const beeEls = document.querySelectorAll<HTMLElement>('[data-bee]');
-    if (!beeEls.length) return;
-
-    if (window.matchMedia('(pointer: coarse)').matches) {
-      beeEls.forEach((el) => { el.style.display = 'none'; });
-      return;
-    }
-
-    const collage = document.getElementById('collage');
-    if (!collage) return;
-
-    const SIZE = 150;
-    const EASE = 0.05;
-
-    const cW = collage.offsetWidth;
-    const cH = collage.offsetHeight;
-
-    function clamp(v: number, min: number, max: number) {
-      return v < min ? min : v > max ? max : v;
-    }
-
-    function randInBox() {
-      return {
-        x: Math.random() * (cW - SIZE),
-        y: Math.random() * (cH - SIZE),
-      };
-    }
-
-    const IDLE_RADIUS = 120;
-    const ACTIVE_RADIUS = 220;
-    const TWO_PI = Math.PI * 2;
-
-    const bees = Array.from(beeEls).map((el, i) => {
-      const home = randInBox();
-      const count = beeEls.length || 3;
-      return {
-        el,
-        x: home.x,
-        y: home.y,
-        angle: (TWO_PI / count) * i + Math.random() * 0.5,
-        speed: 0.008 + Math.random() * 0.012,
-        radiusX: IDLE_RADIUS + Math.random() * 60,
-        radiusY: IDLE_RADIUS + Math.random() * 80,
-        wobble: Math.random() * TWO_PI,
-        wobbleSpeed: 0.02 + Math.random() * 0.015,
-      };
-    });
-
-    bees.forEach((b) => {
-      b.el.style.left = '0';
-      b.el.style.top = '0';
-      b.el.style.transform = `translate(${b.x}px, ${b.y}px)`;
-    });
-
-    let running = true;
-    let active = false;
-    let mouseRelX = cW / 2;
-    let mouseRelY = cH / 2;
-
-    function onEnter() { active = true; }
-    function onLeave() { active = false; }
-
-    function onMove(e: MouseEvent) {
-      const rect = collage.getBoundingClientRect();
-      mouseRelX = e.clientX - rect.left;
-      mouseRelY = e.clientY - rect.top;
-    }
-
-    function animate() {
-      if (!running) return;
-      const w = collage!.offsetWidth;
-      const h = collage!.offsetHeight;
-      const maxX = w - SIZE;
-      const maxY = h - SIZE;
-      const rMult = active ? ACTIVE_RADIUS / IDLE_RADIUS : 1;
-
-      bees.forEach((b) => {
-        b.angle += b.speed;
-        b.wobble += b.wobbleSpeed;
-
-        const rx = b.radiusX * rMult;
-        const ry = b.radiusY * rMult;
-        const wobbleX = Math.sin(b.wobble * 1.3) * 30;
-        const wobbleY = Math.cos(b.wobble * 0.9) * 25;
-
-        const goalX = clamp(
-          mouseRelX - SIZE / 2 + Math.cos(b.angle) * rx + wobbleX,
-          0, maxX
-        );
-        const goalY = clamp(
-          mouseRelY - SIZE / 2 + Math.sin(b.angle) * ry + wobbleY,
-          0, maxY
-        );
-
-        b.x += (goalX - b.x) * EASE;
-        b.y += (goalY - b.y) * EASE;
-
-        b.el.style.transform = `translate(${b.x}px, ${b.y}px)`;
-      });
-
-      requestAnimationFrame(animate);
-    }
-
-    collage.addEventListener('mouseenter', onEnter);
-    collage.addEventListener('mouseleave', onLeave);
-    collage.addEventListener('mousemove', onMove as EventListener);
-    requestAnimationFrame(animate);
-
-    beeCleanup = () => {
-      running = false;
-      collage.removeEventListener('mouseenter', onEnter);
-      collage.removeEventListener('mouseleave', onLeave);
-      collage.removeEventListener('mousemove', onMove as EventListener);
-      beeEls.forEach((el) => {
-        el.style.transform = '';
-        el.style.display = '';
-      });
-    };
+  function killCollageTriggers() {
+    ScrollTrigger.getAll()
+      .filter((t) => (t.vars as any).id === COLLAGE_ST_ID)
+      .forEach((t) => t.kill());
   }
 
-  initBees();
+  function initCollage() {
+    killCollageTriggers();
+
+    const collage = document.getElementById('collage');
+    const items = document.querySelectorAll<HTMLElement>('[data-collage-item]');
+    if (!collage || !items.length) return;
+
+    gsap.set(items, { autoAlpha: 0, y: 40, scale: 0.92 });
+
+    gsap.to(items, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.9,
+      ease: 'expo.out',
+      stagger: 0.12,
+      scrollTrigger: {
+        id: COLLAGE_ST_ID,
+        trigger: collage,
+        start: 'top bottom-=80px',
+        once: true,
+      },
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    items.forEach((item) => {
+      const speed = parseFloat(item.dataset.speed || '0.2');
+      gsap.to(item, {
+        yPercent: -speed * 100,
+        ease: 'none',
+        scrollTrigger: {
+          id: COLLAGE_ST_ID,
+          trigger: collage,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    });
+
+    const FRICTION = 0.92;
+    const COLLISION_BOUNCE = 0.5;
+
+    interface Ball {
+      el: HTMLElement;
+      ox: number;
+      oy: number;
+      vx: number;
+      vy: number;
+      vr: number;
+      r: number;
+      dragging: boolean;
+    }
+
+    const balls: Ball[] = Array.from(items).map((el) => ({
+      el,
+      ox: 0,
+      oy: 0,
+      vx: 0,
+      vy: 0,
+      vr: 0,
+      r: el.offsetWidth / 2,
+      dragging: false,
+    }));
+
+    function getCenter(b: Ball) {
+      const rect = b.el.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+
+    let ticking = false;
+
+    function step() {
+      let moving = false;
+
+      for (let i = 0; i < balls.length; i++) {
+        for (let j = i + 1; j < balls.length; j++) {
+          const a = balls[i];
+          const b = balls[j];
+          const ac = getCenter(a);
+          const bc = getCenter(b);
+          const dx = bc.x - ac.x;
+          const dy = bc.y - ac.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const minDist = a.r + b.r;
+
+          if (dist < minDist) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+            const relVx = a.vx - b.vx;
+            const relVy = a.vy - b.vy;
+            const impact = relVx * nx + relVy * ny;
+
+            if (impact > 0) {
+              const impulse = impact * COLLISION_BOUNCE;
+              if (!a.dragging) { a.vx -= impulse * nx; a.vy -= impulse * ny; a.vr += impulse * 0.8; }
+              if (!b.dragging) { b.vx += impulse * nx; b.vy += impulse * ny; b.vr -= impulse * 0.8; }
+            }
+
+            const overlap = (minDist - dist) / 2 + 0.5;
+            if (!a.dragging) { a.ox -= nx * overlap; a.oy -= ny * overlap; }
+            if (!b.dragging) { b.ox += nx * overlap; b.oy += ny * overlap; }
+          }
+        }
+      }
+
+      for (const b of balls) {
+        if (!b.dragging) {
+          b.vx *= FRICTION;
+          b.vy *= FRICTION;
+          b.vr *= FRICTION;
+          b.ox += b.vx;
+          b.oy += b.vy;
+        }
+
+        const speed = Math.abs(b.vx) + Math.abs(b.vy) + Math.abs(b.vr);
+        if (speed > 0.1 || b.dragging) moving = true;
+
+        gsap.set(b.el, { x: b.ox, y: b.oy, rotation: b.vr * 3 });
+      }
+
+      if (moving) {
+        requestAnimationFrame(step);
+      } else {
+        ticking = false;
+      }
+    }
+
+    function kick() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(step);
+      }
+    }
+
+    function attractAll(px: number, py: number, force: number) {
+      for (const b of balls) {
+        if (b.dragging) continue;
+        const center = getCenter(b);
+        const dx = px - center.x;
+        const dy = py - center.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        b.vx += (dx / dist) * force;
+        b.vy += (dy / dist) * force;
+        b.vr += (dx / dist) * 2;
+      }
+      kick();
+    }
+
+    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+
+    if (isMobile) {
+      items.forEach((item, i) => {
+        let dragBall: Ball | null = null;
+        let lastX = 0;
+        let lastY = 0;
+
+        item.addEventListener('touchstart', (e: TouchEvent) => {
+          const touch = e.touches[0];
+          dragBall = balls[i];
+          dragBall.dragging = true;
+          dragBall.vx = 0;
+          dragBall.vy = 0;
+          lastX = touch.clientX;
+          lastY = touch.clientY;
+          kick();
+          e.preventDefault();
+        }, { passive: false });
+
+        item.addEventListener('touchmove', (e: TouchEvent) => {
+          if (!dragBall) return;
+          const touch = e.touches[0];
+          const dx = touch.clientX - lastX;
+          const dy = touch.clientY - lastY;
+          dragBall.ox += dx;
+          dragBall.oy += dy;
+          dragBall.vx = dx * 0.6;
+          dragBall.vy = dy * 0.6;
+          lastX = touch.clientX;
+          lastY = touch.clientY;
+          e.preventDefault();
+        }, { passive: false });
+
+        function endDrag() {
+          if (dragBall) {
+            dragBall.dragging = false;
+            dragBall = null;
+          }
+        }
+
+        item.addEventListener('touchend', endDrag);
+        item.addEventListener('touchcancel', endDrag);
+      });
+
+      collage.addEventListener('touchstart', (e: TouchEvent) => {
+        const isDraggingItem = (e.target as HTMLElement).closest('[data-collage-item]');
+        if (isDraggingItem) return;
+        const touch = e.touches[0];
+        attractAll(touch.clientX, touch.clientY, 10);
+      }, { passive: true });
+    } else {
+      const HIT_FORCE = 8;
+
+      items.forEach((item, i) => {
+        item.addEventListener('mouseenter', (e: MouseEvent) => {
+          const b = balls[i];
+          const rect = item.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = cx - e.clientX;
+          const dy = cy - e.clientY;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+          b.vx += (dx / dist) * HIT_FORCE;
+          b.vy += (dy / dist) * HIT_FORCE;
+          b.vr += (dx / dist) * 3;
+
+          kick();
+        });
+      });
+
+      collage.addEventListener('click', (e: MouseEvent) => {
+        attractAll(e.clientX, e.clientY, 12);
+      });
+    }
+  }
+
+  initCollage();
   document.addEventListener('astro:after-swap', () => {
-    requestAnimationFrame(initBees);
+    requestAnimationFrame(initCollage);
   });
 
   let carouselCleanup: (() => void) | null = null;
@@ -622,39 +795,28 @@ const { projects, pye, services } = site;
     let current = 0;
     let timer: ReturnType<typeof setInterval> | null = null;
     let isResetting = false;
-    let animatingScroll = false;
+    let scrollTween: gsap.core.Tween | null = null;
 
     function getSlideStep(): number {
       if (allSlides.length < 2) return allSlides[0]?.offsetWidth ?? 0;
       return allSlides[1].offsetLeft - allSlides[0].offsetLeft;
     }
 
-    function smoothScrollTo(target: number, duration = 1200): Promise<void> {
+    function smoothScrollTo(target: number): Promise<void> {
       return new Promise((resolve) => {
+        if (scrollTween) scrollTween.kill();
         const start = track!.scrollLeft;
-        const delta = target - start;
-        if (Math.abs(delta) < 1) { resolve(); return; }
-        const t0 = performance.now();
-        animatingScroll = true;
+        if (Math.abs(target - start) < 1) { resolve(); return; }
 
-        function ease(t: number): number {
-          return t < 0.5
-            ? 4 * t * t * t
-            : 1 - Math.pow(-2 * t + 2, 3) / 2;
-        }
-
-        function tick(now: number) {
-          const elapsed = now - t0;
-          const progress = Math.min(elapsed / duration, 1);
-          track!.scrollLeft = start + delta * ease(progress);
-          if (progress < 1) {
-            requestAnimationFrame(tick);
-          } else {
-            animatingScroll = false;
+        scrollTween = gsap.to(track!, {
+          scrollLeft: target,
+          duration: 1.2,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            scrollTween = null;
             resolve();
-          }
-        }
-        requestAnimationFrame(tick);
+          },
+        });
       });
     }
 
@@ -668,7 +830,7 @@ const { projects, pye, services } = site;
     }
 
     function advance() {
-      if (animatingScroll) return;
+      if (scrollTween) return;
       if (current >= count) {
         silentReset(current - count);
         return;
@@ -694,7 +856,7 @@ const { projects, pye, services } = site;
 
     let scrollTimeout: ReturnType<typeof setTimeout>;
     track.addEventListener('scroll', () => {
-      if (isResetting || animatingScroll) return;
+      if (isResetting || scrollTween) return;
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
         const step = getSlideStep();
@@ -729,6 +891,7 @@ const { projects, pye, services } = site;
 
     carouselCleanup = () => {
       stopAuto();
+      if (scrollTween) scrollTween.kill();
       window.removeEventListener('resize', onResize);
       track.querySelectorAll('[data-clone]').forEach((el) => el.remove());
     };
@@ -736,5 +899,4 @@ const { projects, pye, services } = site;
 
   initCarousel();
   document.addEventListener('astro:after-swap', initCarousel);
-
 </script>

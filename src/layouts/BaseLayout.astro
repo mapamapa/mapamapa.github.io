@@ -70,55 +70,67 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
     <Footer />
 
     <script>
-      let revealObserver: IntersectionObserver | null = null;
+      import { gsap, ScrollTrigger } from '@/scripts/gsap';
+
+      const DELAY_STEP = 0.1;
 
       function dismissPreloader() {
         const loader = document.getElementById('preloader');
-        if (loader && !loader.classList.contains('done')) {
-          loader.classList.add('done');
-          setTimeout(() => loader.remove(), 500);
-        }
+        if (!loader || loader.dataset.done) return;
+        loader.dataset.done = '1';
+        gsap.to(loader, {
+          opacity: 0,
+          duration: 0.4,
+          ease: 'power2.out',
+          onComplete: () => loader.remove(),
+        });
       }
 
-      function initRevealAnimations(immediate = false) {
-        if (revealObserver) {
-          revealObserver.disconnect();
-          revealObserver = null;
-        }
+      const REVEAL_ST_ID = 'reveal';
 
-        const reveals = document.querySelectorAll('.reveal');
-        reveals.forEach((el) => el.classList.remove('visible'));
+      function killRevealTriggers() {
+        ScrollTrigger.getAll()
+          .filter((t) => (t.vars as any).id === REVEAL_ST_ID)
+          .forEach((t) => t.kill());
+      }
 
+      function initRevealAnimations() {
+        killRevealTriggers();
+
+        const reveals = document.querySelectorAll<HTMLElement>('.reveal');
         if (!reveals.length) {
           dismissPreloader();
           return;
         }
 
-        if (immediate) {
-          const vh = window.innerHeight;
-          reveals.forEach((el) => {
-            if (el.getBoundingClientRect().top < vh + 40) {
-              el.classList.add('visible');
-            }
-          });
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const yOffset = isMobile ? 12 : 30;
+
+        gsap.set(reveals, { autoAlpha: 0, y: yOffset });
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          gsap.set(reveals, { autoAlpha: 1, y: 0 });
+          dismissPreloader();
+          return;
         }
 
-        revealObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                revealObserver?.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
-        );
-
         reveals.forEach((el) => {
-          if (!el.classList.contains('visible')) {
-            revealObserver!.observe(el);
-          }
+          const delayClass = Array.from(el.classList).find((c) => c.startsWith('reveal-delay-'));
+          const delay = delayClass ? parseInt(delayClass.replace('reveal-delay-', ''), 10) * DELAY_STEP : 0;
+
+          gsap.to(el, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            delay,
+            ease: 'expo.out',
+            scrollTrigger: {
+              id: REVEAL_ST_ID,
+              trigger: el,
+              start: 'top bottom-=30px',
+              once: true,
+            },
+          });
         });
 
         dismissPreloader();
@@ -126,7 +138,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
 
       function onReady() {
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => initRevealAnimations(false));
+          requestAnimationFrame(() => initRevealAnimations());
         });
       }
 
@@ -137,7 +149,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
       }
 
       document.addEventListener('astro:after-swap', () => {
-        requestAnimationFrame(() => initRevealAnimations(true));
+        requestAnimationFrame(() => initRevealAnimations());
       });
     </script>
   </body>

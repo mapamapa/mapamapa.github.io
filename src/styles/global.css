@@ -141,37 +141,12 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.4s ease;
 }
 
-.preloader.done {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* ===== SCROLL REVEAL ===== */
+/* ===== SCROLL REVEAL (GSAP-driven) ===== */
 .reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity var(--duration-slow) var(--ease-out-expo),
-              transform var(--duration-slow) var(--ease-out-expo);
+  visibility: hidden;
 }
-
-@media (max-width: 768px) {
-  .reveal {
-    transform: translateY(12px);
-  }
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.reveal-delay-1 { transition-delay: 100ms; }
-.reveal-delay-2 { transition-delay: 200ms; }
-.reveal-delay-3 { transition-delay: 300ms; }
-.reveal-delay-4 { transition-delay: 400ms; }
 
 /* ===== VIEW TRANSITIONS ===== */
 ::view-transition-old(root) {
@@ -201,7 +176,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; }
+  .reveal { visibility: visible; }
 }
 
 :focus-visible {

@@ -154,8 +154,6 @@ const MAPA = [
 
   .mapa-cell {
     aspect-ratio: 1;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .mapa-cell--filled {
@@ -165,20 +163,11 @@ const MAPA = [
   .mapa-cell--empty {
     background-color: transparent;
   }
-
-  .mapa-cell--filled:hover {
-    background-color: var(--color-accent);
-    transform: rotate(180deg) scale(1.1);
-  }
-
-  .mapa-cell--filled.mapa-cell--activated {
-    background-color: var(--color-accent);
-    transform: rotate(180deg);
-    transition-delay: var(--delay);
-  }
 </style>
 
 <script>
+  import { gsap } from '@/scripts/gsap';
+
   function initContactForm() {
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
     const success = document.getElementById('form-success');
@@ -200,6 +189,8 @@ const MAPA = [
     });
   }
 
+  let enterTween: gsap.core.Tween | null = null;
+
   function initMapaGrid() {
     const grid = document.getElementById('mapa-grid');
     if (!grid) return;
@@ -207,11 +198,44 @@ const MAPA = [
     const cells = grid.querySelectorAll<HTMLElement>('.mapa-cell--filled');
 
     grid.addEventListener('mouseenter', () => {
-      cells.forEach((cell) => cell.classList.add('mapa-cell--activated'));
+      if (enterTween) enterTween.kill();
+      enterTween = gsap.to(cells, {
+        rotation: 180,
+        backgroundColor: '#df9de5',
+        duration: 0.5,
+        ease: 'expo.out',
+        stagger: { from: 'random', each: 0.03 },
+      });
     });
 
     grid.addEventListener('mouseleave', () => {
-      cells.forEach((cell) => cell.classList.remove('mapa-cell--activated'));
+      if (enterTween) enterTween.kill();
+      enterTween = gsap.to(cells, {
+        rotation: 0,
+        backgroundColor: '#fff',
+        duration: 0.5,
+        ease: 'expo.out',
+        stagger: { from: 'random', each: 0.03 },
+      });
+    });
+
+    cells.forEach((cell) => {
+      cell.addEventListener('mouseenter', () => {
+        gsap.to(cell, {
+          rotation: 180,
+          scale: 1.1,
+          backgroundColor: '#df9de5',
+          duration: 0.35,
+          ease: 'expo.out',
+        });
+      });
+      cell.addEventListener('mouseleave', () => {
+        gsap.to(cell, {
+          scale: 1,
+          duration: 0.35,
+          ease: 'expo.out',
+        });
+      });
     });
   }
 

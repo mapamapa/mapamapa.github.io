@@ -32,6 +32,7 @@ const quoteWords = [
 <BaseLayout title="Social" description="Sigue a MAPA MAPA en redes sociales.">
   <!-- Image Board -->
   <section class="social-board container">
+    <div class="board__fade" data-board-fade aria-hidden="true"></div>
     <div class="board">
       {cols.map((col, ci) => (
         <div class="board__col">
@@ -99,9 +100,7 @@ const quoteWords = [
     padding-top: calc(var(--space-sm) + 70px);
   }
 
-  .social-board::before {
-    content: '';
-    display: block;
+  .board__fade {
     position: sticky;
     top: 0;
     width: 100%;
@@ -110,6 +109,7 @@ const quoteWords = [
     background: linear-gradient(to bottom, var(--color-bg, #0a0a0a) 25%, transparent);
     pointer-events: none;
     z-index: 10;
+    opacity: 0;
   }
 
   .board {
@@ -179,15 +179,7 @@ const quoteWords = [
   }
 
   .social-quote__word {
-    opacity: 0.14;
-    transform: translate3d(0, 72px, 0);
-    transition: opacity 0.35s ease, transform 0.6s var(--ease-out-expo);
     will-change: opacity, transform;
-  }
-
-  .social-quote__word--visible {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
   }
 
   /* ===== COLABORADORES ===== */
@@ -204,14 +196,6 @@ const quoteWords = [
     flex-direction: column;
     align-items: center;
     gap: var(--space-lg);
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.7s ease, transform 0.9s var(--ease-out-expo);
-  }
-
-  .social-collab__group--visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .social-collab__label {
@@ -235,13 +219,7 @@ const quoteWords = [
     width: auto;
     object-fit: contain;
     filter: grayscale(100%) brightness(0.7);
-    opacity: 0;
-    transition: filter 0.4s ease, opacity 0.6s ease;
-    transition-delay: var(--logo-delay, 0s);
-  }
-
-  .social-collab__group--visible .social-collab__logo {
-    opacity: 1;
+    transition: filter 0.4s ease;
   }
 
   .social-collab__logo--lg {
@@ -282,22 +260,47 @@ const quoteWords = [
       padding-bottom: var(--space-3xl);
     }
 
-    .social-quote__word,
+    .social-quote__word {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
     .social-collab__group {
-      opacity: 1;
-      transform: none;
-      transition: none;
+      opacity: 1 !important;
+      transform: none !important;
     }
   }
 </style>
 
 <script>
-  let socialScrollCleanup: (() => void) | null = null;
+  import { gsap, ScrollTrigger } from '@/scripts/gsap';
 
-  function initSocialScrollReveal() {
-    if (socialScrollCleanup) {
-      socialScrollCleanup();
-      socialScrollCleanup = null;
+  const SOCIAL_ST_ID = 'social';
+
+  function killSocialTriggers() {
+    ScrollTrigger.getAll()
+      .filter((t) => (t.vars as any).id === SOCIAL_ST_ID)
+      .forEach((t) => t.kill());
+  }
+
+  function initSocialAnimations() {
+    killSocialTriggers();
+
+    const boardFade = document.querySelector<HTMLElement>('[data-board-fade]');
+    const board = document.querySelector<HTMLElement>('.board');
+
+    if (boardFade && board) {
+      gsap.to(boardFade, {
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          id: SOCIAL_ST_ID,
+          trigger: board,
+          start: 'top top',
+          end: '+=300',
+          scrub: true,
+        },
+      });
     }
 
     const quoteSection = document.querySelector<HTMLElement>('[data-scroll-quote]');
@@ -307,66 +310,62 @@ const quoteWords = [
     if (!quoteSection || !quoteWords.length) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      quoteWords.forEach((w) => w.classList.add('social-quote__word--visible'));
-      collabGroups.forEach((g) => g.classList.add('social-collab__group--visible'));
+      gsap.set(quoteWords, { opacity: 1, y: 0 });
+      gsap.set(collabGroups, { opacity: 1, y: 0 });
       return;
     }
 
-    function update() {
-      const vh = window.innerHeight;
-      const sectionRect = quoteSection!.getBoundingClientRect();
+    gsap.set(quoteWords, { opacity: 0.14, y: 72 });
 
-      const scrollableDistance = sectionRect.height - vh;
-      const scrolled = -sectionRect.top;
-      const progress = Math.min(Math.max(scrolled / scrollableDistance, 0), 1);
-
-      const count = quoteWords.length;
-
-      quoteWords.forEach((word, i) => {
-        const wordStart = i / count;
-        const wordEnd = (i + 1) / count;
-        const local = Math.min(Math.max((progress - wordStart) / (wordEnd - wordStart), 0), 1);
-
-        word.style.opacity = `${0.1 + local * 0.9}`;
-        word.style.transform = `translate3d(0, ${(1 - local) * 60}px, 0)`;
-      });
-    }
-
-    let ticking = false;
-
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        update();
-        ticking = false;
-      });
-    }
-
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-
-    const groupObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).classList.add('social-collab__group--visible');
-            groupObserver.unobserve(entry.target);
-          }
-        });
+    const quoteTl = gsap.timeline({
+      scrollTrigger: {
+        id: SOCIAL_ST_ID,
+        trigger: quoteSection,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.5,
       },
-      { threshold: 0.05 }
-    );
-    collabGroups.forEach((g) => groupObserver.observe(g));
+    });
 
-    socialScrollCleanup = () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      groupObserver.disconnect();
-    };
+    quoteWords.forEach((word, i) => {
+      const pos = i / quoteWords.length;
+      quoteTl.to(word, {
+        opacity: 1,
+        y: 0,
+        duration: 1 / quoteWords.length,
+        ease: 'expo.out',
+      }, pos);
+    });
+
+    collabGroups.forEach((group) => {
+      const logos = group.querySelectorAll<HTMLElement>('.social-collab__logo');
+
+      gsap.set(group, { opacity: 0, y: 40 });
+      gsap.set(logos, { opacity: 0 });
+
+      ScrollTrigger.create({
+        id: SOCIAL_ST_ID,
+        trigger: group,
+        start: 'top bottom-=50px',
+        once: true,
+        onEnter: () => {
+          gsap.to(group, {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'expo.out',
+          });
+          gsap.to(logos, {
+            opacity: 1,
+            duration: 0.6,
+            stagger: 0.15,
+            ease: 'power2.out',
+          });
+        },
+      });
+    });
   }
 
-  initSocialScrollReveal();
-  document.addEventListener('astro:after-swap', initSocialScrollReveal);
+  initSocialAnimations();
+  document.addEventListener('astro:after-swap', initSocialAnimations);
 </script>

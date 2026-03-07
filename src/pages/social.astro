@@ -368,4 +368,31 @@ const quoteWords = [
 
   initSocialAnimations();
   document.addEventListener('astro:after-swap', initSocialAnimations);
+
+  function refreshAfterImages() {
+    const imgs = document.querySelectorAll<HTMLImageElement>('.board__item img');
+    if (!imgs.length) return;
+
+    let loaded = 0;
+    const total = imgs.length;
+
+    function check() {
+      loaded++;
+      if (loaded >= total) {
+        ScrollTrigger.refresh();
+      }
+    }
+
+    imgs.forEach((img) => {
+      if (img.complete) {
+        check();
+      } else {
+        img.addEventListener('load', check, { once: true });
+        img.addEventListener('error', check, { once: true });
+      }
+    });
+  }
+
+  refreshAfterImages();
+  document.addEventListener('astro:after-swap', refreshAfterImages);
 </script>

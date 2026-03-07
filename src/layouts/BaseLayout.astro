@@ -60,7 +60,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
   </head>
   <body>
     <div class="preloader" id="preloader">
-      <img src="/img/logo.png" alt="MAPA MAPA" width="80" height="80" style="opacity:0.6" />
+      <img src="/img/logo.png" alt="MAPA MAPA" width="80" style="opacity:0.6; width:80px; height:auto;" />
     </div>
 
     <Nav />
@@ -74,16 +74,28 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
 
       const DELAY_STEP = 0.1;
 
-      function dismissPreloader() {
-        const loader = document.getElementById('preloader');
-        if (!loader || loader.dataset.done) return;
-        loader.dataset.done = '1';
+      function fadeOutPreloader(loader: HTMLElement) {
         gsap.to(loader, {
           opacity: 0,
           duration: 0.4,
           ease: 'power2.out',
           onComplete: () => loader.remove(),
         });
+      }
+
+      function dismissPreloader() {
+        const loader = document.getElementById('preloader');
+        if (!loader || loader.dataset.done) return;
+        loader.dataset.done = '1';
+
+        const waitVideo = document.querySelector<HTMLVideoElement>('[data-wait-video]');
+        if (waitVideo && waitVideo.readyState < 3) {
+          waitVideo.addEventListener('canplay', () => fadeOutPreloader(loader), { once: true });
+          setTimeout(() => fadeOutPreloader(loader), 5000);
+          return;
+        }
+
+        fadeOutPreloader(loader);
       }
 
       const REVEAL_ST_ID = 'reveal';

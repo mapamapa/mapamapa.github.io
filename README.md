@@ -6,129 +6,108 @@ Construido con [Astro 5](https://astro.build), desplegado en GitHub Pages en [ma
 
 ---
 
-## Requisitos previos
+## Levantar el proyecto en un computador nuevo
 
-| Herramienta | Versión mínima | Para qué se usa |
-| ----------- | -------------- | ---------------- |
-| [Node.js](https://nodejs.org) | v20 o superior | Runtime de JavaScript, incluye npm |
-| [Git](https://git-scm.com) | cualquiera reciente | Control de versiones y clonado del repo |
-| npm | v10+ (viene con Node) | Gestor de paquetes |
-
-### Dependencias que se instalan automáticamente con `npm install`
-
-| Paquete | Rol |
-| ------- | --- |
-| `astro` ^5 | Framework de sitio estático |
-| `@astrojs/sitemap` ^3.7 | Generación automática de sitemap.xml |
-| `sharp` ^0.34 | Optimización de imágenes a WebP (dev dependency) |
-
-> **sharp** requiere compilación nativa. En la mayoría de los casos npm lo resuelve solo, pero si falla ver la sección [Solución de problemas](#solución-de-problemas).
-
----
-
-## Instalación paso a paso
+El proyecto incluye scripts que **detectan e instalan todo lo necesario** automáticamente. No requieren tener nada instalado previamente, salvo el sistema operativo.
 
 ### Windows
 
-1. **Instalar Node.js**
-   - Descargar el instalador **LTS** (v20+) desde [nodejs.org](https://nodejs.org).
-   - Ejecutar el `.msi`, dejar las opciones por defecto y marcar "Automatically install the necessary tools" si aparece.
-   - Verificar en PowerShell o CMD:
+1. Descargar el proyecto como `.zip` desde GitHub y descomprimirlo (o clonarlo con `git clone` si ya tienes Git).
+2. Abrir **PowerShell** dentro de la carpeta del proyecto.
+3. Ejecutar:
 
-     ```powershell
-     node -v
-     npm -v
-     ```
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
 
-2. **Instalar Git**
-   - Descargar desde [git-scm.com](https://git-scm.com/download/win) y seguir el instalador.
-   - Verificar:
+El script hace lo siguiente:
 
-     ```powershell
-     git --version
-     ```
+| Paso | Qué hace | Cómo lo hace |
+| ---- | -------- | ------------ |
+| 1 | Instala **Git** si no está | Usa `winget` (incluido en Windows 10/11) |
+| 2 | Instala **Node.js v20+** si no está | Usa `winget install OpenJS.NodeJS.LTS` |
+| 3 | Verifica que **npm** funcione | Viene incluido con Node.js |
+| 4 | Instala las **dependencias del proyecto** | Ejecuta `npm install` (Astro, sharp, sitemap, gsap) |
 
-3. **Clonar el repositorio**
-
-   ```powershell
-   git clone https://github.com/mapamapa/mapamapa.github.io.git
-   cd mapamapa.github.io
-   ```
-
-4. **Instalar dependencias**
-
-   ```powershell
-   npm install
-   ```
-
-5. **Iniciar el servidor de desarrollo**
-
-   ```powershell
-   npm run dev
-   ```
-
-   Abrir **http://localhost:4321** en el navegador.
-
----
+> Si el script instala Git o Node por primera vez, puede pedir que cierres y reabras la terminal antes de continuar. Solo hay que volver a ejecutar `.\setup.ps1`.
 
 ### macOS
 
-1. **Instalar Node.js** (dos opciones)
+1. Abrir **Terminal**.
+2. Si tienes Git: clonar el repo. Si no, descargar el `.zip` desde GitHub.
 
-   **Opción A — Instalador directo:**
-   - Descargar el `.pkg` LTS (v20+) desde [nodejs.org](https://nodejs.org) e instalar.
+```bash
+git clone https://github.com/mapamapa/mapamapa.github.io.git
+cd mapamapa.github.io
+bash setup.sh
+```
 
-   **Opción B — Con Homebrew (recomendado):**
+El script hace lo siguiente:
 
-   ```bash
-   # Instalar Homebrew si no lo tienes
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+| Paso | Qué hace | Cómo lo hace |
+| ---- | -------- | ------------ |
+| 1 | Instala **Homebrew** si no está | Descarga e instala desde brew.sh |
+| 2 | Instala **Git** si no está | Usa `brew install git` o Xcode CLI Tools |
+| 3 | Instala **Node.js v20+** si no está | Usa `brew install node@20` |
+| 4 | Verifica que **npm** funcione | Viene incluido con Node.js |
+| 5 | Instala las **dependencias del proyecto** | Ejecuta `npm install` (Astro, sharp, sitemap, gsap) |
 
-   # Instalar Node.js
-   brew install node@20
-   ```
+### Linux
 
-   Verificar:
+Mismo script que macOS:
 
-   ```bash
-   node -v
-   npm -v
-   ```
+```bash
+bash setup.sh
+```
 
-2. **Instalar Git**
-   - macOS incluye Git con las Xcode Command Line Tools. Si no lo tienes:
+En Linux usa **nvm** para instalar Node.js y el gestor de paquetes del sistema (`apt`, `dnf` o `pacman`) para Git.
 
-     ```bash
-     xcode-select --install
-     ```
+---
 
-   - O con Homebrew: `brew install git`
-   - Verificar:
+## Después del setup
 
-     ```bash
-     git --version
-     ```
+Una vez completado el script, el proyecto queda listo. Para iniciar:
 
-3. **Clonar el repositorio**
+```bash
+npm run dev
+```
 
-   ```bash
-   git clone https://github.com/mapamapa/mapamapa.github.io.git
-   cd mapamapa.github.io
-   ```
+El sitio queda disponible en **http://localhost:4321** con hot reload (se actualiza solo al guardar cambios).
 
-4. **Instalar dependencias**
+---
 
-   ```bash
-   npm install
-   ```
+## Qué se instala en el computador
 
-5. **Iniciar el servidor de desarrollo**
+### Herramientas del sistema (se instalan una sola vez)
 
-   ```bash
-   npm run dev
-   ```
+| Herramienta | Versión | Para qué se usa |
+| ----------- | ------- | ---------------- |
+| [Git](https://git-scm.com) | cualquiera | Control de versiones, clonar y subir cambios |
+| [Node.js](https://nodejs.org) | v20 o superior | Runtime de JavaScript, necesario para correr Astro |
+| npm | v10+ (viene con Node) | Gestor de paquetes, instala las dependencias |
 
-   Abrir **http://localhost:4321** en el navegador.
+### Dependencias del proyecto (se instalan dentro de la carpeta con `npm install`)
+
+| Paquete | Versión | Rol |
+| ------- | ------- | --- |
+| `astro` | ^5 | Framework que genera el sitio estático |
+| `@astrojs/sitemap` | ^3.7 | Genera el sitemap.xml para SEO |
+| `gsap` | ^3.12 | Animaciones de la interfaz |
+| `sharp` | ^0.34 | Convierte imágenes a WebP optimizado (dev dependency) |
+
+Estas dependencias se guardan en `node_modules/` y no se suben al repositorio. Si se borra esa carpeta, basta con ejecutar `npm install` de nuevo.
+
+---
+
+## Verificar el entorno
+
+Si ya tienes Node instalado y quieres confirmar que todo está en orden sin reinstalar nada:
+
+```bash
+npm run setup
+```
+
+Muestra un diagnóstico rápido de Node, npm, Git y cada paquete del proyecto.
 
 ---
 
@@ -140,8 +119,9 @@ Construido con [Astro 5](https://astro.build), desplegado en GitHub Pages en [ma
 | `npm run build` | Optimiza imágenes + genera el sitio estático en `dist/` |
 | `npm run preview` | Previsualiza el build localmente |
 | `npm run optimize` | Solo optimiza imágenes (sin build) |
+| `npm run setup` | Verifica que el entorno esté completo |
 
-### Qué hace cada paso del build
+### Qué hace el build
 
 1. `npm run optimize` — Ejecuta `scripts/optimize-images.mjs` que usa **sharp** para convertir las imágenes de `public/img/` a WebP optimizado en `public/img-opt/`.
 2. `astro build` — Compila el sitio estático y lo deja en la carpeta `dist/`.
@@ -175,7 +155,11 @@ mapamapa.github.io/
 │   ├── CNAME                    # Dominio mapamapa.cl
 │   └── robots.txt               # SEO
 ├── scripts/
-│   └── optimize-images.mjs      # Script de optimización de imágenes
+│   ├── optimize-images.mjs      # Optimización de imágenes con sharp
+│   └── setup.mjs                # Verificación de entorno (npm run setup)
+├── setup.sh                     # Setup automático para macOS/Linux
+├── setup.ps1                    # Setup automático para Windows
+├── .nvmrc                       # Versión de Node fijada para nvm
 ├── .github/workflows/
 │   └── deploy.yml               # CI/CD con GitHub Actions
 ├── astro.config.mjs             # Configuración de Astro
@@ -224,28 +208,21 @@ El dominio `mapamapa.cl` está configurado via `public/CNAME`.
 
 ---
 
-## Stack técnico
-
-| Tecnología | Uso |
-| ---------- | --- |
-| **Astro 5** | Framework de sitio estático |
-| **View Transitions** | Transiciones animadas entre páginas |
-| **sharp** | Optimización automática de imágenes a WebP |
-| **Instrument Sans** | Tipografía (Google Fonts, variable 400–700) |
-| **CSS custom properties** | Design system con fluid typography |
-| **@astrojs/sitemap** | Generación automática de sitemap |
-| **GitHub Actions** | CI/CD automático |
-
----
-
 ## Solución de problemas
+
+### El script de setup no puede instalar Git o Node (Windows)
+
+Si `winget` no está disponible (versiones antiguas de Windows 10), instalar manualmente:
+- **Node.js**: descargar el instalador LTS desde [nodejs.org](https://nodejs.org)
+- **Git**: descargar desde [git-scm.com](https://git-scm.com/download/win)
+
+Después de instalar, cerrar y reabrir la terminal, y ejecutar `.\setup.ps1` de nuevo.
 
 ### `npm install` falla al compilar sharp
 
 **sharp** necesita binarios nativos. Si falla:
 
 ```bash
-# Limpiar caché y reinstalar
 npm cache clean --force
 rm -rf node_modules package-lock.json
 npm install
@@ -253,11 +230,6 @@ npm install
 
 En **Windows**, si el error menciona "node-gyp" o "Visual C++":
 - Instalar [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) con la carga de trabajo "Desktop development with C++".
-- O ejecutar en PowerShell como administrador:
-
-  ```powershell
-  npm install -g windows-build-tools
-  ```
 
 En **macOS**, si pide Xcode tools:
 
@@ -268,7 +240,6 @@ xcode-select --install
 ### El puerto 4321 está ocupado
 
 ```bash
-# Usar otro puerto
 npx astro dev --port 3000
 ```
 
@@ -282,4 +253,12 @@ npm run optimize
 
 ### Cambios en `site.json` no se reflejan
 
-El servidor de desarrollo detecta cambios automáticamente. Si no se actualizan, detener el servidor (Ctrl+C) y volver a ejecutar `npm run dev`.
+Detener el servidor (Ctrl+C) y volver a ejecutar `npm run dev`.
+
+### Permisos en PowerShell (Windows)
+
+Si PowerShell bloquea el script con un error de "execution policy":
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```

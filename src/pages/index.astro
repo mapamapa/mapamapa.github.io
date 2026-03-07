@@ -355,6 +355,15 @@ const { projects, pye, services } = site;
       bottom: 5%;
     }
 
+    .project-cube:hover .project-row {
+      transform: rotateX(0deg);
+    }
+
+    .project-cube:hover .project-row--back {
+      transform: rotateX(-90deg);
+      visibility: hidden;
+    }
+
     .project-row {
       grid-template-columns: 40px 1fr auto;
     }
@@ -528,6 +537,34 @@ const { projects, pye, services } = site;
   }
   initServicesToggle();
   document.addEventListener('astro:after-swap', initServicesToggle);
+
+  function initMobileProjectCubes() {
+    if (!window.matchMedia('(pointer: coarse)').matches) return;
+
+    document.querySelectorAll<HTMLElement>('.project-cube').forEach((cube) => {
+      const front = cube.querySelector<HTMLElement>('.project-row:not(.project-row--back)');
+      const back = cube.querySelector<HTMLElement>('.project-row--back');
+      const link = cube.querySelector<HTMLAnchorElement>('a');
+      if (!front || !back || !link) return;
+
+      cube.addEventListener('click', (e) => {
+        e.preventDefault();
+        const url = link.href;
+
+        gsap.to(front, { rotateX: 90, duration: 0.35, ease: 'power2.in' });
+        gsap.set(back, { visibility: 'visible' });
+        gsap.fromTo(back, { rotateX: -90 }, {
+          rotateX: 0,
+          duration: 0.35,
+          ease: 'power2.out',
+          onComplete: () => { window.location.href = url; },
+        });
+      });
+    });
+  }
+
+  initMobileProjectCubes();
+  document.addEventListener('astro:after-swap', initMobileProjectCubes);
 
   const COLLAGE_ST_ID = 'collage';
 

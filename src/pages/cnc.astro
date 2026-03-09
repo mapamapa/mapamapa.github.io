@@ -70,6 +70,9 @@ const gallery = {
         />
       </figure>
 
+    </section>
+
+    <div class="production__bottom-row">
       <figure class="production__card production__card--wide reveal reveal-delay-3">
         <img
           src={gallery.scene1}
@@ -91,17 +94,17 @@ const gallery = {
           decoding="async"
         />
       </figure>
-    </section>
+    </div>
 
     <p class="production__credits reveal reveal-delay-4">
-      Proyecto colaborativo impulsado por MAPAMAPA. MAPACOMUN, NEEDLE, PAOLO BORTOLAMEOLLI, LUPA Y AMIGOS
+      [Proyecto colaborativo impulsado por MAPAMAPA. MAPACOMUN, NEEDLE, PAOLO BORTOLAMEOLLI, LUPA Y AMIGOS]
     </p>
   </section>
 </BaseLayout>
 
 <style>
   .production {
-    padding-top: clamp(5.5rem, 8vw, 7rem);
+    padding-top: clamp(2.5rem, 4vw, 4rem);
     padding-bottom: var(--space-xl);
   }
 
@@ -113,14 +116,15 @@ const gallery = {
 
   .production__hero {
     overflow: hidden;
-    background: #060606;
+    height: 540px;
   }
 
   .production__hero img,
   .production__card img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
+    display: block;
   }
 
   .production__heading {
@@ -137,17 +141,15 @@ const gallery = {
   }
 
   .production__editorial {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 0;
+    display: flex;
+    gap: var(--space-md);
     align-items: start;
   }
 
   .production__copy {
-    grid-column: span 6;
+    flex: 1 1 58%;
     display: grid;
     gap: 1rem;
-    padding-right: var(--space-md);
   }
 
   .production__copy p {
@@ -159,21 +161,30 @@ const gallery = {
 
   .production__card {
     overflow: hidden;
-    background: #060606;
-    min-height: 100%;
   }
 
   .production__card--portrait {
-    grid-column: 7 / -1;
-    grid-row: 1 / 3;
+    flex: 0 0 auto;
+    max-width: 402px;
+  }
+
+  .production__bottom-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
   }
 
   .production__card--wide {
-    grid-column: 1 / 8;
+    flex: 1 1 55%;
+  }
+
+  .production__card--wide img {
+    width: 678px;
+    max-width: 100%;
   }
 
   .production__card--small {
-    grid-column: 8 / -1;
+    flex: 1 1 45%;
   }
 
   .production__credits {
@@ -197,21 +208,20 @@ const gallery = {
 
   @media (max-width: 899px) {
     .production__editorial {
-      grid-template-columns: 1fr;
-      gap: 0;
+      flex-direction: column;
     }
 
-    .production__copy,
-    .production__card--portrait,
-    .production__card--wide,
-    .production__card--small {
-      grid-column: auto;
-      grid-row: auto;
+    .production__card--portrait {
+      max-width: none;
     }
 
     .production__copy {
-      padding-right: 0;
       margin-bottom: var(--space-sm);
+    }
+
+    .production__bottom-row {
+      flex-direction: column;
+      gap: var(--space-xs);
     }
   }
 </style>

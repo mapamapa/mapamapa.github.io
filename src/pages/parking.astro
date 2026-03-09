@@ -9,6 +9,18 @@ const gallery = {
   space1: '/img/work/parking/space1.jpg',
   space2: '/img/work/parking/space2.jpg',
 };
+
+const carousel = [
+  '/img/work/parking/carousel1.png',
+  '/img/work/parking/carousel2.png',
+  '/img/work/parking/carousel3.png',
+  '/img/work/parking/carousel4.png',
+  '/img/work/parking/carousel5.png',
+  '/img/work/parking/carousel6.png',
+  '/img/work/parking/carousel7.png',
+  '/img/work/parking/carousel8.png',
+  '/img/work/parking/carousel9.png',
+];
 ---
 
 <BaseLayout title={title} description={description} image={gallery.hero}>
@@ -35,18 +47,12 @@ const gallery = {
       <div class="production__copy reveal reveal-delay-2">
         <h2 id="parking-copy-title" class="sr-only">Descripción del proyecto</h2>
         <p>
-          PARKING es una de las locaciones más singulares de MAPAMAPA y MAPACOMUN: un estacionamiento
-          subterráneo ubicado en el nivel –6 que se transforma en un espacio modular y adaptable para
+          PARKING es una de las locaciones más singulares de MAPAMAPA y MAPACOMUN: un estacionamiento subterráneo ubicado en el nivel –6 que se transforma en un espacio modular y adaptable para
           todo tipo de experiencias.
         </p>
         <p>
           Su carácter industrial y su arquitectura flexible permiten reinterpretar el lugar en cada
           evento, convirtiéndolo en un escenario único que desafía lo convencional.
-        </p>
-        <p>
-          PARKING es un espacio que desafía las convenciones tradicionales y da libertad total a la
-          creación. Cada montaje, iluminación o disposición espacial propone una nueva forma de
-          habitar lo subterráneo.
         </p>
       </div>
 
@@ -71,17 +77,38 @@ const gallery = {
           decoding="async"
         />
       </figure>
+
+      <p class="production__bottom-copy reveal reveal-delay-3">
+        PARKING es un espacio que desafía las convenciones tradicionales y da libertad total a la
+        creación. Cada montaje, iluminación o disposición espacial propone una nueva forma de
+        habitar lo subterráneo.
+      </p>
     </section>
 
+    <div class="carousel reveal reveal-delay-3">
+      <div class="carousel__track">
+        {[...carousel, carousel[0]].map((src) => (
+          <img
+            src={src}
+            alt=""
+            width="1600"
+            height="1067"
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
+      </div>
+    </div>
+
     <p class="production__credits reveal reveal-delay-3">
-      Proyecto conjunto con MAPACOMUN
+      [Proyecto conjunto con MAPACOMUN]
     </p>
   </section>
 </BaseLayout>
 
 <style>
   .production {
-    padding-top: clamp(5.5rem, 8vw, 7rem);
+    padding-top: clamp(2.5rem, 4vw, 4rem);
     padding-bottom: var(--space-xl);
   }
 
@@ -94,6 +121,7 @@ const gallery = {
   .production__hero {
     overflow: hidden;
     background: #060606;
+    height: 540px;
   }
 
   .production__hero img,
@@ -141,7 +169,14 @@ const gallery = {
     font-size: clamp(1rem, 0.92rem + 0.35vw, 1.18rem);
     line-height: 1.08;
     color: #c8c8c8;
-    max-width: 58ch;
+  }
+
+  .production__bottom-copy {
+    grid-column: 1 / -1;
+    margin-top: var(--space-md);
+    font-size: clamp(1rem, 0.92rem + 0.35vw, 1.18rem);
+    line-height: 1.08;
+    color: #c8c8c8;
   }
 
   .production__card {
@@ -156,6 +191,40 @@ const gallery = {
 
   .production__card--right {
     grid-column: 7 / -1;
+  }
+
+  .carousel {
+    overflow: hidden;
+    margin-top: var(--space-md);
+    width: 900px;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .carousel__track {
+    display: flex;
+    height: 430px;
+    animation: carousel-slide 36s ease-in-out infinite;
+  }
+
+  .carousel__track img {
+    width: 900px;
+    height: 430px;
+    flex-shrink: 0;
+    object-fit: cover;
+    display: block;
+  }
+
+  @keyframes carousel-slide {
+    0%, 9%     { transform: translateX(0); }
+    10%, 19%   { transform: translateX(-900px); }
+    20%, 29%   { transform: translateX(-1800px); }
+    30%, 39%   { transform: translateX(-2700px); }
+    40%, 49%   { transform: translateX(-3600px); }
+    50%, 59%   { transform: translateX(-4500px); }
+    60%, 69%   { transform: translateX(-5400px); }
+    70%, 79%   { transform: translateX(-6300px); }
+    80%, 100%  { transform: translateX(-7200px); }
   }
 
   .production__credits {
@@ -173,7 +242,7 @@ const gallery = {
     }
 
     .production__copy {
-      max-width: 50%;
+      max-width: 100%;
     }
   }
 

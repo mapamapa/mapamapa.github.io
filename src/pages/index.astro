@@ -196,6 +196,9 @@ const { projects, pye, services } = site;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
   }
 
   .collage__item--main {
@@ -414,6 +417,7 @@ const { projects, pye, services } = site;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     line-height: 1.05;
+    margin-top: var(--space-xs);
   }
 
   .pye__card-subtitle {
@@ -446,6 +450,14 @@ const { projects, pye, services } = site;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 0.75rem;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+  }
+
+  .carousel__track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
   }
 
   .carousel__track::-webkit-scrollbar {
@@ -466,6 +478,8 @@ const { projects, pye, services } = site;
     height: 100%;
     object-fit: cover;
     display: block;
+    pointer-events: none;
+    -webkit-user-drag: none;
   }
 
   .carousel__label {
@@ -567,6 +581,7 @@ const { projects, pye, services } = site;
   document.addEventListener('astro:after-swap', initMobileProjectCubes);
 
   const COLLAGE_ST_ID = 'collage';
+  let collageMouseCleanup: (() => void) | null = null;
 
   function killCollageTriggers() {
     ScrollTrigger.getAll()
@@ -576,6 +591,7 @@ const { projects, pye, services } = site;
 
   function initCollage() {
     killCollageTriggers();
+    if (collageMouseCleanup) { collageMouseCleanup(); collageMouseCleanup = null; }
 
     const collage = document.getElementById('collage');
     const items = document.querySelectorAll<HTMLElement>('[data-collage-item]');
@@ -777,9 +793,29 @@ const { projects, pye, services } = site;
       }, { passive: true });
     } else {
       const HIT_FORCE = 8;
+      let activeDrag: { ball: Ball; idx: number } | null = null;
+      let lastMX = 0;
+      let lastMY = 0;
+      let didDrag = false;
 
       items.forEach((item, i) => {
+        item.addEventListener('mousedown', (e: MouseEvent) => {
+          const b = balls[i];
+          activeDrag = { ball: b, idx: i };
+          b.dragging = true;
+          b.vx = 0;
+          b.vy = 0;
+          lastMX = e.clientX;
+          lastMY = e.clientY;
+          didDrag = false;
+          item.style.zIndex = '10';
+          document.body.style.userSelect = 'none';
+          kick();
+          e.preventDefault();
+        });
+
         item.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (activeDrag) return;
           const b = balls[i];
           const rect = item.getBoundingClientRect();
           const cx = rect.left + rect.width / 2;
@@ -796,7 +832,38 @@ const { projects, pye, services } = site;
         });
       });
 
+      const onMouseMove = (e: MouseEvent) => {
+        if (!activeDrag) return;
+        const dx = e.clientX - lastMX;
+        const dy = e.clientY - lastMY;
+        activeDrag.ball.ox += dx;
+        activeDrag.ball.oy += dy;
+        activeDrag.ball.vx = dx * 0.6;
+        activeDrag.ball.vy = dy * 0.6;
+        lastMX = e.clientX;
+        lastMY = e.clientY;
+        if (Math.abs(dx) > 2 || Math.abs(dy) > 2) didDrag = true;
+      };
+
+      const onMouseUp = () => {
+        if (!activeDrag) return;
+        activeDrag.ball.dragging = false;
+        items[activeDrag.idx].style.zIndex = '';
+        activeDrag = null;
+        document.body.style.userSelect = '';
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+
+      if (collageMouseCleanup) collageMouseCleanup();
+      collageMouseCleanup = () => {
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+      };
+
       collage.addEventListener('click', (e: MouseEvent) => {
+        if (didDrag) { didDrag = false; return; }
         attractAll(e.clientX, e.clientY, 12);
       });
     }
@@ -909,8 +976,84 @@ const { projects, pye, services } = site;
       }, 100);
     }, { passive: true });
 
-    track.addEventListener('mouseenter', stopAuto);
-    track.addEventListener('mouseleave', startAuto);
+    /* --- Drag-to-scroll (mouse + touch) --- */
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragScrollLeft = 0;
+    let dragVelocity = 0;
+    let lastDragX = 0;
+    let lastDragTime = 0;
+
+    function onPointerDown(e: PointerEvent) {
+      if (e.button !== 0) return;
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragScrollLeft = track!.scrollLeft;
+      dragVelocity = 0;
+      lastDragX = e.clientX;
+      lastDragTime = Date.now();
+      track!.classList.add('is-dragging');
+      track!.setPointerCapture(e.pointerId);
+      stopAuto();
+      if (scrollTween) { scrollTween.kill(); scrollTween = null; }
+      e.preventDefault();
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStartX;
+      track!.scrollLeft = dragScrollLeft - dx;
+
+      const now = Date.now();
+      const dt = now - lastDragTime || 1;
+      dragVelocity = (e.clientX - lastDragX) / dt;
+      lastDragX = e.clientX;
+      lastDragTime = now;
+    }
+
+    function onPointerUp(e: PointerEvent) {
+      if (!isDragging) return;
+      isDragging = false;
+      track!.classList.remove('is-dragging');
+      track!.releasePointerCapture(e.pointerId);
+
+      const momentum = -dragVelocity * 300;
+      if (Math.abs(momentum) > 10) {
+        gsap.to(track!, {
+          scrollLeft: track!.scrollLeft + momentum,
+          duration: 0.6,
+          ease: 'power2.out',
+          onComplete: () => { snapToNearest(); startAuto(); },
+        });
+      } else {
+        snapToNearest();
+        startAuto();
+      }
+    }
+
+    function snapToNearest() {
+      const step = getSlideStep();
+      if (step <= 0) return;
+      const idx = Math.round(track!.scrollLeft / step);
+      current = idx;
+      if (current >= count) {
+        silentReset(current - count);
+      }
+      gsap.to(track!, { scrollLeft: step * current, duration: 0.35, ease: 'power2.out' });
+    }
+
+    track.addEventListener('pointerdown', onPointerDown);
+    track.addEventListener('pointermove', onPointerMove);
+    track.addEventListener('pointerup', onPointerUp);
+    track.addEventListener('pointercancel', onPointerUp);
+
+    track.addEventListener('click', (e: MouseEvent) => {
+      if (Math.abs(dragVelocity) > 0.05) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, { capture: true });
+
     track.addEventListener('touchstart', stopAuto, { passive: true });
     track.addEventListener('touchend', () => startAuto());
 
@@ -930,6 +1073,10 @@ const { projects, pye, services } = site;
       stopAuto();
       if (scrollTween) scrollTween.kill();
       window.removeEventListener('resize', onResize);
+      track.removeEventListener('pointerdown', onPointerDown);
+      track.removeEventListener('pointermove', onPointerMove);
+      track.removeEventListener('pointerup', onPointerUp);
+      track.removeEventListener('pointercancel', onPointerUp);
       track.querySelectorAll('[data-clone]').forEach((el) => el.remove());
     };
   }

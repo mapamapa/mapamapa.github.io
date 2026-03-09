@@ -33,61 +33,80 @@ const gallery = {
     </header>
 
     <section class="production__editorial" aria-labelledby="rito-copy-title">
-      <div class="production__copy reveal reveal-delay-2">
+      <div class="production__intro reveal reveal-delay-2">
         <h2 id="rito-copy-title" class="sr-only">Descripción del proyecto</h2>
         <p>
           MAPAMAPA estuvo a cargo de la coproducción del reestreno de Rito de Primavera en MUT, junto a LOTUS, la Compañía de José Vidal y LUPA, reactivando una de las piezas escénicas contemporáneas más intensas del coreógrafo nacional.
         </p>
-        <p>
-          Creada por José Vidal, la obra propone una experiencia polirrítmica y sensorial que convoca a performers y público a un viaje colectivo donde cuerpos, voces, aromas, sonidos y energías se funden en un ritual escénico único.
-        </p>
-        <p>
-          Su banda sonora —que incluye un track del dúo (ab)², conformado por Felipe Bribbo y Andrés Abarzúa— mantiene la estructura rítmica de Stravinsky, sosteniendo una energía que impulsa al movimiento inevitable y refuerza el carácter ritual de la obra.
-        </p>
-        <p>
-          Desde la producción general, MAPAMAPA estuvo a cargo de la organización, programación y articulación técnica y humana necesarias para materializar esta experiencia escénica en MUT, asegurando coherencia entre la propuesta artística y su encuentro con el público.
-        </p>
       </div>
 
-      <figure class="production__card production__card--side reveal reveal-delay-2">
-        <img
-          src={gallery.scene1}
-          alt="Escena de performers durante Rito de Primavera"
-          width="276"
-          height="366"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
+      <div class="production__gallery reveal reveal-delay-3">
+        <figure class="production__card">
+          <img
+            src={gallery.scene1}
+            alt="Escena de performers durante Rito de Primavera"
+            width="276"
+            height="366"
+            loading="lazy"
+            decoding="async"
+            style="width: 300px; height: 400px;"
+          />
+        </figure>
 
-      <figure class="production__card production__card--left reveal reveal-delay-3">
-        <img
-          src={gallery.scene2}
-          alt="Detalle de la puesta en escena de Rito de Primavera"
-          width="276"
-          height="366"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
+        <figure class="production__card">
+          <video
+            src="/img/rito-primavera/video.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+            style="width: 350px; height: 500px; object-fit: cover;"
+          ></video>
+        </figure>
 
-      <figure class="production__card production__card--right reveal reveal-delay-3">
-        <img
-          src={gallery.performers}
-          alt="Performers en movimiento durante el reestreno"
-          width="433"
-          height="658"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
+        <figure class="production__card">
+          <img
+            src={gallery.scene2}
+            alt="Detalle de la puesta en escena de Rito de Primavera"
+            width="276"
+            height="366"
+            loading="lazy"
+            decoding="async"
+            style="width: 300px; height: 400px;"
+          />
+        </figure>
+      </div>
+
+      <div class="production__copy reveal reveal-delay-4">
+        <div class="production__copy-text">
+          <p>
+            Creada por José Vidal, la obra propone una experiencia polirrítmica y sensorial que convoca a performers y público a un viaje colectivo donde cuerpos, voces, aromas, sonidos y energías se funden en un ritual escénico único.
+          </p>
+          <p>
+            Su banda sonora —que incluye un track del dúo (ab)², conformado por Felipe Bribbo y Andrés Abarzúa— mantiene la estructura rítmica de Stravinsky, sosteniendo una energía que impulsa al movimiento inevitable y refuerza el carácter ritual de la obra.
+          </p>
+          <p>
+            Desde la producción general, MAPAMAPA estuvo a cargo de la organización, programación y articulación técnica y humana necesarias para materializar esta experiencia escénica en MUT, asegurando coherencia entre la propuesta artística y su encuentro con el público.
+          </p>
+        </div>
+        <figure class="production__copy-image">
+          <img
+            src={gallery.performers}
+            alt="Performers en movimiento durante el reestreno"
+            width="433"
+            height="658"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
     </section>
   </section>
 </BaseLayout>
 
 <style>
   .production {
-    padding-top: clamp(5.5rem, 8vw, 7rem);
+    padding-top: clamp(2.5rem, 4vw, 4rem);
     padding-bottom: var(--space-xl);
   }
 
@@ -100,6 +119,7 @@ const gallery = {
   .production__hero {
     overflow: hidden;
     background: #060606;
+    height: 540px;
   }
 
   .production__hero img {
@@ -129,29 +149,55 @@ const gallery = {
 
   .production__editorial {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 0;
-    align-items: start;
+    gap: var(--space-md);
   }
 
-  .production__copy {
-    grid-column: span 6;
+  .production__intro {
     display: grid;
     gap: 1rem;
-    padding-right: var(--space-md);
   }
 
+  .production__intro p,
   .production__copy p {
     font-size: clamp(1rem, 0.92rem + 0.35vw, 1.18rem);
     line-height: 1.08;
     color: #c8c8c8;
-    max-width: 58ch;
+    max-width: 100%;
+  }
+
+  .production__copy {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+  }
+
+  .production__copy-text {
+    display: grid;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  .production__copy-image {
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #060606;
+  }
+
+  .production__copy-image img {
+    width: 300px;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  .production__gallery {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .production__card {
     overflow: hidden;
     background: #060606;
-    min-height: 100%;
   }
 
   .production__card img {
@@ -160,44 +206,14 @@ const gallery = {
     object-fit: cover;
   }
 
-  .production__card--side {
-    grid-column: 7 / -1;
-  }
-
-  .production__card--left {
-    grid-column: 1 / 7;
-  }
-
-  .production__card--right {
-    grid-column: 7 / -1;
-  }
-
-  @media (min-width: 900px) {
-    .production__header {
-      margin-bottom: var(--space-md);
-    }
-
-    .production__copy {
-      padding-top: 0.25rem;
-    }
-  }
-
   @media (max-width: 899px) {
-    .production__editorial {
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-
-    .production__copy,
-    .production__card--side,
-    .production__card--left,
-    .production__card--right {
-      grid-column: auto;
+    .production__gallery {
+      flex-direction: column;
     }
 
     .production__copy {
-      padding-right: 0;
-      margin-bottom: var(--space-sm);
+      flex-direction: column;
+      align-items: center;
     }
   }
 </style>

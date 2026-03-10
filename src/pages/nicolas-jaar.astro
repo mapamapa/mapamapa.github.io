@@ -133,9 +133,9 @@ const carouselSlides = [
       </div>
     </section>
 
-    <div class="carousel reveal reveal-delay-3">
-      <div class="carousel__track">
-        {[...carouselSlides, carouselSlides[0]].map((src, i) => (
+    <div class="carousel reveal reveal-delay-3" id="jaar-carousel">
+      <div class="carousel__track" id="jaar-track">
+        {carouselSlides.map((src) => (
           <img
             src={src}
             alt=""
@@ -146,6 +146,16 @@ const carouselSlides = [
           />
         ))}
       </div>
+      <button class="carousel__arrow carousel__arrow--prev" id="jaar-prev" aria-label="Anterior">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <button class="carousel__arrow carousel__arrow--next" id="jaar-next" aria-label="Siguiente">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
     </div>
 
     <p class="production__note reveal reveal-delay-4">[Una iniciativa de GrietaMag producida por MAPAMAPA]</p>
@@ -289,6 +299,7 @@ const carouselSlides = [
   }
 
   .carousel {
+    position: relative;
     width: 100%;
     overflow: hidden;
     margin-top: var(--space-lg);
@@ -296,32 +307,55 @@ const carouselSlides = [
 
   .carousel__track {
     display: flex;
-    width: calc(100% * 12);
     height: 500px;
-    animation: carousel-slide 44s ease-in-out infinite;
   }
 
   .carousel__track img {
-    width: calc(100% / 12);
+    width: 100%;
     height: 100%;
     flex-shrink: 0;
     object-fit: cover;
     display: block;
   }
 
-  @keyframes carousel-slide {
-    0%, 7%      { transform: translateX(0); }
-    8.33%, 15%  { transform: translateX(calc(-100% / 12)); }
-    16.66%, 23% { transform: translateX(calc(-200% / 12)); }
-    25%, 31%    { transform: translateX(calc(-300% / 12)); }
-    33.33%, 39% { transform: translateX(calc(-400% / 12)); }
-    41.66%, 47% { transform: translateX(calc(-500% / 12)); }
-    50%, 55%    { transform: translateX(calc(-600% / 12)); }
-    58.33%, 63% { transform: translateX(calc(-700% / 12)); }
-    66.66%, 71% { transform: translateX(calc(-800% / 12)); }
-    75%, 79%    { transform: translateX(calc(-900% / 12)); }
-    83.33%, 87% { transform: translateX(calc(-1000% / 12)); }
-    91.66%, 100% { transform: translateX(calc(-1100% / 12)); }
+  .carousel__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color var(--duration-fast), border-color var(--duration-fast);
+    z-index: 2;
+  }
+
+  .carousel__arrow:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .carousel__arrow--prev { left: 12px; }
+  .carousel__arrow--next { right: 12px; }
+
+  @media (max-width: 599px) {
+    .carousel__track {
+      height: 300px;
+    }
+
+    .carousel__arrow {
+      width: 36px;
+      height: 36px;
+    }
+
+    .carousel__arrow--prev { left: 8px; }
+    .carousel__arrow--next { right: 8px; }
   }
 
   .production__note {
@@ -362,3 +396,51 @@ const carouselSlides = [
     }
   }
 </style>
+
+<script>
+  import { gsap } from '@/scripts/gsap';
+
+  function initCarousel() {
+    const track = document.getElementById('jaar-track');
+    const prevBtn = document.getElementById('jaar-prev');
+    const nextBtn = document.getElementById('jaar-next');
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const slides = track.querySelectorAll('img');
+    const total = slides.length;
+    let current = 0;
+    let animating = false;
+
+    function goTo(index: number) {
+      if (animating) return;
+      animating = true;
+      current = (index + total) % total;
+      gsap.to(track, {
+        xPercent: -current * 100,
+        duration: 0.6,
+        ease: 'expo.out',
+        onComplete: () => { animating = false; },
+      });
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+
+    let startX = 0;
+    const carousel = document.getElementById('jaar-carousel');
+    if (!carousel) return;
+
+    carousel.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', (e) => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        goTo(diff > 0 ? current + 1 : current - 1);
+      }
+    }, { passive: true });
+  }
+
+  document.addEventListener('astro:page-load', initCarousel);
+</script>

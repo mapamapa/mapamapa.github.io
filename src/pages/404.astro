@@ -3,76 +3,164 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="404" description="Página no encontrada.">
-  <section class="not-found">
-    <div class="not-found__inner container">
-      <span class="not-found__code">404</span>
-      <h1 class="not-found__title">Página no encontrada</h1>
-      <p class="not-found__desc">La página que buscas no existe o fue movida.</p>
-      <a href="/" class="not-found__link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 12H5M12 19l-7-7 7-7" />
-        </svg>
-        Volver al inicio
-      </a>
+  <a href="/" class="lost" id="lost">
+    <h1 class="sr-only">404 — Página no encontrada</h1>
+
+    <div class="lost__center">
+      <span class="lost__code" id="code" aria-hidden="true">404</span>
+      <span class="lost__line" id="line"></span>
     </div>
-  </section>
+
+    <span class="lost__tap">Toca para volver</span>
+  </a>
 </BaseLayout>
 
 <style>
-  .not-found {
-    min-height: 80dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-3xl) var(--gutter);
-  }
-
-  .not-found__inner {
-    text-align: center;
+  .lost {
+    position: fixed;
+    inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-sm);
+    justify-content: center;
+    gap: 1.2rem;
+    background: var(--color-bg);
+    cursor: pointer;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 50;
   }
 
-  .not-found__code {
-    font-family: var(--font-display);
-    font-size: var(--text-5xl);
-    font-weight: 700;
-    color: var(--color-accent);
-    line-height: 1;
-    opacity: 0.3;
-  }
-
-  .not-found__title {
-    font-size: var(--text-2xl);
-  }
-
-  .not-found__desc {
-    color: var(--color-text-muted);
-    font-size: var(--text-lg);
-  }
-
-  .not-found__link {
-    display: inline-flex;
+  .lost__center {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: var(--space-sm);
-    margin-top: var(--space-sm);
-    padding: var(--space-sm) var(--space-lg);
-    border: 1px solid var(--color-accent);
-    color: var(--color-accent);
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 100px;
-    transition: background-color var(--duration-fast),
-                color var(--duration-fast);
+    gap: 0.8rem;
   }
 
-  .not-found__link:hover {
-    background-color: var(--color-accent);
+  .lost__code {
+    font-family: var(--font-display);
+    font-size: clamp(7rem, 5rem + 15vw, 20rem);
+    font-weight: 900;
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    color: #fff;
+    position: relative;
+    display: inline-block;
+  }
+
+  .lost__code .char {
+    display: inline-block;
+    animation: glitch-idle 4s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+
+  @keyframes glitch-idle {
+    0%, 88%, 100% { transform: none; opacity: 1; }
+    90% { transform: translateX(-2px) skewX(-4deg); opacity: 0.6; }
+    92% { transform: translateX(3px) skewX(2deg); opacity: 1; }
+    94% { transform: translateX(-1px); opacity: 0.5; }
+    96% { transform: none; opacity: 1; }
+  }
+
+  .lost__line {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(0.9rem, 0.6rem + 1.2vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: 0.18em;
     color: var(--color-bg);
+    background: var(--color-accent);
+    padding: 0.15em 0.4em;
+    min-height: 1.8em;
+    text-align: center;
+  }
+
+  .lost__tap {
+    position: absolute;
+    bottom: clamp(2rem, 4vw, 4rem);
+    font-size: var(--text-xs);
+    color: #fff;
+    letter-spacing: 0.1em;
+    animation: fade-pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes fade-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+
+  .lost:hover .lost__tap {
+    opacity: 1;
+    animation: none;
   }
 </style>
+
+<script>
+  import { gsap } from '@/scripts/gsap';
+
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@&%!?*';
+  const TARGET = '404';
+  const MESSAGE = 'FUERA DE PROGRAMA';
+
+  function scrambleTo(el: HTMLElement, target: string, duration: number, delay: number) {
+    const len = target.length;
+    let frame = 0;
+    const totalFrames = Math.round(duration * 30);
+
+    el.innerHTML = '';
+    const spans = Array.from({ length: len }, (_, i) => {
+      const s = document.createElement('span');
+      s.className = 'char';
+      s.style.setProperty('--d', `${i * 0.7}s`);
+      s.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
+      el.appendChild(s);
+      return s;
+    });
+
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        const tick = () => {
+          frame++;
+          const progress = frame / totalFrames;
+
+          spans.forEach((s, i) => {
+            const charProgress = (progress - i / len) * len;
+            if (charProgress >= 1) {
+              s.textContent = target[i];
+            } else {
+              s.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
+            }
+          });
+
+          if (frame < totalFrames) {
+            requestAnimationFrame(tick);
+          } else {
+            resolve();
+          }
+        };
+        requestAnimationFrame(tick);
+      }, delay);
+    });
+  }
+
+  function init404() {
+    const code = document.getElementById('code');
+    const line = document.getElementById('line');
+    if (!code || !line) return;
+
+    line.textContent = '';
+
+    scrambleTo(code, TARGET, 1.2, 300).then(() => {
+      scrambleTo(line, MESSAGE, 0.8, 200);
+    });
+
+    gsap.fromTo(
+      code,
+      { scale: 0.8, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.6, ease: 'expo.out', delay: 0.1 }
+    );
+  }
+
+  document.addEventListener('astro:page-load', init404);
+</script>

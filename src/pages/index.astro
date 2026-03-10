@@ -84,6 +84,8 @@ const { projects, pye, services } = site;
 
   <!-- Servicios Carousel -->
   <section class="carousel reveal" id="services-carousel" aria-label="Servicios">
+    <button class="carousel__arrow carousel__arrow--prev" aria-label="Anterior" data-carousel-prev>&#8592;</button>
+    <button class="carousel__arrow carousel__arrow--next" aria-label="Siguiente" data-carousel-next>&#8594;</button>
     <div class="carousel__track">
       {services.map((item) => (
         <a href={item.url ?? '#'} class="carousel__slide" data-slide>
@@ -405,7 +407,7 @@ const { projects, pye, services } = site;
 
   .pye__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-xs);
   }
 
@@ -452,6 +454,33 @@ const { projects, pye, services } = site;
     overflow: hidden;
     padding: var(--space-md) 0 var(--space-lg);
   }
+
+  .carousel__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: var(--color-accent, #df9de5);
+    color: var(--color-bg, #000);
+    font-size: 1.3rem;
+    font-weight: 900;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .carousel__arrow:hover {
+    opacity: 1;
+  }
+
+  .carousel__arrow--prev { left: clamp(0.5rem, 2vw, 1.5rem); }
+  .carousel__arrow--next { right: clamp(0.5rem, 2vw, 1.5rem); }
 
   .carousel__track {
     display: flex;
@@ -522,6 +551,12 @@ const { projects, pye, services } = site;
       font-size: clamp(1.4rem, 1rem + 2vw, 2.5rem);
       bottom: clamp(1rem, 3vw, 2rem);
       left: clamp(0.8rem, 3vw, 2rem);
+    }
+
+    .carousel__arrow {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
     }
   }
 </style>
@@ -958,6 +993,16 @@ const { projects, pye, services } = site;
       }
     }
 
+    function retreat() {
+      if (scrollTween) return;
+      if (current <= 0) {
+        silentReset(count);
+      }
+      current = current - 1;
+      const target = getSlideStep() * current;
+      smoothScrollTo(target);
+    }
+
     function startAuto() {
       stopAuto();
       timer = setInterval(advance, 4500);
@@ -966,6 +1011,11 @@ const { projects, pye, services } = site;
     function stopAuto() {
       if (timer) { clearInterval(timer); timer = null; }
     }
+
+    const prevBtn = document.querySelector<HTMLElement>('[data-carousel-prev]');
+    const nextBtn = document.querySelector<HTMLElement>('[data-carousel-next]');
+    prevBtn?.addEventListener('click', () => { stopAuto(); retreat(); startAuto(); });
+    nextBtn?.addEventListener('click', () => { stopAuto(); advance(); startAuto(); });
 
     let scrollTimeout: ReturnType<typeof setTimeout>;
     track.addEventListener('scroll', () => {
@@ -993,24 +1043,37 @@ const { projects, pye, services } = site;
     let lastDragX = 0;
     let lastDragTime = 0;
 
+    let didDragCarousel = false;
+    let pendingPointerId: number | null = null;
+    const DRAG_THRESHOLD = 8;
+
     function onPointerDown(e: PointerEvent) {
       if (e.button !== 0) return;
-      isDragging = true;
+      isDragging = false;
+      didDragCarousel = false;
+      pendingPointerId = e.pointerId;
       dragStartX = e.clientX;
       dragScrollLeft = track!.scrollLeft;
       dragVelocity = 0;
       lastDragX = e.clientX;
       lastDragTime = Date.now();
-      track!.classList.add('is-dragging');
-      track!.setPointerCapture(e.pointerId);
       stopAuto();
       if (scrollTween) { scrollTween.kill(); scrollTween = null; }
-      e.preventDefault();
     }
 
     function onPointerMove(e: PointerEvent) {
-      if (!isDragging) return;
+      if (pendingPointerId === null && !isDragging) return;
       const dx = e.clientX - dragStartX;
+
+      if (!isDragging && Math.abs(dx) > DRAG_THRESHOLD) {
+        isDragging = true;
+        didDragCarousel = true;
+        track!.classList.add('is-dragging');
+        track!.setPointerCapture(e.pointerId);
+        pendingPointerId = null;
+      }
+
+      if (!isDragging) return;
       track!.scrollLeft = dragScrollLeft - dx;
 
       const now = Date.now();
@@ -1021,7 +1084,8 @@ const { projects, pye, services } = site;
     }
 
     function onPointerUp(e: PointerEvent) {
-      if (!isDragging) return;
+      pendingPointerId = null;
+      if (!isDragging) { startAuto(); return; }
       isDragging = false;
       track!.classList.remove('is-dragging');
       track!.releasePointerCapture(e.pointerId);
@@ -1057,7 +1121,7 @@ const { projects, pye, services } = site;
     track.addEventListener('pointercancel', onPointerUp);
 
     track.addEventListener('click', (e: MouseEvent) => {
-      if (Math.abs(dragVelocity) > 0.05) {
+      if (didDragCarousel) {
         e.preventDefault();
         e.stopPropagation();
       }

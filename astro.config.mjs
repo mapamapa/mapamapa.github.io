@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://mapamapa.github.io',
+  site: 'https://mapamapa.cl',
   output: 'static',
   integrations: [sitemap()],
   build: {

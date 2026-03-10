@@ -81,6 +81,16 @@ const gallery = {
         />
       </figure>
     </section>
+
+    <figure class="production__bottom-video reveal reveal-delay-3">
+      <video
+        loop
+        muted
+        playsinline
+        preload="none"
+        data-src="/img/BANKSY_ONLINE.mp4"
+      />
+    </figure>
   </section>
 </BaseLayout>
 
@@ -251,6 +261,19 @@ const gallery = {
     display: block;
   }
 
+  .production__bottom-video {
+    width: 100%;
+    margin-top: var(--space-md);
+    overflow: hidden;
+  }
+
+  .production__bottom-video video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
   .production__copy {
     grid-column: 1 / -1;
     display: grid;
@@ -349,5 +372,28 @@ const gallery = {
     });
   }
 
+  function lazyLoadVideos() {
+    const videos = document.querySelectorAll<HTMLVideoElement>('video[data-src]');
+    if (!videos.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const video = entry.target as HTMLVideoElement;
+            video.src = video.dataset.src!;
+            video.load();
+            video.play();
+            observer.unobserve(video);
+          }
+        });
+      },
+      { rootMargin: '200px' }
+    );
+
+    videos.forEach((video) => observer.observe(video));
+  }
+
   document.addEventListener('astro:page-load', initParallax);
+  document.addEventListener('astro:page-load', lazyLoadVideos);
 </script>

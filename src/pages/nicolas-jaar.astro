@@ -12,6 +12,20 @@ const gallery = {
   radio1: '/img/nicolas-jaar/radio1.jpg',
   radio2: '/img/nicolas-jaar/radio2.jpg',
 };
+
+const carouselSlides = [
+  '/img/nicolas-jaar/carousel/slide01.png',
+  '/img/nicolas-jaar/carousel/slide02.png',
+  '/img/nicolas-jaar/carousel/slide03.png',
+  '/img/nicolas-jaar/carousel/slide04.png',
+  '/img/nicolas-jaar/carousel/slide05.png',
+  '/img/nicolas-jaar/carousel/slide06.png',
+  '/img/nicolas-jaar/carousel/slide07.png',
+  '/img/nicolas-jaar/carousel/slide08.png',
+  '/img/nicolas-jaar/carousel/slide09.png',
+  '/img/nicolas-jaar/carousel/slide10.png',
+  '/img/nicolas-jaar/carousel/slide11.png',
+];
 ---
 
 <BaseLayout title={title} description={description} image={gallery.hero}>
@@ -36,37 +50,40 @@ const gallery = {
 
     <!-- LADRIDOS -->
     <section class="production__editorial" aria-labelledby="ladridos-title">
-      <div class="production__copy reveal reveal-delay-2">
-        <h2 id="ladridos-title">Ladridos</h2>
-        <p>
-          Encuentro cultural gratuito desplegado en los galpones del Persa Biobío, CEINA y Galería CIMA, que reunió música en vivo, artes visuales, instalaciones, IA, performance y espacios de conversación en torno a la pregunta: ¿Qué significa ser de aquí?
-        </p>
-        <p>
-          Con la participación de artistas locales e internacionales, MAPAMAPA colaboró en la producción de esta experiencia interdisciplinaria que exploró territorio, identidad y pertenencia desde múltiples miradas, culminando en una fiesta de cierre en PARKING.
-        </p>
+      <div class="production__pair reveal reveal-delay-2">
+        <div class="production__pair-left">
+          <div class="production__copy">
+            <img src="/social/logos/grieta.png" alt="Grieta" class="production__collab-logo" width="120" height="auto" decoding="async" />
+            <h2 id="ladridos-title">Ladridos</h2>
+            <p>
+              Encuentro cultural gratuito desplegado en los galpones del Persa Biobío, CEINA y Galería CIMA, que reunió música en vivo, artes visuales, instalaciones, IA, performance y espacios de conversación en torno a la pregunta: ¿Qué significa ser de aquí?
+            </p>
+            <p>
+              Con la participación de artistas locales e internacionales, MAPAMAPA colaboró en la producción de esta experiencia interdisciplinaria que exploró territorio, identidad y pertenencia desde múltiples miradas, culminando en una fiesta de cierre en PARKING.
+            </p>
+          </div>
+          <figure class="production__card">
+            <img
+              src={gallery.ladridos2}
+              alt="Instalación artística durante Ladridos"
+              width="746"
+              height="288"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        </div>
+        <figure class="production__card">
+          <img
+            src={gallery.ladridos1}
+            alt="Evento Ladridos en el Persa Biobío"
+            width="397"
+            height="548"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
       </div>
-
-      <figure class="production__card production__card--side reveal reveal-delay-2">
-        <img
-          src={gallery.ladridos1}
-          alt="Evento Ladridos en el Persa Biobío"
-          width="397"
-          height="548"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
-
-      <figure class="production__card production__card--wide reveal reveal-delay-3">
-        <img
-          src={gallery.ladridos2}
-          alt="Instalación artística durante Ladridos"
-          width="746"
-          height="288"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
 
       <figure class="production__card production__card--full reveal reveal-delay-3">
         <img
@@ -92,30 +109,46 @@ const gallery = {
         </p>
       </div>
 
-      <figure class="production__card production__card--side reveal reveal-delay-3">
-        <img
-          src={gallery.radio1}
-          alt="Sesión de grabación de Radiopiedra"
-          width="572"
-          height="398"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
-
-      <figure class="production__card production__card--left reveal reveal-delay-3">
-        <img
-          src={gallery.radio2}
-          alt="Producción de Radiopiedra en estudio"
-          width="572"
-          height="305"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
+      <div class="production__pair reveal reveal-delay-3">
+        <figure class="production__card">
+          <img
+            src={gallery.radio2}
+            alt="Producción de Radiopiedra en estudio"
+            width="572"
+            height="305"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+        <figure class="production__card">
+          <img
+            src={gallery.radio1}
+            alt="Sesión de grabación de Radiopiedra"
+            width="572"
+            height="398"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
     </section>
 
-    <p class="production__note reveal reveal-delay-4">Una iniciativa de GrietaMag producida por MAPAMAPA</p>
+    <div class="carousel reveal reveal-delay-3">
+      <div class="carousel__track">
+        {[...carouselSlides, carouselSlides[0]].map((src, i) => (
+          <img
+            src={src}
+            alt=""
+            width="1600"
+            height="1067"
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
+      </div>
+    </div>
+
+    <p class="production__note reveal reveal-delay-4">[Una iniciativa de GrietaMag producida por MAPAMAPA]</p>
   </section>
 </BaseLayout>
 
@@ -207,6 +240,38 @@ const gallery = {
     object-fit: cover;
   }
 
+  .production__pair {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 0;
+    align-items: end;
+  }
+
+  .production__pair .production__card {
+    min-height: auto;
+  }
+
+  .production__pair-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .production__collab-logo {
+    width: 360px;
+    height: auto;
+    clip-path: inset(36% 0 34% 0);
+    margin-top: -130px;
+    margin-bottom: -122px;
+  }
+
+  .production__pair-left .production__copy {
+    grid-column: auto;
+    padding-right: 0;
+    margin-bottom: var(--space-sm);
+  }
+
   .production__card--side {
     grid-column: 7 / -1;
   }
@@ -221,6 +286,42 @@ const gallery = {
 
   .production__card--left {
     grid-column: 1 / 7;
+  }
+
+  .carousel {
+    width: 100%;
+    overflow: hidden;
+    margin-top: var(--space-lg);
+  }
+
+  .carousel__track {
+    display: flex;
+    width: calc(100% * 12);
+    height: 500px;
+    animation: carousel-slide 44s ease-in-out infinite;
+  }
+
+  .carousel__track img {
+    width: calc(100% / 12);
+    height: 100%;
+    flex-shrink: 0;
+    object-fit: cover;
+    display: block;
+  }
+
+  @keyframes carousel-slide {
+    0%, 7%      { transform: translateX(0); }
+    8.33%, 15%  { transform: translateX(calc(-100% / 12)); }
+    16.66%, 23% { transform: translateX(calc(-200% / 12)); }
+    25%, 31%    { transform: translateX(calc(-300% / 12)); }
+    33.33%, 39% { transform: translateX(calc(-400% / 12)); }
+    41.66%, 47% { transform: translateX(calc(-500% / 12)); }
+    50%, 55%    { transform: translateX(calc(-600% / 12)); }
+    58.33%, 63% { transform: translateX(calc(-700% / 12)); }
+    66.66%, 71% { transform: translateX(calc(-800% / 12)); }
+    75%, 79%    { transform: translateX(calc(-900% / 12)); }
+    83.33%, 87% { transform: translateX(calc(-1000% / 12)); }
+    91.66%, 100% { transform: translateX(calc(-1100% / 12)); }
   }
 
   .production__note {

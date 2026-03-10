@@ -3,3 +3,17 @@ dist/
 .astro/
 .DS_Store
 *.log
+
+# Originals / unused assets backup
+_originals/
+
+# Source originals (webp thumbnails in img-opt/ are used instead)
+public/img/pye/*.jpg
+public/img/pye/*.png
+public/img/work/*.jpg
+public/img/work/*.png
+public/img/us/*.jpg
+public/img/us/*.png
+
+# Note: MP4 videos are kept in git for GitHub Pages deployment.
+# For better performance, consider hosting videos on a CDN in the future.

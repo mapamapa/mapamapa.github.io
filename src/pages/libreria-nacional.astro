@@ -4,8 +4,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 const title = 'Librería Nacional — Concurso Arte en Vivo';
 const description = 'Diseño de producción para el concurso Arte en Vivo de Librería Nacional: una experiencia cultural de estudio abierto con artistas emergentes.';
 
+const heroVideo = '/img/libreria-nacional/hero-video.mp4';
+
 const gallery = {
-  hero: '/img/libreria-nacional/expo1.jpg',
+  expo1: '/img/libreria-nacional/expo1.jpg',
   expo2: '/img/libreria-nacional/expo2.jpg',
   expo3: '/img/libreria-nacional/expo3.jpg',
   expo4: '/img/libreria-nacional/expo4.jpg',
@@ -14,17 +16,17 @@ const gallery = {
 };
 ---
 
-<BaseLayout title={title} description={description} image={gallery.hero}>
+<BaseLayout title={title} description={description} image={gallery.expo1}>
   <section class="production container">
     <header class="production__header">
       <figure class="production__hero reveal">
-        <img
-          src={gallery.hero}
-          alt="Artista trabajando en vivo durante el concurso Arte en Vivo"
-          width="498"
-          height="424"
-          fetchpriority="high"
-          decoding="async"
+        <video
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="none"
+          data-src={heroVideo}
         />
       </figure>
 
@@ -91,6 +93,17 @@ const gallery = {
           decoding="async"
         />
       </figure>
+
+      <figure class="production__card production__card--right reveal reveal-delay-4">
+        <img
+          src={gallery.expo1}
+          alt="Artista trabajando en vivo durante el concurso Arte en Vivo"
+          width="498"
+          height="424"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
     </section>
 
     <figure class="production__closing reveal reveal-delay-4">
@@ -131,6 +144,7 @@ const gallery = {
   }
 
   .production__hero img,
+  .production__hero video,
   .production__card img,
   .production__closing img {
     width: 100%;
@@ -225,3 +239,29 @@ const gallery = {
     }
   }
 </style>
+
+<script>
+  function lazyLoadVideos() {
+    const videos = document.querySelectorAll<HTMLVideoElement>('video[data-src]');
+    if (!videos.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const video = entry.target as HTMLVideoElement;
+            video.src = video.dataset.src!;
+            video.load();
+            video.play();
+            observer.unobserve(video);
+          }
+        });
+      },
+      { rootMargin: '200px' }
+    );
+
+    videos.forEach((video) => observer.observe(video));
+  }
+
+  document.addEventListener('astro:page-load', lazyLoadVideos);
+</script>

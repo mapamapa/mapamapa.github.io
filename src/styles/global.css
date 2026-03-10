@@ -189,6 +189,14 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-bg);
 }
 
+/* ===== INTERIOR PAGES — HERO MOBILE CENTERING ===== */
+@media (max-width: 899px) {
+  .production__hero img,
+  .production__hero video {
+    object-position: center center;
+  }
+}
+
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-bg); }

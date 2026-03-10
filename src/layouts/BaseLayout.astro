@@ -17,7 +17,9 @@ const {
 } = Astro.props;
 
 const pageTitle = title === 'MAPA MAPA' ? title : `${title} — MAPA MAPA`;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa.cl');
+const siteBase = Astro.site ?? 'https://mapamapa.cl';
+const canonicalURL = new URL(Astro.url.pathname, siteBase);
+const ogImage = new URL(image, siteBase).href;
 ---
 
 <html lang="es">
@@ -26,6 +28,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0a0a0a" />
+    <link rel="icon" type="image/png" href="/img/logo.png" />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph -->
@@ -33,14 +36,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://mapamapa
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MAPA MAPA" />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={canonicalURL} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- Fonts: preconnect + preload for fast render -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

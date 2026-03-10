@@ -137,8 +137,13 @@ const gallery = {
     font-size: 0.7rem;
     font-weight: 700;
     font-style: italic;
-    color: #b1b1b1;
+    color: var(--color-bg, #0a0a0a);
     text-align: right;
+    background: var(--color-accent, #df9de5);
+    padding: 0.15em 0.35em;
+    line-height: 1.5;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   .production__hero img,

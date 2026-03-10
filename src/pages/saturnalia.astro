@@ -5,7 +5,7 @@ const title = 'SATURNALIA — Celebración del Vino';
 const description = 'Celebración dedicada al vino, la música y la cultura que reúne viñas de autor, destilerías, música en vivo y restaurantes pop-up.';
 
 const heroVideo = '/img/work/saturnalia/hero-video.mp4';
-const heroRepeat = 3;
+const heroRepeat = 7;
 const bottomVideo = '/img/work/saturnalia/bottom-video.mp4';
 
 const gallery = {
@@ -266,19 +266,23 @@ const gallery = {
   }
 
   @media (max-width: 599px) {
-    .hero-poster {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .production__hero {
+      height: auto;
     }
 
     .hero-video-strip {
-      display: none;
+      height: auto;
     }
 
-    .production__hero {
-      height: 300px;
+    .hero-video-strip video {
+      width: 100%;
+      height: auto;
+      clip-path: none;
+      margin: 0;
+    }
+
+    .hero-video-strip video:nth-child(n+2) {
+      display: none;
     }
 
     .production__bottom-video video {
@@ -291,30 +295,6 @@ const gallery = {
   function lazyLoadVideos() {
     const videos = document.querySelectorAll<HTMLVideoElement>('video[data-src]');
     if (!videos.length) return;
-
-    if (window.matchMedia('(max-width: 599px)').matches) {
-      const bottomVideo = document.querySelector<HTMLVideoElement>(
-        '.production__bottom-video video[data-src]'
-      );
-      if (bottomVideo) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                const video = entry.target as HTMLVideoElement;
-                video.src = video.dataset.src!;
-                video.load();
-                video.play();
-                observer.unobserve(video);
-              }
-            });
-          },
-          { rootMargin: '200px' }
-        );
-        observer.observe(bottomVideo);
-      }
-      return;
-    }
 
     const observer = new IntersectionObserver(
       (entries) => {

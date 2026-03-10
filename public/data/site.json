@@ -55,7 +55,6 @@
   "pye": {
     "title": "Producción & experiencias",
     "items": [
-      { "title": "Producción General", "subtitle": "Diseño de Producción", "image": "/img-opt/pye/prodgen.webp", "url": "/produccion-general/" },
       { "title": "Rito de Primavera", "subtitle": "José Vidal Mut", "image": "/img-opt/pye/rito.webp", "url": "/rito-primavera/" },
       { "title": "Iván Navarro", "subtitle": "Carnavalito GAM", "image": "/img-opt/pye/ivan.webp", "url": "/carnavalito-gam/" },
       { "title": "Libreria Nacional", "subtitle": "Concurso \"Arte en Vivo\"", "image": "/img-opt/pye/lnacional.webp", "url": "/libreria-nacional/" },
@@ -66,6 +65,7 @@
   },
 
   "services": [
+    { "title": "Producción General", "image": "/img-opt/pye/prodgen.webp", "hero": "/img/prod-gene/ECLIPSE CONDORIACO.jpg", "url": "/produccion-general/" },
     { "title": "Producción Técnica", "image": "/img-opt/pye/prodtec.webp", "hero": "/img/produccion-tecnica/hero.jpg", "url": "/produccion-tecnica/" },
     { "title": "Host Producer", "image": "/img-opt/pye/ghost.webp", "hero": "/img/ghost-producers/hero.jpg", "url": "/host-producer/" },
     { "title": "Editoriales", "image": "/img-opt/pye/editoriales.webp", "hero": "/img/editoriales/hero.jpg", "url": "/editoriales/" },

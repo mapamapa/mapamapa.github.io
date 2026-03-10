@@ -67,7 +67,7 @@
   "services": [
     { "title": "Producción General", "image": "/img-opt/pye/prodgen.webp", "hero": "/img/prod-gene/ECLIPSE CONDORIACO.jpg", "url": "/produccion-general/" },
     { "title": "Producción Técnica", "image": "/img-opt/pye/prodtec.webp", "hero": "/img/produccion-tecnica/hero.jpg", "url": "/produccion-tecnica/" },
-    { "title": "Host Producer", "image": "/img-opt/pye/ghost.webp", "hero": "/img/ghost-producers/hero.jpg", "url": "/host-producer/" },
+    { "title": "Ghost Producer", "image": "/img-opt/pye/ghost.webp", "hero": "/img/ghost-producers/hero.jpg", "url": "/ghost-producer/" },
     { "title": "Editoriales", "image": "/img-opt/pye/editoriales.webp", "hero": "/img/editoriales/hero.jpg", "url": "/editoriales/" },
     { "title": "Creatividad & Amigos", "image": "/img-opt/pye/creatividad.webp", "hero": "/img/creatividad/crowd1.jpg", "url": "/creatividad-amigos/" },
     { "title": "BTL", "image": "/img-opt/pye/btl.webp", "hero": "/img/btl/hero.jpg", "url": "/btl/" }

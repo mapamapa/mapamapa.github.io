@@ -562,6 +562,29 @@ const { projects, pye, services } = site;
     width: 40px !important;
     height: 40px !important;
   }
+
+  @media (max-width: 768px) {
+    .nav {
+      padding: var(--space-xs) var(--space-sm) !important;
+    }
+
+    .nav__link {
+      font-size: var(--text-xl) !important;
+    }
+
+    .footer__link {
+      font-size: var(--text-lg) !important;
+    }
+
+    .footer__logo-img {
+      width: 80px !important;
+    }
+
+    .footer__social-link svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+  }
 </style>
 
 <script>

@@ -1,8 +1,15 @@
-# MAPA MAPA
+# MAPA MAPA — v1.1
 
 Sitio web de **MAPA MAPA** — estudio de gestión y producción cultural con base en Chile.
 
 Construido con [Astro 5](https://astro.build), desplegado en GitHub Pages en [mapamapa.cl](https://mapamapa.cl).
+
+### Novedades en v1.1
+
+- **Home Lab** (`/home-lab`) — Versión experimental del home con layout full-width: hero, proyectos, producción & experiencias y carousel de servicios ocupan el 100% del ancho de pantalla.
+- Navegación y footer expandidos a los bordes con tipografía más grande.
+- Menú estático (no sigue al hacer scroll).
+- Collage interactivo: los elementos son atraídos hacia el cursor del mouse en desktop.
 
 ---
 
@@ -140,6 +147,7 @@ mapamapa.github.io/
 │   │   └── BaseLayout.astro     # Layout base (nav, footer, meta, View Transitions)
 │   ├── pages/
 │   │   ├── index.astro          # Home
+│   │   ├── home-lab.astro       # Home Lab — versión experimental full-width
 │   │   ├── us.astro             # Quiénes somos
 │   │   ├── work.astro           # Trabajos
 │   │   ├── social.astro         # Redes sociales

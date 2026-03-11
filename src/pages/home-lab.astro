@@ -167,7 +167,7 @@ const { projects, pye, services } = site;
     font-weight: 900;
     letter-spacing: 0.02em;
     text-align: center;
-    margin-top: clamp(-10px, -2vw, -30px);
+    margin-top: clamp(-50px, -5vw, -70px);
   }
 
   .lab-hero__collage {
@@ -839,11 +839,53 @@ const { projects, pye, services } = site;
         attractAll(touch.clientX, touch.clientY, 10);
       }, { passive: true });
     } else {
-      const HIT_FORCE = 8;
+      const ATTRACT_FORCE = 2.5;
+      let mouseInCollage = false;
+      let mouseX = 0;
+      let mouseY = 0;
+      let attractRAF: number | null = null;
+
+      function attractLoop() {
+        if (!mouseInCollage) { attractRAF = null; return; }
+
+        for (const b of balls) {
+          if (b.dragging) continue;
+          const center = getCenter(b);
+          const dx = mouseX - center.x;
+          const dy = mouseY - center.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const strength = Math.min(ATTRACT_FORCE, 200 / dist);
+          b.vx += (dx / dist) * strength;
+          b.vy += (dy / dist) * strength;
+          b.vr += (dx / dist) * 1.2;
+        }
+        kick();
+        attractRAF = requestAnimationFrame(attractLoop);
+      }
+
+      const onCollageMove = (e: MouseEvent) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!attractRAF) {
+          attractRAF = requestAnimationFrame(attractLoop);
+        }
+      };
+
+      const onCollageEnter = () => {
+        mouseInCollage = true;
+      };
+
+      const onCollageLeave = () => {
+        mouseInCollage = false;
+      };
+
+      collage.addEventListener('mouseenter', onCollageEnter);
+      collage.addEventListener('mouseleave', onCollageLeave);
+      collage.addEventListener('mousemove', onCollageMove);
+
       let activeDrag: { ball: Ball; idx: number } | null = null;
       let lastMX = 0;
       let lastMY = 0;
-      let didDrag = false;
 
       items.forEach((item, i) => {
         item.addEventListener('mousedown', (e: MouseEvent) => {
@@ -854,28 +896,10 @@ const { projects, pye, services } = site;
           b.vy = 0;
           lastMX = e.clientX;
           lastMY = e.clientY;
-          didDrag = false;
           item.style.zIndex = '10';
           document.body.style.userSelect = 'none';
           kick();
           e.preventDefault();
-        });
-
-        item.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (activeDrag) return;
-          const b = balls[i];
-          const rect = item.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          const dx = cx - e.clientX;
-          const dy = cy - e.clientY;
-          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-
-          b.vx += (dx / dist) * HIT_FORCE;
-          b.vy += (dy / dist) * HIT_FORCE;
-          b.vr += (dx / dist) * 3;
-
-          kick();
         });
       });
 
@@ -889,7 +913,6 @@ const { projects, pye, services } = site;
         activeDrag.ball.vy = dy * 0.6;
         lastMX = e.clientX;
         lastMY = e.clientY;
-        if (Math.abs(dx) > 2 || Math.abs(dy) > 2) didDrag = true;
       };
 
       const onMouseUp = () => {
@@ -905,14 +928,14 @@ const { projects, pye, services } = site;
 
       if (collageMouseCleanup) collageMouseCleanup();
       collageMouseCleanup = () => {
+        mouseInCollage = false;
+        if (attractRAF) { cancelAnimationFrame(attractRAF); attractRAF = null; }
+        collage.removeEventListener('mouseenter', onCollageEnter);
+        collage.removeEventListener('mouseleave', onCollageLeave);
+        collage.removeEventListener('mousemove', onCollageMove);
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
       };
-
-      collage.addEventListener('click', (e: MouseEvent) => {
-        if (didDrag) { didDrag = false; return; }
-        attractAll(e.clientX, e.clientY, 12);
-      });
     }
   }
 

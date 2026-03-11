@@ -1,0 +1,1152 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import site from '../../public/data/site.json';
+
+const { projects, pye, services } = site;
+---
+
+<BaseLayout title="Home Lab">
+  <!-- Hero: full-width -->
+  <section class="lab-hero">
+    <div class="lab-hero__logo-wrap reveal reveal-delay-1">
+      <p class="lab-hero__services" id="hero-services">
+        Dirección Creativa, Producción General, Producción Técnica, Museografía, Diseño Sonoro, Diseño de Espacios, Relatos, Editorial, Comunicaciones, Gestión de Prensa, Diseño, Render, Soporte, Fabricación, Fotografía y Audiovisual, Tramitación de Permisos y +
+      </p>
+      <img src="/img/logo.png" alt="MAPA MAPA" class="lab-hero__logo" width="1080" height="auto" fetchpriority="high" decoding="async" />
+    </div>
+    <p class="lab-hero__office reveal reveal-delay-2">Office</p>
+
+    <div class="lab-hero__collage" id="collage">
+      <div class="collage__item collage__item--main" data-collage-item data-speed="0.15">
+        <img src="/img/red.jpg" alt="MAPA MAPA — producción" width="400" height="400" decoding="async" />
+      </div>
+      <div class="collage__item collage__item--a" data-collage-item data-speed="0.3">
+        <img src="/img/box.jpg" alt="" width="300" height="300" loading="lazy" decoding="async" />
+      </div>
+      <div class="collage__item collage__item--b" data-collage-item data-speed="0.45">
+        <img src="/img/proy.jpg" alt="" width="300" height="300" loading="lazy" decoding="async" />
+      </div>
+      <div class="collage__item collage__item--c" data-collage-item data-speed="0.25">
+        <img src="/img/bw.jpg" alt="" width="300" height="300" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Project list: full-width -->
+  <section class="lab-projects">
+    {projects.map((project, i) => (
+      <div class={`lab-project-cube reveal reveal-delay-${(i % 4) + 1}`}>
+        <a href={project.url} class="lab-project-row">
+          <span class="lab-project-row__num">{String(i + 1).padStart(2, '0')}</span>
+          <span class="lab-project-row__name">{project.name}</span>
+          <span class="lab-project-row__desc">{project.description}</span>
+          <span class="lab-project-row__cta">VER</span>
+        </a>
+        <a href={project.url} class="lab-project-row lab-project-row--back">
+          <span class="lab-project-row__num">{String(i + 1).padStart(2, '0')}</span>
+          <span class="lab-project-row__name">{project.name}</span>
+          <span class="lab-project-row__desc">{project.description}</span>
+          <span class="lab-project-row__cta">VER</span>
+        </a>
+      </div>
+    ))}
+  </section>
+
+  <!-- Producción & experiencias: full-width -->
+  <section class="lab-pye">
+    <h2 class="lab-pye__title reveal">{pye.title}</h2>
+    <div class="lab-pye__grid">
+      {pye.items.map((item, i) => (
+        item.url ? (
+          <a href={item.url} class={`pye__card reveal reveal-delay-${(i % 4) + 1}`}>
+            <div class="lab-pye__card-img">
+              <img src={item.image} alt={item.title} width="600" height="600" loading="lazy" decoding="async" />
+            </div>
+            <h3 class="lab-pye__card-title">{item.title}</h3>
+            {item.subtitle && <p class="lab-pye__card-subtitle">{item.subtitle}</p>}
+          </a>
+        ) : (
+          <article class={`pye__card reveal reveal-delay-${(i % 4) + 1}`}>
+            <div class="lab-pye__card-img">
+              <img src={item.image} alt={item.title} width="600" height="600" loading="lazy" decoding="async" />
+            </div>
+            <h3 class="lab-pye__card-title">{item.title}</h3>
+            {item.subtitle && <p class="lab-pye__card-subtitle">{item.subtitle}</p>}
+          </article>
+        )
+      ))}
+    </div>
+  </section>
+
+  <!-- Servicios Carousel: full-width -->
+  <section class="lab-carousel reveal" id="services-carousel" aria-label="Servicios">
+    <button class="lab-carousel__arrow lab-carousel__arrow--prev" aria-label="Anterior" data-carousel-prev>&#8592;</button>
+    <button class="lab-carousel__arrow lab-carousel__arrow--next" aria-label="Siguiente" data-carousel-next>&#8594;</button>
+    <div class="lab-carousel__track">
+      {services.map((item) => (
+        <a href={item.url ?? '#'} class="lab-carousel__slide" data-slide>
+          <img
+            src={item.hero ?? item.image}
+            alt={item.title}
+            width="1600"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="lab-carousel__label">{item.title}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ===== LAB HERO — full width ===== */
+  .lab-hero {
+    position: relative;
+    min-height: 70dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 0 var(--space-xl);
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .lab-hero__services {
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: 100%;
+    max-width: 90%;
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--color-hover);
+    text-align: left;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .lab-hero__services--visible {
+    opacity: 1;
+  }
+
+  .lab-hero__services:hover {
+    cursor: none;
+  }
+
+  .lab-hero__logo-wrap {
+    position: relative;
+    z-index: var(--z-above);
+    width: 100%;
+    max-width: 1400px;
+    margin-inline: auto;
+    margin-top: -20px;
+    margin-bottom: clamp(-40px, -8vw, -100px);
+    overflow: hidden;
+  }
+
+  .lab-hero__logo {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.04));
+  }
+
+  .lab-hero__office {
+    position: relative;
+    z-index: var(--z-above);
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-align: center;
+    margin-top: clamp(-10px, -2vw, -30px);
+  }
+
+  .lab-hero__collage {
+    position: relative;
+    width: 100%;
+    min-height: clamp(280px, 35vw, 500px);
+    margin-top: var(--space-lg);
+  }
+
+  .collage__item {
+    position: absolute;
+    overflow: hidden;
+    will-change: transform;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .collage__item:active {
+    cursor: grabbing;
+  }
+
+  .collage__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  .collage__item--main {
+    width: clamp(200px, 26vw, 420px);
+    aspect-ratio: 1;
+    left: 2%;
+    top: 0;
+    z-index: 2;
+  }
+
+  .collage__item--a {
+    width: clamp(120px, 16vw, 280px);
+    aspect-ratio: 1;
+    right: 5%;
+    top: 5%;
+    z-index: 3;
+  }
+
+  .collage__item--b {
+    width: clamp(100px, 13vw, 220px);
+    aspect-ratio: 1;
+    left: 30%;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  .collage__item--c {
+    width: clamp(110px, 14vw, 240px);
+    aspect-ratio: 1;
+    right: 25%;
+    top: 0;
+    z-index: 2;
+  }
+
+  /* ===== LAB PROJECTS — full width ===== */
+  .lab-projects {
+    padding: 20px 0;
+    width: 100%;
+  }
+
+  .lab-project-cube {
+    perspective: 800px;
+    height: 2.6em;
+    position: relative;
+  }
+
+  .lab-project-cube:hover .lab-project-row {
+    transform: rotateX(90deg);
+  }
+
+  .lab-project-cube:hover .lab-project-row--back {
+    transform: rotateX(0deg);
+    visibility: visible;
+  }
+
+  .lab-project-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 2fr auto;
+    gap: var(--space-sm);
+    align-items: baseline;
+    padding: 0.3em clamp(1rem, 3vw, 3rem);
+    text-decoration: none;
+    height: 100%;
+    backface-visibility: hidden;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center bottom;
+    transform: rotateX(0deg);
+  }
+
+  .lab-project-row--back {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-accent);
+    color: #000;
+    transform-origin: center top;
+    transform: rotateX(-90deg);
+    visibility: hidden;
+  }
+
+  .lab-project-cube:hover .lab-project-row--back {
+    visibility: visible;
+  }
+
+  .lab-project-row--back span {
+    color: #000;
+  }
+
+  .lab-project-row span {
+    font-size: var(--text-xl);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .lab-project-row__num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lab-project-row__desc {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lab-project-row__cta {
+    transition: color var(--duration-fast);
+  }
+
+  /* ===== LAB PYE — full width ===== */
+  .lab-pye {
+    padding: 20px 0 var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    width: 100%;
+  }
+
+  .lab-pye__title {
+    font-size: var(--text-2xl);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .lab-pye__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    width: 100%;
+  }
+
+  .lab-pye__card-img {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+  }
+
+  .lab-pye__card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lab-pye__card-title {
+    font-size: var(--text-xl);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.05;
+    margin-top: var(--space-sm);
+  }
+
+  .lab-pye__card-subtitle {
+    font-size: var(--text-xl);
+  }
+
+  /* ===== LAB CAROUSEL — full width ===== */
+  .lab-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: var(--space-md) 0 var(--space-lg);
+  }
+
+  .lab-carousel__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: var(--color-accent, #df9de5);
+    color: var(--color-bg, #000);
+    font-size: 1.3rem;
+    font-weight: 900;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lab-carousel__arrow:hover {
+    opacity: 1;
+  }
+
+  .lab-carousel__arrow--prev { left: clamp(0.5rem, 2vw, 1.5rem); }
+  .lab-carousel__arrow--next { right: clamp(0.5rem, 2vw, 1.5rem); }
+
+  .lab-carousel__track {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+  }
+
+  .lab-carousel__track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  .lab-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lab-carousel__slide {
+    position: relative;
+    flex: 0 0 100%;
+    aspect-ratio: 21 / 9;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+  }
+
+  .lab-carousel__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+
+  .lab-carousel__label {
+    position: absolute;
+    bottom: clamp(1rem, 3vw, 2rem);
+    left: clamp(1rem, 3vw, 2rem);
+    font-size: clamp(1.2rem, 0.8rem + 2vw, 2.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--color-bg, #0a0a0a);
+    background: var(--color-accent, #df9de5);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    pointer-events: none;
+    padding: 0.15em 0.4em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 768px) {
+    .lab-hero {
+      min-height: auto;
+      padding-top: 70px;
+      padding-bottom: var(--space-md);
+    }
+
+    .lab-hero__logo-wrap {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .lab-hero__services {
+      top: 0;
+      left: 0;
+      transform: none;
+      max-width: 100%;
+      font-size: var(--text-xl);
+      padding: var(--space-xs);
+    }
+
+    .lab-hero__office {
+      margin-top: 0;
+    }
+
+    .lab-hero__collage {
+      min-height: 180px;
+      margin-top: var(--space-sm);
+    }
+
+    .collage__item--main { width: 55%; left: 0; }
+    .collage__item--a { width: 35%; right: 0; top: 10%; }
+    .collage__item--b { width: 28%; left: 40%; bottom: 0; }
+    .collage__item--c { width: 30%; right: 5%; top: auto; bottom: 5%; }
+
+    .lab-project-cube:hover .lab-project-row {
+      transform: rotateX(0deg);
+    }
+
+    .lab-project-cube:hover .lab-project-row--back {
+      transform: rotateX(-90deg);
+      visibility: hidden;
+    }
+
+    .lab-project-row {
+      grid-template-columns: 40px 1fr auto;
+      padding: 0.3em var(--space-sm);
+    }
+
+    .lab-project-row__desc {
+      display: none;
+    }
+
+    .lab-project-row span {
+      font-size: var(--text-lg);
+    }
+
+    .lab-pye__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lab-carousel__slide {
+      aspect-ratio: 4 / 3;
+    }
+
+    .lab-carousel__arrow {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .lab-pye__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<style is:global>
+  .nav {
+    position: absolute !important;
+  }
+
+  .nav--scrolled {
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .nav--hidden {
+    transform: none !important;
+  }
+
+  .nav__inner {
+    max-width: none !important;
+  }
+
+  .nav__link {
+    font-size: var(--text-3xl) !important;
+  }
+
+  .footer__inner {
+    max-width: none !important;
+  }
+
+  .footer__row {
+    max-width: none !important;
+  }
+
+  .footer__link {
+    font-size: var(--text-2xl) !important;
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger } from '@/scripts/gsap';
+
+  function initServicesToggle() {
+    const el = document.getElementById('hero-services');
+    if (!el) return;
+
+    let cursor: HTMLElement | null = document.getElementById('services-cursor');
+    if (!cursor) {
+      cursor = document.createElement('div');
+      cursor.id = 'services-cursor';
+      cursor.style.cssText = 'position:fixed;top:0;left:0;width:50px;height:50px;background:#df9de5;pointer-events:none;z-index:9999;opacity:0;will-change:transform;';
+      document.body.appendChild(cursor);
+    }
+
+    el.addEventListener('click', () => {
+      el.classList.toggle('lab-hero__services--visible');
+    });
+
+    el.addEventListener('mouseenter', (e: MouseEvent) => {
+      gsap.set(cursor!, { x: e.clientX - 25, y: e.clientY - 25 });
+      gsap.to(cursor!, { opacity: 1, duration: 0.15 });
+    });
+
+    el.addEventListener('mouseleave', () => {
+      gsap.to(cursor!, { opacity: 0, duration: 0.15 });
+    });
+
+    el.addEventListener('mousemove', (e: MouseEvent) => {
+      gsap.set(cursor!, { x: e.clientX - 25, y: e.clientY - 25 });
+    });
+  }
+  initServicesToggle();
+  document.addEventListener('astro:after-swap', initServicesToggle);
+
+  function initMobileProjectCubes() {
+    if (!window.matchMedia('(pointer: coarse)').matches) return;
+
+    document.querySelectorAll<HTMLElement>('.lab-project-cube').forEach((cube) => {
+      const front = cube.querySelector<HTMLElement>('.lab-project-row:not(.lab-project-row--back)');
+      const back = cube.querySelector<HTMLElement>('.lab-project-row--back');
+      const link = cube.querySelector<HTMLAnchorElement>('a');
+      if (!front || !back || !link) return;
+
+      cube.addEventListener('click', (e) => {
+        e.preventDefault();
+        const url = link.href;
+
+        gsap.to(front, { rotateX: 90, duration: 0.35, ease: 'power2.in' });
+        gsap.set(back, { visibility: 'visible' });
+        gsap.fromTo(back, { rotateX: -90 }, {
+          rotateX: 0,
+          duration: 0.35,
+          ease: 'power2.out',
+          onComplete: () => { window.location.href = url; },
+        });
+      });
+    });
+  }
+
+  initMobileProjectCubes();
+  document.addEventListener('astro:after-swap', initMobileProjectCubes);
+
+  const COLLAGE_ST_ID = 'collage';
+  let collageMouseCleanup: (() => void) | null = null;
+
+  function killCollageTriggers() {
+    ScrollTrigger.getAll()
+      .filter((t) => (t.vars as any).id === COLLAGE_ST_ID)
+      .forEach((t) => t.kill());
+  }
+
+  function initCollage() {
+    killCollageTriggers();
+    if (collageMouseCleanup) { collageMouseCleanup(); collageMouseCleanup = null; }
+
+    const collage = document.getElementById('collage');
+    const items = document.querySelectorAll<HTMLElement>('[data-collage-item]');
+    if (!collage || !items.length) return;
+
+    gsap.set(items, { autoAlpha: 0, y: 40, scale: 0.92 });
+
+    gsap.to(items, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.9,
+      ease: 'expo.out',
+      stagger: 0.12,
+      scrollTrigger: {
+        id: COLLAGE_ST_ID,
+        trigger: collage,
+        start: 'top bottom-=80px',
+        once: true,
+      },
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    items.forEach((item) => {
+      const speed = parseFloat(item.dataset.speed || '0.2');
+      gsap.to(item, {
+        yPercent: -speed * 100,
+        ease: 'none',
+        scrollTrigger: {
+          id: COLLAGE_ST_ID,
+          trigger: collage,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    });
+
+    const FRICTION = 0.92;
+    const COLLISION_BOUNCE = 0.5;
+
+    interface Ball {
+      el: HTMLElement;
+      ox: number;
+      oy: number;
+      vx: number;
+      vy: number;
+      vr: number;
+      r: number;
+      dragging: boolean;
+    }
+
+    const balls: Ball[] = Array.from(items).map((el) => ({
+      el,
+      ox: 0,
+      oy: 0,
+      vx: 0,
+      vy: 0,
+      vr: 0,
+      r: el.offsetWidth / 2,
+      dragging: false,
+    }));
+
+    function getCenter(b: Ball) {
+      const rect = b.el.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+
+    let ticking = false;
+
+    function step() {
+      let moving = false;
+
+      for (let i = 0; i < balls.length; i++) {
+        for (let j = i + 1; j < balls.length; j++) {
+          const a = balls[i];
+          const b = balls[j];
+          const ac = getCenter(a);
+          const bc = getCenter(b);
+          const dx = bc.x - ac.x;
+          const dy = bc.y - ac.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const minDist = a.r + b.r;
+
+          if (dist < minDist) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+            const relVx = a.vx - b.vx;
+            const relVy = a.vy - b.vy;
+            const impact = relVx * nx + relVy * ny;
+
+            if (impact > 0) {
+              const impulse = impact * COLLISION_BOUNCE;
+              if (!a.dragging) { a.vx -= impulse * nx; a.vy -= impulse * ny; a.vr += impulse * 0.8; }
+              if (!b.dragging) { b.vx += impulse * nx; b.vy += impulse * ny; b.vr -= impulse * 0.8; }
+            }
+
+            const overlap = (minDist - dist) / 2 + 0.5;
+            if (!a.dragging) { a.ox -= nx * overlap; a.oy -= ny * overlap; }
+            if (!b.dragging) { b.ox += nx * overlap; b.oy += ny * overlap; }
+          }
+        }
+      }
+
+      for (const b of balls) {
+        if (!b.dragging) {
+          b.vx *= FRICTION;
+          b.vy *= FRICTION;
+          b.vr *= FRICTION;
+          b.ox += b.vx;
+          b.oy += b.vy;
+        }
+
+        const speed = Math.abs(b.vx) + Math.abs(b.vy) + Math.abs(b.vr);
+        if (speed > 0.1 || b.dragging) moving = true;
+
+        gsap.set(b.el, { x: b.ox, y: b.oy, rotation: b.vr * 3 });
+      }
+
+      if (moving) {
+        requestAnimationFrame(step);
+      } else {
+        ticking = false;
+      }
+    }
+
+    function kick() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(step);
+      }
+    }
+
+    function attractAll(px: number, py: number, force: number) {
+      for (const b of balls) {
+        if (b.dragging) continue;
+        const center = getCenter(b);
+        const dx = px - center.x;
+        const dy = py - center.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        b.vx += (dx / dist) * force;
+        b.vy += (dy / dist) * force;
+        b.vr += (dx / dist) * 2;
+      }
+      kick();
+    }
+
+    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+
+    if (isMobile) {
+      items.forEach((item, i) => {
+        let dragBall: Ball | null = null;
+        let lastX = 0;
+        let lastY = 0;
+
+        item.addEventListener('touchstart', (e: TouchEvent) => {
+          const touch = e.touches[0];
+          dragBall = balls[i];
+          dragBall.dragging = true;
+          dragBall.vx = 0;
+          dragBall.vy = 0;
+          lastX = touch.clientX;
+          lastY = touch.clientY;
+          kick();
+          e.preventDefault();
+        }, { passive: false });
+
+        item.addEventListener('touchmove', (e: TouchEvent) => {
+          if (!dragBall) return;
+          const touch = e.touches[0];
+          const dx = touch.clientX - lastX;
+          const dy = touch.clientY - lastY;
+          dragBall.ox += dx;
+          dragBall.oy += dy;
+          dragBall.vx = dx * 0.6;
+          dragBall.vy = dy * 0.6;
+          lastX = touch.clientX;
+          lastY = touch.clientY;
+          e.preventDefault();
+        }, { passive: false });
+
+        function endDrag() {
+          if (dragBall) {
+            dragBall.dragging = false;
+            dragBall = null;
+          }
+        }
+
+        item.addEventListener('touchend', endDrag);
+        item.addEventListener('touchcancel', endDrag);
+      });
+
+      collage.addEventListener('touchstart', (e: TouchEvent) => {
+        const isDraggingItem = (e.target as HTMLElement).closest('[data-collage-item]');
+        if (isDraggingItem) return;
+        const touch = e.touches[0];
+        attractAll(touch.clientX, touch.clientY, 10);
+      }, { passive: true });
+    } else {
+      const HIT_FORCE = 8;
+      let activeDrag: { ball: Ball; idx: number } | null = null;
+      let lastMX = 0;
+      let lastMY = 0;
+      let didDrag = false;
+
+      items.forEach((item, i) => {
+        item.addEventListener('mousedown', (e: MouseEvent) => {
+          const b = balls[i];
+          activeDrag = { ball: b, idx: i };
+          b.dragging = true;
+          b.vx = 0;
+          b.vy = 0;
+          lastMX = e.clientX;
+          lastMY = e.clientY;
+          didDrag = false;
+          item.style.zIndex = '10';
+          document.body.style.userSelect = 'none';
+          kick();
+          e.preventDefault();
+        });
+
+        item.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (activeDrag) return;
+          const b = balls[i];
+          const rect = item.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = cx - e.clientX;
+          const dy = cy - e.clientY;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+          b.vx += (dx / dist) * HIT_FORCE;
+          b.vy += (dy / dist) * HIT_FORCE;
+          b.vr += (dx / dist) * 3;
+
+          kick();
+        });
+      });
+
+      const onMouseMove = (e: MouseEvent) => {
+        if (!activeDrag) return;
+        const dx = e.clientX - lastMX;
+        const dy = e.clientY - lastMY;
+        activeDrag.ball.ox += dx;
+        activeDrag.ball.oy += dy;
+        activeDrag.ball.vx = dx * 0.6;
+        activeDrag.ball.vy = dy * 0.6;
+        lastMX = e.clientX;
+        lastMY = e.clientY;
+        if (Math.abs(dx) > 2 || Math.abs(dy) > 2) didDrag = true;
+      };
+
+      const onMouseUp = () => {
+        if (!activeDrag) return;
+        activeDrag.ball.dragging = false;
+        items[activeDrag.idx].style.zIndex = '';
+        activeDrag = null;
+        document.body.style.userSelect = '';
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+
+      if (collageMouseCleanup) collageMouseCleanup();
+      collageMouseCleanup = () => {
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+      };
+
+      collage.addEventListener('click', (e: MouseEvent) => {
+        if (didDrag) { didDrag = false; return; }
+        attractAll(e.clientX, e.clientY, 12);
+      });
+    }
+  }
+
+  initCollage();
+  document.addEventListener('astro:after-swap', () => {
+    requestAnimationFrame(initCollage);
+  });
+
+  let carouselCleanup: (() => void) | null = null;
+
+  function initCarousel() {
+    if (carouselCleanup) { carouselCleanup(); carouselCleanup = null; }
+
+    const track = document.querySelector<HTMLElement>('.lab-carousel__track');
+    if (!track) return;
+
+    track.querySelectorAll('[data-clone]').forEach((el) => el.remove());
+
+    const originals = Array.from(track.querySelectorAll<HTMLElement>('[data-slide]'));
+    const count = originals.length;
+    if (!count) return;
+
+    originals.forEach((slide) => {
+      const clone = slide.cloneNode(true) as HTMLElement;
+      clone.removeAttribute('data-slide');
+      clone.setAttribute('data-clone', '');
+      track.appendChild(clone);
+    });
+
+    const allSlides = Array.from(track.querySelectorAll<HTMLElement>('.lab-carousel__slide'));
+    let current = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let isResetting = false;
+    let scrollTween: gsap.core.Tween | null = null;
+
+    function getSlideStep(): number {
+      if (allSlides.length < 2) return allSlides[0]?.offsetWidth ?? 0;
+      return allSlides[1].offsetLeft - allSlides[0].offsetLeft;
+    }
+
+    function smoothScrollTo(target: number): Promise<void> {
+      return new Promise((resolve) => {
+        if (scrollTween) scrollTween.kill();
+        const start = track!.scrollLeft;
+        if (Math.abs(target - start) < 1) { resolve(); return; }
+
+        scrollTween = gsap.to(track!, {
+          scrollLeft: target,
+          duration: 1.2,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            scrollTween = null;
+            resolve();
+          },
+        });
+      });
+    }
+
+    function silentReset(to: number) {
+      isResetting = true;
+      track!.scrollLeft = getSlideStep() * to;
+      current = to;
+      requestAnimationFrame(() => {
+        isResetting = false;
+      });
+    }
+
+    function advance() {
+      if (scrollTween) return;
+      if (current >= count) {
+        silentReset(current - count);
+        return;
+      }
+      const next = current + 1;
+      current = next;
+      const target = getSlideStep() * current;
+      if (next >= count) {
+        smoothScrollTo(target).then(() => silentReset(next - count));
+      } else {
+        smoothScrollTo(target);
+      }
+    }
+
+    function retreat() {
+      if (scrollTween) return;
+      if (current <= 0) {
+        silentReset(count);
+      }
+      current = current - 1;
+      const target = getSlideStep() * current;
+      smoothScrollTo(target);
+    }
+
+    function startAuto() {
+      stopAuto();
+      timer = setInterval(advance, 4500);
+    }
+
+    function stopAuto() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    const prevBtn = document.querySelector<HTMLElement>('[data-carousel-prev]');
+    const nextBtn = document.querySelector<HTMLElement>('[data-carousel-next]');
+    prevBtn?.addEventListener('click', () => { stopAuto(); retreat(); startAuto(); });
+    nextBtn?.addEventListener('click', () => { stopAuto(); advance(); startAuto(); });
+
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+    track.addEventListener('scroll', () => {
+      if (isResetting || scrollTween) return;
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const step = getSlideStep();
+        if (step > 0) {
+          const idx = Math.round(track!.scrollLeft / step);
+          if (idx !== current) {
+            current = idx;
+            if (current >= count) {
+              silentReset(current - count);
+            }
+          }
+        }
+      }, 100);
+    }, { passive: true });
+
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragScrollLeft = 0;
+    let dragVelocity = 0;
+    let lastDragX = 0;
+    let lastDragTime = 0;
+
+    let didDragCarousel = false;
+    let pendingPointerId: number | null = null;
+    const DRAG_THRESHOLD = 8;
+
+    function onPointerDown(e: PointerEvent) {
+      if (e.button !== 0) return;
+      isDragging = false;
+      didDragCarousel = false;
+      pendingPointerId = e.pointerId;
+      dragStartX = e.clientX;
+      dragScrollLeft = track!.scrollLeft;
+      dragVelocity = 0;
+      lastDragX = e.clientX;
+      lastDragTime = Date.now();
+      stopAuto();
+      if (scrollTween) { scrollTween.kill(); scrollTween = null; }
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      if (pendingPointerId === null && !isDragging) return;
+      const dx = e.clientX - dragStartX;
+
+      if (!isDragging && Math.abs(dx) > DRAG_THRESHOLD) {
+        isDragging = true;
+        didDragCarousel = true;
+        track!.classList.add('is-dragging');
+        track!.setPointerCapture(e.pointerId);
+        pendingPointerId = null;
+      }
+
+      if (!isDragging) return;
+      track!.scrollLeft = dragScrollLeft - dx;
+
+      const now = Date.now();
+      const dt = now - lastDragTime || 1;
+      dragVelocity = (e.clientX - lastDragX) / dt;
+      lastDragX = e.clientX;
+      lastDragTime = now;
+    }
+
+    function onPointerUp(e: PointerEvent) {
+      pendingPointerId = null;
+      if (!isDragging) { startAuto(); return; }
+      isDragging = false;
+      track!.classList.remove('is-dragging');
+      track!.releasePointerCapture(e.pointerId);
+
+      const momentum = -dragVelocity * 300;
+      if (Math.abs(momentum) > 10) {
+        gsap.to(track!, {
+          scrollLeft: track!.scrollLeft + momentum,
+          duration: 0.6,
+          ease: 'power2.out',
+          onComplete: () => { snapToNearest(); startAuto(); },
+        });
+      } else {
+        snapToNearest();
+        startAuto();
+      }
+    }
+
+    function snapToNearest() {
+      const step = getSlideStep();
+      if (step <= 0) return;
+      const idx = Math.round(track!.scrollLeft / step);
+      current = idx;
+      if (current >= count) {
+        silentReset(current - count);
+      }
+      gsap.to(track!, { scrollLeft: step * current, duration: 0.35, ease: 'power2.out' });
+    }
+
+    track.addEventListener('pointerdown', onPointerDown);
+    track.addEventListener('pointermove', onPointerMove);
+    track.addEventListener('pointerup', onPointerUp);
+    track.addEventListener('pointercancel', onPointerUp);
+
+    track.addEventListener('click', (e: MouseEvent) => {
+      if (didDragCarousel) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, { capture: true });
+
+    track.addEventListener('touchstart', stopAuto, { passive: true });
+    track.addEventListener('touchend', () => startAuto());
+
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    function onResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (current >= count) silentReset(current - count);
+        track!.scrollTo({ left: getSlideStep() * current, behavior: 'instant' as ScrollBehavior });
+      }, 150);
+    }
+    window.addEventListener('resize', onResize);
+
+    startAuto();
+
+    carouselCleanup = () => {
+      stopAuto();
+      if (scrollTween) scrollTween.kill();
+      window.removeEventListener('resize', onResize);
+      track.removeEventListener('pointerdown', onPointerDown);
+      track.removeEventListener('pointermove', onPointerMove);
+      track.removeEventListener('pointerup', onPointerUp);
+      track.removeEventListener('pointercancel', onPointerUp);
+      track.querySelectorAll('[data-clone]').forEach((el) => el.remove());
+    };
+  }
+
+  initCarousel();
+  document.addEventListener('astro:after-swap', initCarousel);
+</script>

@@ -38,9 +38,18 @@ const MAPA = [
     <form
       class="contact-form reveal reveal-delay-2"
       id="contact-form"
-      action="/.netlify/functions/contact"
+      name="contacto"
       method="POST"
+      action="/"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
     >
+      <input type="hidden" name="form-name" value="contacto" />
+
+      <p class="contact-form__hidden" aria-hidden="true">
+        <label>No llenar este campo: <input name="bot-field" /></label>
+      </p>
+
       <div class="contact-form__field">
         <label for="name">Nombre</label>
         <input type="text" id="name" name="name" required autocomplete="name" />
@@ -121,6 +130,13 @@ const MAPA = [
   }
 
   /* CONTACT FORM */
+  .contact-form__hidden {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .contact-form {
     display: flex;
     flex-direction: column;
@@ -334,14 +350,10 @@ const MAPA = [
 
       try {
         const formData = new FormData(form);
-        const response = await fetch(form.action, {
+        const response = await fetch('/', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: formData.get('name'),
-            email: formData.get('email'),
-            message: formData.get('message'),
-          }),
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
         });
 
         if (response.ok) {

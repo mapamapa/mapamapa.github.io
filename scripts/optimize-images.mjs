@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { readdir, mkdir, stat, copyFile, unlink } from 'node:fs/promises';
+import { readdir, mkdir, stat, copyFile, unlink, readFile } from 'node:fs/promises';
 import { join, parse, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -70,10 +70,13 @@ const OPTIMIZE_FOLDERS = [
   'img/editoriales',
   'img/ghost-producers',
   'img/libreria-nacional',
+  'img/mubi',
   'img/nicolas-jaar',
   'img/nicolas-jaar/carousel',
   'img/produccion-tecnica',
+  'img/rosalia',
   'img/rito-primavera',
+  'img/sub30',
   'img/work/saturnalia',
   'img/work/cnc',
   'img/work/fast',
@@ -108,12 +111,13 @@ async function optimizeInPlace(folder) {
     }
 
     const ext = extname(file).toLowerCase();
-    const image = sharp(filePath);
-    const meta = await image.metadata();
+    // Read into memory so no handle stays open on the source file (Windows blocks the overwrite otherwise)
+    const input = await readFile(filePath);
+    const meta = await sharp(input).metadata();
 
     const needsResize = (meta.width > MAX_WIDTH) || (meta.height > MAX_HEIGHT);
 
-    let pipeline = sharp(filePath);
+    let pipeline = sharp(input);
 
     if (needsResize) {
       pipeline = pipeline.resize(MAX_WIDTH, MAX_HEIGHT, {
@@ -169,7 +173,8 @@ async function optimizeRootImages() {
     if (fileStat.size < SIZE_THRESHOLD) { skipped++; continue; }
 
     const ext = extname(file).toLowerCase();
-    let pipeline = sharp(filePath).resize(MAX_WIDTH, MAX_HEIGHT, {
+    const input = await readFile(filePath);
+    let pipeline = sharp(input).resize(MAX_WIDTH, MAX_HEIGHT, {
       fit: 'inside',
       withoutEnlargement: true,
     });

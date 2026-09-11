@@ -58,35 +58,39 @@ const { projects, pye, services } = site;
   <section class="pye">
     <div class="pye__inner container">
       <h2 class="pye__title reveal">{pye.title}</h2>
-      <div class="pye__grid">
-        {pye.items.map((item, i) => (
-          item.url ? (
-            <a href={item.url} class={`pye__card reveal reveal-delay-${(i % 4) + 1}`}>
-              <div class="pye__card-img">
-                <img src={item.image} alt={item.title} width="600" height="600" loading="lazy" decoding="async" />
-              </div>
-              <h3 class="pye__card-title">{item.title}</h3>
-              {item.subtitle && <p class="pye__card-subtitle">{item.subtitle}</p>}
-            </a>
-          ) : (
-            <article class={`pye__card reveal reveal-delay-${(i % 4) + 1}`}>
-              <div class="pye__card-img">
-                <img src={item.image} alt={item.title} width="600" height="600" loading="lazy" decoding="async" />
-              </div>
-              <h3 class="pye__card-title">{item.title}</h3>
-              {item.subtitle && <p class="pye__card-subtitle">{item.subtitle}</p>}
-            </article>
-          )
-        ))}
+      <div class="pye__carousel reveal reveal-delay-1" data-carousel data-interval="4000" aria-label={pye.title}>
+        <button class="carousel__arrow pye__arrow pye__arrow--prev" aria-label="Anterior" data-carousel-prev>&#8592;</button>
+        <button class="carousel__arrow pye__arrow pye__arrow--next" aria-label="Siguiente" data-carousel-next>&#8594;</button>
+        <div class="pye__track" data-carousel-track>
+          {pye.items.map((item) => (
+            item.url ? (
+              <a href={item.url} class="pye__card" data-slide>
+                <div class="pye__card-img">
+                  <img src={item.image} alt={item.title} width="600" height="600" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="pye__card-title">{item.title}</h3>
+                {item.subtitle && <p class="pye__card-subtitle">{item.subtitle}</p>}
+              </a>
+            ) : (
+              <article class="pye__card" data-slide>
+                <div class="pye__card-img">
+                  <img src={item.image} alt={item.title} width="600" height="600" loading="lazy" decoding="async" />
+                </div>
+                <h3 class="pye__card-title">{item.title}</h3>
+                {item.subtitle && <p class="pye__card-subtitle">{item.subtitle}</p>}
+              </article>
+            )
+          ))}
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Servicios Carousel -->
-  <section class="carousel reveal" id="services-carousel" aria-label="Servicios">
+  <section class="carousel reveal" id="services-carousel" aria-label="Servicios" data-carousel data-interval="4500">
     <button class="carousel__arrow carousel__arrow--prev" aria-label="Anterior" data-carousel-prev>&#8592;</button>
     <button class="carousel__arrow carousel__arrow--next" aria-label="Siguiente" data-carousel-next>&#8594;</button>
-    <div class="carousel__track">
+    <div class="carousel__track" data-carousel-track>
       {services.map((item) => (
         <a href={item.url ?? '#'} class="carousel__slide" data-slide>
           <img
@@ -405,11 +409,49 @@ const { projects, pye, services } = site;
     margin-bottom: 20px;
   }
 
-  .pye__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-xs);
+  .pye__carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
   }
+
+  .pye__track {
+    display: flex;
+    gap: var(--space-xs);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+  }
+
+  .pye__track.is-dragging {
+    cursor: grabbing;
+  }
+
+  .pye__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pye__card {
+    flex: 0 0 calc((100% - 2 * var(--space-xs)) / 3);
+    display: block;
+    text-decoration: none;
+  }
+
+  .pye__card img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+
+  /* Flechas centradas sobre la imagen (aspect 5/4), no sobre el texto */
+  .pye__arrow {
+    top: calc(((100% - 2 * var(--space-xs)) / 3) * 0.4);
+  }
+
+  .pye__arrow--prev { left: clamp(0.5rem, 2vw, 1.5rem); }
+  .pye__arrow--next { right: clamp(0.5rem, 2vw, 1.5rem); }
 
   .pye__card-img {
     width: 100%;
@@ -436,14 +478,25 @@ const { projects, pye, services } = site;
   }
 
   @media (max-width: 768px) {
-    .pye__grid {
-      grid-template-columns: repeat(2, 1fr);
+    .pye__card {
+      flex-basis: calc((100% - var(--space-xs)) / 2);
+    }
+
+    .pye__arrow {
+      top: calc(((100% - var(--space-xs)) / 2) * 0.4);
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
     }
   }
 
   @media (max-width: 480px) {
-    .pye__grid {
-      grid-template-columns: 1fr;
+    .pye__card {
+      flex-basis: 100%;
+    }
+
+    .pye__arrow {
+      top: 40%;
     }
   }
 
@@ -918,19 +971,27 @@ const { projects, pye, services } = site;
     requestAnimationFrame(initCollage);
   });
 
-  let carouselCleanup: (() => void) | null = null;
+  const carouselCleanups: (() => void)[] = [];
 
-  function initCarousel() {
-    if (carouselCleanup) { carouselCleanup(); carouselCleanup = null; }
+  function initCarousels() {
+    carouselCleanups.splice(0).forEach((fn) => fn());
+    document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+      const cleanup = initCarousel(root);
+      if (cleanup) carouselCleanups.push(cleanup);
+    });
+  }
 
-    const track = document.querySelector<HTMLElement>('.carousel__track');
-    if (!track) return;
+  function initCarousel(root: HTMLElement): (() => void) | null {
+    const track = root.querySelector<HTMLElement>('[data-carousel-track]');
+    if (!track) return null;
+
+    const interval = parseInt(root.dataset.interval || '4500', 10);
 
     track.querySelectorAll('[data-clone]').forEach((el) => el.remove());
 
     const originals = Array.from(track.querySelectorAll<HTMLElement>('[data-slide]'));
     const count = originals.length;
-    if (!count) return;
+    if (!count) return null;
 
     originals.forEach((slide) => {
       const clone = slide.cloneNode(true) as HTMLElement;
@@ -939,9 +1000,10 @@ const { projects, pye, services } = site;
       track.appendChild(clone);
     });
 
-    const allSlides = Array.from(track.querySelectorAll<HTMLElement>('.carousel__slide'));
+    const allSlides = Array.from(track.querySelectorAll<HTMLElement>('[data-slide], [data-clone]'));
     let current = 0;
     let timer: ReturnType<typeof setInterval> | null = null;
+    let hovering = false;
     let isResetting = false;
     let scrollTween: gsap.core.Tween | null = null;
 
@@ -1005,17 +1067,32 @@ const { projects, pye, services } = site;
 
     function startAuto() {
       stopAuto();
-      timer = setInterval(advance, 4500);
+      if (hovering) return;
+      timer = setInterval(advance, interval);
     }
 
     function stopAuto() {
       if (timer) { clearInterval(timer); timer = null; }
     }
 
-    const prevBtn = document.querySelector<HTMLElement>('[data-carousel-prev]');
-    const nextBtn = document.querySelector<HTMLElement>('[data-carousel-next]');
+    const prevBtn = root.querySelector<HTMLElement>('[data-carousel-prev]');
+    const nextBtn = root.querySelector<HTMLElement>('[data-carousel-next]');
     prevBtn?.addEventListener('click', () => { stopAuto(); retreat(); startAuto(); });
     nextBtn?.addEventListener('click', () => { stopAuto(); advance(); startAuto(); });
+
+    /* --- Pausa mientras el mouse está encima (solo puntero fino) --- */
+    function onPointerEnter(e: PointerEvent) {
+      if (e.pointerType !== 'mouse') return;
+      hovering = true;
+      stopAuto();
+    }
+    function onPointerLeave(e: PointerEvent) {
+      if (e.pointerType !== 'mouse') return;
+      hovering = false;
+      startAuto();
+    }
+    root.addEventListener('pointerenter', onPointerEnter);
+    root.addEventListener('pointerleave', onPointerLeave);
 
     let scrollTimeout: ReturnType<typeof setTimeout>;
     track.addEventListener('scroll', () => {
@@ -1142,10 +1219,12 @@ const { projects, pye, services } = site;
 
     startAuto();
 
-    carouselCleanup = () => {
+    return () => {
       stopAuto();
       if (scrollTween) scrollTween.kill();
       window.removeEventListener('resize', onResize);
+      root.removeEventListener('pointerenter', onPointerEnter);
+      root.removeEventListener('pointerleave', onPointerLeave);
       track.removeEventListener('pointerdown', onPointerDown);
       track.removeEventListener('pointermove', onPointerMove);
       track.removeEventListener('pointerup', onPointerUp);
@@ -1154,6 +1233,6 @@ const { projects, pye, services } = site;
     };
   }
 
-  initCarousel();
-  document.addEventListener('astro:after-swap', initCarousel);
+  initCarousels();
+  document.addEventListener('astro:after-swap', initCarousels);
 </script>

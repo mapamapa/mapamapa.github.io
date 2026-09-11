@@ -32,7 +32,13 @@ const gallery = {
 
       <div class="production__heading reveal reveal-delay-1">
         <h1>Experiencia SUB30 — Romeo y Julieta</h1>
-        <p class="production__subtitle">MAPAMAPA × Clásica No Convencional × Teatro Municipal de Santiago</p>
+        <p class="production__logos" aria-label="MAPAMAPA, Clásica No Convencional y Teatro Municipal de Santiago">
+          <img src="/img/logo.png" alt="MAPAMAPA" class="production__logo production__logo--mapa" width="1080" height="643" decoding="async" />
+          <span class="production__logos-x" aria-hidden="true">×</span>
+          <img src="/img/sub30/logo-cnc.png" alt="Clásica No Convencional" class="production__logo production__logo--cnc" width="346" height="77" decoding="async" />
+          <span class="production__logos-x" aria-hidden="true">×</span>
+          <img src="/img/sub30/logo-municipal.png" alt="Teatro Municipal de Santiago" class="production__logo production__logo--municipal" width="774" height="382" decoding="async" />
+        </p>
       </div>
     </header>
 
@@ -158,10 +164,38 @@ const gallery = {
     color: #d7d7d7;
   }
 
-  .production__subtitle {
+  .production__logos {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(0.75rem, 1.5vw, 1.5rem);
+    margin-top: 0.6rem;
+  }
+
+  .production__logo {
+    display: block;
+    width: auto;
+  }
+
+  .production__logo--mapa {
+    height: clamp(28px, 2.6vw, 40px);
+  }
+
+  .production__logo--cnc {
+    height: clamp(26px, 2.4vw, 36px);
+  }
+
+  .production__logo--municipal {
+    height: clamp(48px, 4.6vw, 70px);
+    /* El logo original viene en grises oscuros; sobre fondo negro se pasa a blanco */
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+
+  .production__logos-x {
     font-size: clamp(1rem, 0.8rem + 1.2vw, 1.5rem);
     color: #999;
-    line-height: 1.1;
+    line-height: 1;
   }
 
   .production__editorial {

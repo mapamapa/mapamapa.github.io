@@ -8,9 +8,9 @@ const description = 'Lanzamiento en MUBI de La misteriosa mirada del flamenco, p
 const gallery = {
   hero: '/img/mubi/hero.jpg',
   performer: '/img/mubi/performer.jpg',
+  mesa: '/img/mubi/mesa.jpg',
   retrato: '/img/mubi/retrato.jpg',
   bingo: '/img/mubi/bingo.jpg',
-  mesa: '/img/mubi/mesa.jpg',
   mesaPerformer: '/img/mubi/mesa-performer.jpg',
   manos: '/img/mubi/manos.jpg',
 };
@@ -36,43 +36,68 @@ const gallery = {
       </div>
     </header>
 
+    <!-- Texto y foto se alternan en zigzag -->
     <section class="production__editorial" aria-labelledby="mubi-copy-title">
-      <div class="production__copy reveal reveal-delay-2">
-        <h2 id="mubi-copy-title" class="sr-only">Descripción del proyecto</h2>
-        <p>
-          En el desierto de Atacama, en un campamento minero donde el sol raja la tierra y las noticias tardan en llegar, un grupo de personas decide que la familia se elige, no se hereda. Ese es el punto de partida de La misteriosa mirada del flamenco, la primera película de Diego Céspedes: una comunidad que se sostiene entre el miedo a una enfermedad que nadie nombra y el rechazo de quienes prefieren no mirar, y que aun así, o justamente por eso, encuentra espacio para el amor.
-        </p>
-        <p>
-          MAPAMAPA tomó esa idea de familia elegida, artificio y cariño como refugio, y la convirtió en el lenguaje del lanzamiento en MUBI, recreando particularmente la escena de Miss Alaska: un club vintage, íntimo, de barrio, el mismo gesto de comunidad que sostiene a la película, hecho espacio.
-        </p>
-        <p>
-          La ambientación no buscó ilustrar la película, sino interpretarla: recreó ese mismo pulso entre lo doméstico y lo excesivo, entre la ronda cotidiana de una comunidad y el glamour que ahí funciona como refugio. Por una noche, el estreno no se contó, se habitó, con el mismo gesto de familia elegida que sostiene la narrativa.
-        </p>
+      <h2 id="mubi-copy-title" class="sr-only">Descripción del proyecto</h2>
+
+      <div class="production__row reveal reveal-delay-2">
+        <div class="production__text">
+          <p>
+            En el desierto de Atacama, en un campamento minero donde el sol raja la tierra y las noticias tardan en llegar, un grupo de personas decide que la familia se elige, no se hereda. Ese es el punto de partida de La misteriosa mirada del flamenco, la primera película de Diego Céspedes: una comunidad que se sostiene entre el miedo a una enfermedad que nadie nombra y el rechazo de quienes prefieren no mirar, y que aun así, o justamente por eso, encuentra espacio para el amor.
+          </p>
+        </div>
+        <figure class="production__card production__card--tall">
+          <img
+            src={gallery.performer}
+            alt="Performer en vestido rojo bajo la luz del club"
+            width="720"
+            height="1080"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
       </div>
 
-      <figure class="production__card production__card--q1 reveal reveal-delay-2">
-        <img
-          src={gallery.performer}
-          alt="Performer en vestido rojo bajo la luz del club"
-          width="720"
-          height="1080"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
+      <div class="production__row production__row--flip reveal reveal-delay-2">
+        <figure class="production__card production__card--wide">
+          <img
+            src={gallery.mesa}
+            alt="Mesa con flores, velas y botellas de vino"
+            width="1620"
+            height="1080"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+        <div class="production__text">
+          <p>
+            MAPAMAPA tomó esa idea de familia elegida, artificio y cariño como refugio, y la convirtió en el lenguaje del lanzamiento en MUBI, recreando particularmente la escena de Miss Alaska: un club vintage, íntimo, de barrio, el mismo gesto de comunidad que sostiene a la película, hecho espacio.
+          </p>
+        </div>
+      </div>
 
-      <figure class="production__card production__card--q2 reveal reveal-delay-2">
-        <img
-          src={gallery.retrato}
-          alt="Retrato de performer con peluca rubia y joyas"
-          width="720"
-          height="1080"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
+      <div class="production__row reveal reveal-delay-2">
+        <div class="production__text">
+          <p>
+            La ambientación no buscó ilustrar la película, sino interpretarla: recreó ese mismo pulso entre lo doméstico y lo excesivo, entre la ronda cotidiana de una comunidad y el glamour que ahí funciona como refugio. Por una noche, el estreno no se contó, se habitó, con el mismo gesto de familia elegida que sostiene la narrativa.
+          </p>
+        </div>
+        <figure class="production__card production__card--tall">
+          <img
+            src={gallery.retrato}
+            alt="Retrato de performer con peluca rubia y joyas"
+            width="720"
+            height="1080"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
+    </section>
 
-      <figure class="production__card production__card--q3 reveal reveal-delay-3">
+    <!-- Cierre: tres detalles del club -->
+    <section class="production__gallery" aria-label="Más imágenes del evento">
+      <figure class="production__card reveal reveal-delay-1">
         <img
           src={gallery.bingo}
           alt="Cartones de bingo y mantel floreado sobre la mesa"
@@ -82,19 +107,7 @@ const gallery = {
           decoding="async"
         />
       </figure>
-
-      <figure class="production__card production__card--q4 reveal reveal-delay-3">
-        <img
-          src={gallery.mesa}
-          alt="Mesa con flores, velas y botellas de vino"
-          width="1620"
-          height="1080"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
-
-      <figure class="production__card production__card--q5 reveal reveal-delay-3">
+      <figure class="production__card reveal reveal-delay-2">
         <img
           src={gallery.mesaPerformer}
           alt="Performer sentada en una mesa del club"
@@ -104,8 +117,7 @@ const gallery = {
           decoding="async"
         />
       </figure>
-
-      <figure class="production__card production__card--q6 reveal reveal-delay-4">
+      <figure class="production__card reveal reveal-delay-3">
         <img
           src={gallery.manos}
           alt="Detalle de manos con uñas decoradas"
@@ -162,26 +174,37 @@ const gallery = {
     line-height: 1.1;
   }
 
-  /* Mosaico de 12 columnas (misma lógica que Artel) */
   .production__editorial {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 0;
-    align-items: start;
+    gap: var(--space-lg);
   }
 
-  .production__copy {
-    grid-column: span 5;
+  /* Cada fila: texto a un lado, foto al otro. Las filas --flip invierten el orden. */
+  .production__row {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  .production__row--flip {
+    grid-template-columns: 7fr 5fr;
+  }
+
+  .production__text {
     display: grid;
     gap: 1rem;
-    padding-right: var(--space-md);
   }
 
-  .production__copy p {
+  .production__text p {
     font-size: clamp(1rem, 0.92rem + 0.35vw, 1.18rem);
     line-height: 1.08;
     color: #c8c8c8;
-    max-width: 58ch;
+    max-width: 48ch;
+  }
+
+  .production__row--flip .production__text {
+    justify-self: end;
   }
 
   .production__card {
@@ -196,69 +219,64 @@ const gallery = {
     display: block;
   }
 
-  /* Fila 1: texto + dos retratos */
-  .production__card--q1 {
-    grid-column: 6 / 9;
-    height: 560px;
+  .production__card--tall {
+    height: 620px;
   }
 
-  .production__card--q2 {
-    grid-column: 9 / -1;
-    height: 560px;
+  .production__card--wide {
+    height: 460px;
   }
 
-  /* Fila 2: tres piezas de distinto ancho */
-  .production__card--q3 {
-    grid-column: 1 / 4;
-    height: 420px;
+  .production__gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xs);
+    margin-top: var(--space-xl);
   }
 
-  .production__card--q4 {
-    grid-column: 4 / 8;
-    height: 420px;
-  }
-
-  .production__card--q5 {
-    grid-column: 8 / -1;
-    height: 420px;
-  }
-
-  /* Fila 3: detalle suelto a la izquierda */
-  .production__card--q6 {
-    grid-column: 1 / 4;
-    height: 360px;
+  .production__gallery .production__card {
+    height: 460px;
   }
 
   @media (min-width: 900px) {
     .production__header {
       margin-bottom: var(--space-md);
     }
-
-    .production__copy {
-      padding-top: 0.25rem;
-    }
   }
 
   @media (max-width: 899px) {
     .production__editorial {
+      gap: var(--space-md);
+    }
+
+    .production__row,
+    .production__row--flip {
+      grid-template-columns: 1fr;
+      gap: var(--space-sm);
+    }
+
+    /* En una columna, el texto siempre va antes de su foto */
+    .production__row--flip .production__text {
+      order: -1;
+      justify-self: start;
+    }
+
+    .production__card--tall,
+    .production__card--wide {
+      height: 360px;
+    }
+
+    .production__gallery {
       grid-template-columns: 1fr 1fr;
-      gap: 0;
+      margin-top: var(--space-lg);
     }
 
-    .production__copy {
-      grid-column: 1 / -1;
-      padding-right: 0;
-      margin-bottom: var(--space-sm);
-    }
-
-    .production__card--q1,
-    .production__card--q2,
-    .production__card--q3,
-    .production__card--q4,
-    .production__card--q5,
-    .production__card--q6 {
-      grid-column: auto;
+    .production__gallery .production__card {
       height: 300px;
+    }
+
+    .production__gallery .production__card:last-child {
+      grid-column: 1 / -1;
     }
   }
 </style>

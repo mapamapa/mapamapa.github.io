@@ -4,12 +4,12 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 const title = 'LUX — Rosalía';
 const description = 'Escenografía para la sesión de escucha mundial del álbum LUX de Rosalía, experiencia de Sony Music: un espacio completamente blanco envuelto en luces, proyecciones y aromas.';
 
-// La foto de la sala con butacas (hero.jpg) es la portada en la home; no se repite dentro de la página.
+// La foto del pasillo (pasillo.jpg) es la portada en la home; no se repite dentro de la página.
 const ogImage = '/img/rosalia/hero.jpg';
 
 const gallery = {
-  pasillo: '/img/rosalia/pasillo.jpg',
   butacas: '/img/rosalia/butacas.jpg',
+  sala: '/img/rosalia/hero.jpg',
   telas: '/img/rosalia/telas.jpg',
   sillas: '/img/rosalia/sillas.jpg',
 };
@@ -35,8 +35,8 @@ const gallery = {
       <div class="production__gallery reveal reveal-delay-2">
         <figure class="production__card production__card--sm">
           <img
-            src={gallery.pasillo}
-            alt="Pasillo de telas blancas hacia la entrada de la sala"
+            src={gallery.butacas}
+            alt="Butacas blancas frente a las cortinas de la sala"
             width="1080"
             height="1350"
             loading="lazy"
@@ -45,8 +45,8 @@ const gallery = {
         </figure>
         <figure class="production__card production__card--lg">
           <img
-            src={gallery.butacas}
-            alt="Butacas blancas frente a las cortinas de la sala"
+            src={gallery.sala}
+            alt="Sala completamente blanca con telas y butacas para la sesión de escucha"
             width="1080"
             height="1350"
             loading="lazy"

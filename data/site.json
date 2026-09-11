@@ -55,6 +55,9 @@
   "pye": {
     "title": "Producción & experiencias",
     "items": [
+      { "title": "MUBI", "subtitle": "La Misteriosa Mirada del Flamenco", "image": "/img-opt/pye/mubi.webp", "url": "/mubi/" },
+      { "title": "Rosalía — LUX", "subtitle": "Sesión de escucha | Sony Music", "image": "/img-opt/pye/rosalia.webp", "url": "/rosalia/" },
+      { "title": "Experiencia SUB30", "subtitle": "Romeo y Julieta | Teatro Municipal de Santiago", "image": "/img-opt/pye/sub30.webp", "url": "/sub30/" },
       { "title": "Rito de Primavera", "subtitle": "José Vidal Mut", "image": "/img-opt/pye/rito.webp", "url": "/rito-primavera/" },
       { "title": "Iván Navarro", "subtitle": "Carnavalito GAM", "image": "/img-opt/pye/ivan.webp", "url": "/carnavalito-gam/" },
       { "title": "Libreria Nacional", "subtitle": "Concurso \"Arte en Vivo\"", "image": "/img-opt/pye/lnacional.webp", "url": "/libreria-nacional/" },

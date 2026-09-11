@@ -87,23 +87,26 @@ const { projects, pye, services } = site;
   </section>
 
   <!-- Servicios Carousel -->
-  <section class="carousel reveal" id="services-carousel" aria-label="Servicios" data-carousel data-interval="4500">
-    <button class="carousel__arrow carousel__arrow--prev" aria-label="Anterior" data-carousel-prev>&#8592;</button>
-    <button class="carousel__arrow carousel__arrow--next" aria-label="Siguiente" data-carousel-next>&#8594;</button>
-    <div class="carousel__track" data-carousel-track>
-      {services.map((item) => (
-        <a href={item.url ?? '#'} class="carousel__slide" data-slide>
-          <img
-            src={item.hero ?? item.image}
-            alt={item.title}
-            width="1600"
-            height="900"
-            loading="lazy"
-            decoding="async"
-          />
-          <span class="carousel__label">{item.title}</span>
-        </a>
-      ))}
+  <section class="carousel reveal" id="services-carousel" aria-labelledby="services-title" data-carousel data-interval="4500">
+    <h2 id="services-title" class="carousel__title">Servicios</h2>
+    <div class="carousel__body">
+      <button class="carousel__arrow carousel__arrow--prev" aria-label="Anterior" data-carousel-prev>&#8592;</button>
+      <button class="carousel__arrow carousel__arrow--next" aria-label="Siguiente" data-carousel-next>&#8594;</button>
+      <div class="carousel__track" data-carousel-track>
+        {services.map((item) => (
+          <a href={item.url ?? '#'} class="carousel__slide" data-slide>
+            <img
+              src={item.hero ?? item.image}
+              alt={item.title}
+              width="1600"
+              height="900"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="carousel__label">{item.title}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -505,7 +508,19 @@ const { projects, pye, services } = site;
     position: relative;
     width: 100%;
     overflow: hidden;
-    padding: var(--space-md) 0 var(--space-lg);
+    padding: 20px 0 var(--space-lg);
+  }
+
+  .carousel__title {
+    font-size: var(--text-2xl);
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .carousel__body {
+    position: relative;
   }
 
   .carousel__arrow {

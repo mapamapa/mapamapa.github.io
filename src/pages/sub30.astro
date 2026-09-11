@@ -4,25 +4,27 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 const title = 'Experiencia SUB30 — Romeo y Julieta';
 const description = 'Experiencia SUB30 en el Teatro Municipal de Santiago: una generación menor de 30 entrando a ver ballet y quedándose a la primera fiesta electrónica en el foyer del Municipal.';
 
+// La foto de la pareja bailando (hero.jpg) es la portada en la home; no se repite dentro de la página.
 const gallery = {
-  hero: '/img/sub30/hero.jpg',
-  bailarina: '/img/sub30/bailarina.jpg',
   foyer: '/img/sub30/foyer.jpg',
+  bailarina: '/img/sub30/bailarina.jpg',
   duo: '/img/sub30/duo.jpg',
   publico: '/img/sub30/publico.jpg',
   dj: '/img/sub30/dj.jpg',
-  dj2: '/img/sub30/dj2.jpg',
   multitud: '/img/sub30/multitud.jpg',
+  dj2: '/img/sub30/dj2.jpg',
+  mixer: '/img/sub30/mixer.jpg',
+  piso: '/img/sub30/piso.jpg',
 };
 ---
 
-<BaseLayout title={title} description={description} image={gallery.hero}>
+<BaseLayout title={title} description={description} image={gallery.foyer}>
   <section class="production container">
     <header class="production__header">
       <figure class="production__hero reveal">
         <img
-          src={gallery.hero}
-          alt="Pareja de bailarines en el foyer del Teatro Municipal bajo luz azul"
+          src={gallery.foyer}
+          alt="Foyer del Teatro Municipal iluminado en violeta con bailarines"
           width="1164"
           height="480"
           fetchpriority="high"
@@ -67,10 +69,10 @@ const gallery = {
         />
       </figure>
 
-      <figure class="production__card production__card--full reveal reveal-delay-3">
+      <figure class="production__card production__card--left reveal reveal-delay-3">
         <img
-          src={gallery.foyer}
-          alt="Foyer del Teatro Municipal iluminado en violeta con bailarines"
+          src={gallery.duo}
+          alt="Dúo de bailarines sobre el piso ajedrezado bajo luz roja"
           width="1620"
           height="1080"
           loading="lazy"
@@ -78,52 +80,72 @@ const gallery = {
         />
       </figure>
 
-      <div class="production__pair reveal reveal-delay-3">
-        <figure class="production__card">
-          <img
-            src={gallery.duo}
-            alt="Dúo de bailarines sobre el piso ajedrezado bajo luz roja"
-            width="1620"
-            height="1080"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-        <figure class="production__card">
-          <img
-            src={gallery.publico}
-            alt="Público en el foyer con luces rojas y rayo láser"
-            width="1620"
-            height="1080"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-      </div>
+      <figure class="production__card production__card--right reveal reveal-delay-3">
+        <img
+          src={gallery.publico}
+          alt="Público en el foyer con luces rojas y rayo láser"
+          width="1620"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
 
-      <div class="production__pair reveal reveal-delay-4">
-        <figure class="production__card">
-          <img
-            src={gallery.dj}
-            alt="DJ tocando bajo la lámpara de araña del foyer"
-            width="1620"
-            height="1080"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-        <figure class="production__card">
-          <img
-            src={gallery.multitud}
-            alt="Multitud bailando en el foyer del Municipal"
-            width="1620"
-            height="1080"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-      </div>
+      <figure class="production__card production__card--left reveal reveal-delay-4">
+        <img
+          src={gallery.dj}
+          alt="DJ tocando bajo la lámpara de araña del foyer"
+          width="1620"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
+      <figure class="production__card production__card--right reveal reveal-delay-4">
+        <img
+          src={gallery.multitud}
+          alt="Multitud bailando en el foyer del Municipal"
+          width="1620"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
+      <figure class="production__card production__card--left reveal reveal-delay-4">
+        <img
+          src={gallery.dj2}
+          alt="DJ entre humo y luces en el foyer"
+          width="1620"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
+      <figure class="production__card production__card--right reveal reveal-delay-4">
+        <img
+          src={gallery.mixer}
+          alt="Manos sobre la consola de mezcla"
+          width="1620"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
     </section>
+
+    <figure class="production__closing reveal reveal-delay-4">
+      <img
+        src={gallery.piso}
+        alt="Bailarín sobre el piso ajedrezado del foyer visto desde arriba"
+        width="1620"
+        height="1080"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
   </section>
 </BaseLayout>
 
@@ -145,10 +167,20 @@ const gallery = {
     height: 540px;
   }
 
-  .production__hero img {
+  .production__closing {
+    margin-top: 0;
+    overflow: hidden;
+    background: #060606;
+    height: 520px;
+  }
+
+  .production__hero img,
+  .production__card img,
+  .production__closing img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
   }
 
   .production__heading {
@@ -198,10 +230,11 @@ const gallery = {
     line-height: 1;
   }
 
+  /* Cartas alternadas izquierda / derecha (misma lógica que Librería Nacional) */
   .production__editorial {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--space-xs);
+    gap: 0;
     align-items: start;
   }
 
@@ -222,35 +255,19 @@ const gallery = {
   .production__card {
     overflow: hidden;
     background: #060606;
-  }
-
-  .production__card img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
+    min-height: 100%;
   }
 
   .production__card--side {
     grid-column: 7 / -1;
-    align-self: stretch;
-    min-height: 420px;
   }
 
-  .production__card--full {
-    grid-column: 1 / -1;
-    height: 560px;
+  .production__card--left {
+    grid-column: 1 / 7;
   }
 
-  .production__pair {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-xs);
-  }
-
-  .production__pair .production__card {
-    height: 420px;
+  .production__card--right {
+    grid-column: 7 / -1;
   }
 
   @media (min-width: 900px) {
@@ -266,13 +283,13 @@ const gallery = {
   @media (max-width: 899px) {
     .production__editorial {
       grid-template-columns: 1fr;
-      gap: 0.5rem;
+      gap: 0;
     }
 
     .production__copy,
     .production__card--side,
-    .production__card--full,
-    .production__pair {
+    .production__card--left,
+    .production__card--right {
       grid-column: auto;
     }
 
@@ -281,21 +298,8 @@ const gallery = {
       margin-bottom: var(--space-sm);
     }
 
-    .production__card--side {
-      min-height: 0;
+    .production__closing {
       height: 300px;
-    }
-
-    .production__card--full {
-      height: 300px;
-    }
-
-    .production__pair {
-      grid-template-columns: 1fr;
-    }
-
-    .production__pair .production__card {
-      height: 280px;
     }
   }
 </style>

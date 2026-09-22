@@ -63,13 +63,16 @@ const SIZE_THRESHOLD = 500 * 1024; // 500 KB
 
 const OPTIMIZE_FOLDERS = [
   'img/prod-gene',
+  'img/agente-secreto',
   'img/banksy',
   'img/btl',
   'img/carnavalito',
   'img/creatividad',
+  'img/don-julio',
   'img/editoriales',
   'img/ghost-producers',
   'img/libreria-nacional',
+  'img/living-filarmonico',
   'img/mubi',
   'img/nicolas-jaar',
   'img/nicolas-jaar/carousel',

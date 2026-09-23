@@ -167,5 +167,30 @@ const ogImage = new URL(image, siteBase).href;
         requestAnimationFrame(() => initRevealAnimations());
       });
     </script>
+
+    <!-- emBlue OnSite: widgets (formulario de contacto). Cuenta 29163. -->
+    <script is:inline>
+      (function (d, t) {
+        if (window.__emblueOnSite) return;
+        window.__emblueOnSite = 1;
+        var m = new Date();
+        var ts =
+          '' +
+          m.getFullYear() +
+          (m.getMonth() + 1) +
+          m.getDate() +
+          'T' +
+          m.getHours() +
+          m.getMinutes() +
+          m.getSeconds();
+        var s = d.createElement(t);
+        s.async = 1;
+        s.src =
+          'https://widgets-static.embluemail.com/accounts/2916369B076ADAC836/scripts/sw_29163.js?ts=' +
+          ts;
+        var c = d.getElementsByTagName(t)[0];
+        c.parentNode.insertBefore(s, c);
+      })(document, 'script');
+    </script>
   </body>
 </html>

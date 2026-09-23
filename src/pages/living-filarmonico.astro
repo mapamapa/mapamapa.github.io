@@ -4,15 +4,15 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 const title = 'Living Filarmónico';
 const description = 'Living Filarmónico en el Teatro Municipal de Santiago: el público sube al escenario, entre los músicos de la Orquesta Filarmónica, para ver un ensayo dirigido por Paolo Bortolameolli.';
 
-// La foto del público sentado en el escenario es la portada en la home; no se repite dentro de la página.
+// La foto de los sillones en el escenario (living.jpg) es la portada en la home; no se repite dentro de la página.
 const gallery = {
   hero: '/img/living-filarmonico/hero.jpg',
   teatro: '/img/living-filarmonico/teatro.jpg',
+  director: '/img/living-filarmonico/director.jpg',
   entreMusicos: '/img/living-filarmonico/entre-musicos.jpg',
   capilla: '/img/living-filarmonico/capilla.jpg',
   dj: '/img/living-filarmonico/dj.jpg',
-  director: '/img/living-filarmonico/director.jpg',
-  living: '/img/living-filarmonico/living.jpg',
+  publicoEscenario: '/img/living-filarmonico/publico-escenario.jpg',
   ensayo: '/img/living-filarmonico/ensayo.jpg',
   foyer: '/img/living-filarmonico/foyer.jpg',
   coctel: '/img/living-filarmonico/coctel.jpg',
@@ -38,18 +38,22 @@ const gallery = {
 
       <div class="production__heading reveal reveal-delay-1">
         <h1>Living Filarmónico</h1>
-        <p class="production__subtitle">Teatro Municipal de Santiago — Producción MAPA</p>
+        <p class="production__logos" aria-label="Producción MAPAMAPA en el Teatro Municipal de Santiago">
+          <img src="/img/logo.png" alt="MAPAMAPA" class="production__logo production__logo--mapa" width="1080" height="643" decoding="async" />
+          <span class="production__logos-x" aria-hidden="true">×</span>
+          <img src="/img/living-filarmonico/logo-municipal.png" alt="Teatro Municipal de Santiago" class="production__logo production__logo--municipal" width="774" height="382" decoding="async" />
+        </p>
       </div>
     </header>
 
-    <!-- Texto y foto se alternan en zigzag -->
+    <!-- Texto y foto se alternan en zigzag; el primer párrafo va repartido en dos filas -->
     <section class="production__editorial" aria-labelledby="living-copy-title">
       <h2 id="living-copy-title" class="sr-only">Descripción del proyecto</h2>
 
       <div class="production__row reveal reveal-delay-2">
         <div class="production__text">
           <p>
-            Un ensayo es el momento menos visto de la música clásica: ahí donde una obra todavía se está decidiendo, donde el director corrige, los músicos ajustan y una pieza va tomando forma antes de convertirse en el resultado pulido que llega al público. Living Filarmónico partió de esa idea: abrir ese proceso, nunca antes mostrado así en el Teatro Municipal, a quienes normalmente solo llegan cuando ya todo está listo.
+            Un ensayo es el momento menos visto de la música clásica: ahí donde una obra todavía se está decidiendo, donde el director corrige, los músicos ajustan y una pieza va tomando forma antes de convertirse en el resultado pulido que llega al público.
           </p>
         </div>
         <figure class="production__card production__card--wide">
@@ -67,8 +71,8 @@ const gallery = {
       <div class="production__row production__row--flip reveal reveal-delay-2">
         <figure class="production__card production__card--tall">
           <img
-            src={gallery.entreMusicos}
-            alt="Invitados sentados entre los músicos de la Orquesta Filarmónica"
+            src={gallery.director}
+            alt="Paolo Bortolameolli dirigiendo el ensayo frente al público"
             width="720"
             height="1080"
             loading="lazy"
@@ -77,7 +81,7 @@ const gallery = {
         </figure>
         <div class="production__text">
           <p>
-            Para eso, MAPA sacó al público de la butaca y lo subió al escenario principal. En vez de las filas de siempre, dispuso mobiliario tipo living: sillones, luz cálida, cercanía, entre los propios músicos de la Orquesta Filarmónica de Santiago, de manera que los asistentes quedaran a centímetros de Paolo Bortolameolli dirigiendo el ensayo de las Danzas sinfónicas Op. 45 de Rachmaninov. No fue un concierto con mejores asientos: fue estar adentro del momento exacto en que la orquesta construye la obra, con las correcciones, los gestos y las decisiones ocurriendo en vivo, frente a los ojos de cada invitado.
+            Living Filarmónico partió de esa idea: abrir ese proceso, nunca antes mostrado así en el Teatro Municipal, a quienes normalmente solo llegan cuando ya todo está listo.
           </p>
         </div>
       </div>
@@ -85,13 +89,13 @@ const gallery = {
       <div class="production__row reveal reveal-delay-2">
         <div class="production__text">
           <p>
-            Al cerrar el ensayo, la experiencia se trasladó a la Sala La Capilla para un cóctel con set en vivo de Christopher Manhey, donde el público pudo compartir directamente con Bortolameolli y los músicos de la orquesta.
+            Para eso, MAPA sacó al público de la butaca y lo subió al escenario principal. En vez de las filas de siempre, dispuso mobiliario tipo living: sillones, luz cálida, cercanía, entre los propios músicos de la Orquesta Filarmónica de Santiago, de manera que los asistentes quedaran a centímetros de Paolo Bortolameolli dirigiendo el ensayo de las Danzas sinfónicas Op. 45 de Rachmaninov. No fue un concierto con mejores asientos: fue estar adentro del momento exacto en que la orquesta construye la obra, con las correcciones, los gestos y las decisiones ocurriendo en vivo, frente a los ojos de cada invitado.
           </p>
         </div>
         <figure class="production__card production__card--tall">
           <img
-            src={gallery.capilla}
-            alt="Sala La Capilla iluminada en rojo durante el cóctel"
+            src={gallery.entreMusicos}
+            alt="Invitados sentados entre los músicos de la Orquesta Filarmónica"
             width="720"
             height="1080"
             loading="lazy"
@@ -103,8 +107,8 @@ const gallery = {
       <div class="production__row production__row--flip reveal reveal-delay-2">
         <figure class="production__card production__card--tall">
           <img
-            src={gallery.dj}
-            alt="Christopher Manhey en su set en vivo bajo luz roja"
+            src={gallery.capilla}
+            alt="Sala La Capilla iluminada en rojo durante el cóctel"
             width="720"
             height="1080"
             loading="lazy"
@@ -113,9 +117,27 @@ const gallery = {
         </figure>
         <div class="production__text">
           <p>
+            Al cerrar el ensayo, la experiencia se trasladó a la Sala La Capilla para un cóctel con set en vivo de Christopher Manhey, donde el público pudo compartir directamente con Bortolameolli y los músicos de la orquesta.
+          </p>
+        </div>
+      </div>
+
+      <div class="production__row reveal reveal-delay-2">
+        <div class="production__text">
+          <p>
             Living Filarmónico es, en el fondo, un ejercicio de proximidad: demostrar que la música clásica no pierde nada, al contrario, cuando se le retira la distancia protocolar y se deja ver cómo realmente se hace.
           </p>
         </div>
+        <figure class="production__card production__card--tall">
+          <img
+            src={gallery.dj}
+            alt="Christopher Manhey en su set en vivo bajo luz roja"
+            width="720"
+            height="1080"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
       </div>
     </section>
 
@@ -123,25 +145,15 @@ const gallery = {
     <section class="production__gallery" aria-label="Más imágenes del evento">
       <figure class="production__card reveal reveal-delay-1">
         <img
-          src={gallery.director}
-          alt="Paolo Bortolameolli dirigiendo el ensayo frente al público"
+          src={gallery.publicoEscenario}
+          alt="Público sentado en el escenario entre los músicos"
           width="720"
           height="1080"
           loading="lazy"
           decoding="async"
         />
       </figure>
-      <figure class="production__card reveal reveal-delay-1">
-        <img
-          src={gallery.living}
-          alt="Sillones tipo living dispuestos en el escenario"
-          width="720"
-          height="1080"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
-      <figure class="production__card reveal reveal-delay-2">
+      <figure class="production__card production__card--span2 reveal reveal-delay-1">
         <img
           src={gallery.ensayo}
           alt="La orquesta ensayando con el público alrededor"
@@ -242,10 +254,34 @@ const gallery = {
     color: #d7d7d7;
   }
 
-  .production__subtitle {
+  .production__logos {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(0.75rem, 1.5vw, 1.5rem);
+    margin-top: 0.6rem;
+  }
+
+  .production__logo {
+    display: block;
+    width: auto;
+  }
+
+  .production__logo--mapa {
+    height: clamp(28px, 2.6vw, 40px);
+  }
+
+  .production__logo--municipal {
+    height: clamp(48px, 4.6vw, 70px);
+    /* El logo original viene en grises oscuros; sobre fondo negro se pasa a blanco */
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+
+  .production__logos-x {
     font-size: clamp(1rem, 0.8rem + 1.2vw, 1.5rem);
     color: #999;
-    line-height: 1.1;
+    line-height: 1;
   }
 
   .production__editorial {
@@ -301,7 +337,7 @@ const gallery = {
     height: 460px;
   }
 
-  /* Cierre: grilla de cuatro columnas, dos filas */
+  /* Cierre: grilla de cuatro columnas; la foto del ensayo ocupa dos */
   .production__gallery {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -311,6 +347,10 @@ const gallery = {
 
   .production__gallery .production__card {
     height: 360px;
+  }
+
+  .production__card--span2 {
+    grid-column: span 2;
   }
 
   @media (min-width: 900px) {
@@ -348,6 +388,10 @@ const gallery = {
 
     .production__gallery .production__card {
       height: 280px;
+    }
+
+    .production__card--span2 {
+      grid-column: 1 / -1;
     }
   }
 </style>

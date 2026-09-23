@@ -56,7 +56,7 @@
     "title": "Producción & experiencias",
     "items": [
       { "title": "El Agente Secreto", "subtitle": "MUBI", "image": "/img-opt/pye/agente-secreto.webp", "url": "/agente-secreto/" },
-      { "title": "Don Julio", "subtitle": "Cinco tequilas, cinco ritmos | RI.CO.HIFI", "image": "/img-opt/pye/don-julio.webp", "url": "/don-julio/" },
+      { "title": "Don Julio", "subtitle": "Cinco tequilas, cinco ritmos", "image": "/img-opt/pye/don-julio.webp", "url": "/don-julio/" },
       { "title": "Living Filarmónico", "subtitle": "Teatro Municipal de Santiago", "image": "/img-opt/pye/living-filarmonico.webp", "url": "/living-filarmonico/" },
       { "title": "La Misteriosa Mirada del Flamenco", "subtitle": "MUBI", "image": "/img-opt/pye/mubi.webp", "url": "/mubi/" },
       { "title": "Rosalía — LUX", "subtitle": "Sesión de escucha | Sony Music", "image": "/img-opt/pye/rosalia.webp", "url": "/rosalia/" },

@@ -35,12 +35,42 @@ const MAPA = [
 
     </div>
 
-    <!--
-      El formulario de esta página se reemplazó por el widget OnSite de emBlue
-      ("MAPA - Formulario contacto web"), que guarda el contacto en la base de
-      emBlue y dispara la respuesta automática. El script vive en BaseLayout.astro.
-      El enlace de email de arriba queda como alternativa si el widget no carga.
-    -->
+    <form
+      class="contact-form reveal reveal-delay-2"
+      id="contact-form"
+      name="contacto"
+      method="POST"
+      action="/"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+    >
+      <input type="hidden" name="form-name" value="contacto" />
+
+      <p class="contact-form__hidden" aria-hidden="true">
+        <label>No llenar este campo: <input name="bot-field" /></label>
+      </p>
+
+      <div class="contact-form__field">
+        <label for="name">Nombre</label>
+        <input type="text" id="name" name="name" required autocomplete="name" />
+      </div>
+
+      <div class="contact-form__field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email" />
+      </div>
+
+      <div class="contact-form__field">
+        <label for="message">Mensaje</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+      </div>
+
+      <button type="submit" class="contact-form__submit">
+        <span class="contact-form__submit-text">Enviar</span>
+      </button>
+
+      <p class="contact-form__status" id="contact-form-status" role="status" aria-live="polite"></p>
+    </form>
   </section>
 </BaseLayout>
 
@@ -306,4 +336,50 @@ const MAPA = [
   initMapaGrid();
   document.addEventListener('astro:after-swap', initMapaGrid);
 
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const status = document.getElementById('contact-form-status');
+    const submitBtn = form?.querySelector<HTMLButtonElement>('.contact-form__submit');
+    if (!form || !status || !submitBtn) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.removeAttribute('data-state');
+      status.textContent = '';
+      submitBtn.disabled = true;
+
+      try {
+        const formData = new FormData(form);
+        // Envío directo al webhook de Make (cuenta Simple Producciones, eu1) — escenario
+        // "MapaMapa — Formulario contacto: aviso interno + respuesta automática".
+        const response = await fetch('https://hook.eu1.make.com/kywm9q8wdigb4wmob0i6qprmstd6439x', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.get('name'),
+            email: formData.get('email'),
+            message: formData.get('message'),
+            'bot-field': formData.get('bot-field') || '',
+            source: location.hostname + location.pathname,
+          }),
+        });
+
+        if (response.ok) {
+          form.reset();
+          status.dataset.state = 'success';
+          status.textContent = 'Mensaje enviado. Te responderemos pronto.';
+        } else {
+          throw new Error('Request failed');
+        }
+      } catch {
+        status.dataset.state = 'error';
+        status.textContent = 'No pudimos enviar tu mensaje. Escríbenos directo por email.';
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  }
+
+  initContactForm();
+  document.addEventListener('astro:after-swap', initContactForm);
 </script>
